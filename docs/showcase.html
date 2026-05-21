@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Showcase — &lt;pattern-grid&gt;</title>
+  <meta name="description" content="A gallery of pattern-grid demos covering geometric, gradient, procedural, animated, random, text, and interactive effects." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pattern-grid.css" />
+  <script type="module" src="pattern-grid.js"></script>
+  <script type="module" src="seed-context.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;pattern-grid&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="showcase.html" class="active">Showcase</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Showcase</h1>
+    <p class="demo-description">A gallery of what's possible when you combine <code>&lt;pattern-grid&gt;</code>, modern CSS, and the seeded <code>&lt;seed-context&gt;</code> companion. Each tile is a live element — view source or expand the details below it to see exactly how it's built.</p>
+
+    <div class="gallery">
+      <!-- Pieces are added in Tasks 27–32 -->
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT licensed · Source on <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a> · Part of the ProfPowell suite</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+</body>
+</html>
