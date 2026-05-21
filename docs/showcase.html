@@ -471,6 +471,59 @@
 /* Each ring positions its cells via polar math with a
    different --r (radius) per ring. */</code></pre></details>
       </figure>
+
+      <!-- 27. Goo blobs -->
+      <figure id="sc-goo">
+        <div class="tile">
+          <svg class="filter-svg" aria-hidden="true">
+            <defs>
+              <filter id="sc-goo-filter">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b" />
+                <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10" result="g" />
+                <feBlend in="SourceGraphic" in2="g" />
+              </filter>
+            </defs>
+          </svg>
+          <pattern-grid cells="8x8"></pattern-grid>
+        </div>
+        <figcaption><strong>Goo blobs</strong>Drifting cells merge via an SVG <code>feGaussianBlur</code> + <code>feColorMatrix</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;filter id="sc-goo-filter"&gt;
+  &lt;feGaussianBlur stdDeviation="6" /&gt;
+  &lt;feColorMatrix values="... 0 0 0 22 -10" /&gt;
+&lt;/filter&gt;
+
+#sc-goo .tile { filter: url(#sc-goo-filter); }
+#sc-goo pattern-grid &gt; i {
+  /* cells drift around with a per-cell offset animation */
+  animation: drift 5s ease-in-out infinite;
+  animation-delay: calc(sibling-index() * -80ms);
+}</code></pre></details>
+      </figure>
+
+      <!-- 28. Turbulence -->
+      <figure id="sc-turb">
+        <div class="tile">
+          <svg class="filter-svg" aria-hidden="true">
+            <defs>
+              <filter id="sc-turb-filter">
+                <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="3" />
+                <feDisplacementMap in="SourceGraphic" scale="22" />
+              </filter>
+            </defs>
+          </svg>
+          <pattern-grid cells="10x10"></pattern-grid>
+        </div>
+        <figcaption><strong>Turbulence</strong>SVG <code>feTurbulence</code> + <code>feDisplacementMap</code> warps a colorful grid.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;filter id="sc-turb-filter"&gt;
+  &lt;feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" /&gt;
+  &lt;feDisplacementMap scale="22" /&gt;
+&lt;/filter&gt;
+
+#sc-turb pattern-grid { filter: url(#sc-turb-filter); }
+#sc-turb pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 7) 80% 60%);
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
