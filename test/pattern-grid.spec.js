@@ -25,4 +25,13 @@ test.describe('<pattern-grid>', () => {
     await page.locator('pattern-grid').evaluate((el) => el.setAttribute('cols', '5'));
     await expect(page.locator('pattern-grid > i')).toHaveCount(10);
   });
+
+  test('cell attribute uses custom tag', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cells="4" cell="span"></pattern-grid>
+    `);
+    await expect(page.locator('pattern-grid > span')).toHaveCount(4);
+    await expect(page.locator('pattern-grid > i')).toHaveCount(0);
+  });
 });
