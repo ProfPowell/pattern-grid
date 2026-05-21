@@ -121,6 +121,41 @@
   border-radius: 50%;
 }</code></pre></details>
       </figure>
+
+      <!-- 7. Diagonal wipe -->
+      <figure id="sc-wipe">
+        <div class="tile"><pattern-grid cells="14x14"></pattern-grid></div>
+        <figcaption><strong>Diagonal wipe</strong>Animation delay grows along (x+y).</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+
+#sc-wipe pattern-grid &gt; i {
+  --idx: calc(sibling-index() - 1);
+  background: hsl(220 70% 50%);
+  animation: wipe 3s ease-in-out infinite;
+  animation-delay: calc(var(--idx) * 12ms);
+}
+@keyframes wipe {
+  0%, 100% { background: hsl(220 70% 50%); }
+  50%      { background: hsl(50 90% 60%); }
+}</code></pre></details>
+      </figure>
+
+      <!-- 8. Pulse field -->
+      <figure id="sc-pulse">
+        <div class="tile"><pattern-grid cells="12x12"></pattern-grid></div>
+        <figcaption><strong>Pulse field</strong>Staggered scale pulses per cell.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+
+#sc-pulse pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  animation: pulse 2.4s ease-in-out infinite;
+  animation-delay: calc(sibling-index() * -30ms);
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1);   border-radius: 0%;  }
+  50%      { transform: scale(0.6); border-radius: 50%; }
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
