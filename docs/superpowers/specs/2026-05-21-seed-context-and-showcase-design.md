@@ -45,7 +45,7 @@ Wrap any subtree containing one or more `<pattern-grid>` elements (or any future
 | Attribute | Type | Default | Description |
 |---|---|---|---|
 | `seed` | string \| number | `""` | Seed value. Same seed → same randoms across reloads. Hashed to a 32-bit integer for the PRNG. |
-| `count` | integer | `4` | How many `--rand-N` slots per cell. Range 1–32. Values outside the range are clamped. |
+| `count` | integer | `8` | How many `--rand-N` slots per cell. Range 1–32. Values outside the range are clamped. |
 
 Attributes reflect to camelCase JS properties.
 
@@ -122,40 +122,64 @@ const mulberry32 = (a) => () => {
 };
 ```
 
-Per-cell seed: `seedHash ^ (cellIndex * 0x9E3779B1)`. Each cell gets its own generator, so adding/removing cells doesn't shift the random sequence of unrelated cells.
+Per-cell seed: `seedHash ^ (cellIndex * 0x9E3779B1) ^ (gridOffset * 0x85EBCA6B)`, where `gridOffset` is a counter incremented for each pattern-grid the seed-context has populated. This guarantees that two pattern-grids inside the same seed-context get different sequences even at matching cell indices.
+
+Each cell gets its own generator, so adding/removing cells doesn't shift the random sequence of unrelated cells. The `--randi-N` integer is derived from the same draw as `--rand-N` via `Math.floor(rand * 100)` — not an independent roll.
 
 ### Size budget
 
-≤ 80 lines of executable JS in `src/seed-context.js`, matching the suite contract. The two helpers above plus the class itself fit comfortably.
+≤ 90 lines of executable JS in `src/seed-context.js` (≤110 with JSDoc). Slightly more headroom than pattern-grid's 80-line budget because seed-context carries the hash + PRNG helpers, the head-style injection, and the multi-grid bookkeeping. Still small enough that deletion remains easy when CSS `random()` is Baseline.
 
-### Anti-FOUC
+### Anti-FOUC (built-in, no opt-in)
 
-When a `<seed-context>` wraps a `<pattern-grid>`, there is a frame between cells being rendered and seeded. For demos sensitive to this (e.g. random colors), the optional `dist/seed-context.css` stylesheet provides:
+`<seed-context>` injects a `<style>` element into `<head>` exactly once per page (module-level side effect, gated by an `id` check so HMR / multiple imports don't duplicate it). The injected rule:
 
 ```css
-seed-context:not(:defined) > pattern-grid > *:not(template),
 seed-context > pattern-grid > *:not(template) {
   opacity: 0;
-  transition: opacity 0.2s;
-}
-seed-context > pattern-grid > *:not(template) {
-  opacity: 1;
+  transition: opacity 220ms ease-out;
 }
 ```
 
-`:not(:defined)` hides cells until the element upgrades; once defined and populated, they fade in. This is opt-in via the stylesheet.
+When seed-context populates a cell, its inline `cssText` includes `opacity: 1` alongside the `--rand-N` / `--randi-N` properties. Inline beats stylesheet so populated cells become visible. The result: cells inside a `<seed-context>` only appear once they have their randoms, fading in together. No author opt-in needed.
+
+This also handles the `:not(:defined)` upgrade window — the CSS rule selects on tag name, which matches before the element upgrades, so cells stay hidden until the JS has executed and populated them.
+
+`dist/seed-context.css` still ships as an empty / additional-defaults file for parity with `pattern-grid.css`, but is not required for FOUC suppression.
 
 ### Tests (Playwright)
 
-- `<seed-context>` populates `--rand-0..3` floats and `--randi-0..3` ints on each cell after a pattern-grid:render fires.
-- Same `seed` produces same values across reloads.
-- Different `seed` produces different values.
-- Changing `seed` attribute triggers reseed (verify a previously-random cell has a different value).
-- `count="8"` writes 16 properties (8 float + 8 int) per cell.
-- `count="0"` clamps to 1.
-- `reseed()` method re-writes values without changing attributes.
-- Late connection: seed-context appended *after* the pattern-grid already rendered still populates cells.
-- `seed-context:populated` event fires with the correct detail.
+Core behavior:
+- Default `count="8"` writes `--rand-0..7` floats *and* `--randi-0..7` ints on each cell after a pattern-grid:render fires (16 properties per cell).
+- `--rand-N` is in `[0, 1)`; `--randi-N` is in `[0, 99]`.
+- `--randi-N` equals `floor(rand-N * 100)` (the two are derived from the same draw, not independent rolls).
+- Same `seed` produces identical values across reloads.
+- Different `seed` produces different values for at least one cell.
+- Empty `seed` (`seed=""`) still produces randoms (hashes to a constant; tests check at least one cell has any randoms set).
+- Changing `seed` attribute triggers reseed (a sampled cell's `--rand-0` changes).
+- Changing `count` attribute rewrites with the new slot count (verify `--rand-{new-1}` is set and `--rand-{old-1}` may be cleared if new < old).
+- `count="0"` clamps to 1; `count="50"` clamps to 32.
+- `reseed()` method re-writes values without changing attributes (sampled cell value changes if the internal `prng` was advanced; otherwise identical — clarify in implementation).
+- Setting `seed` via JS property (`el.seed = "x"`) reflects to the attribute and triggers reseed.
+
+Lifecycle / late attachment:
+- Late connection: seed-context appended *after* the pattern-grid already rendered still populates cells (walks descendants on connect).
+- Adding a new `<pattern-grid>` inside an existing seed-context: the new grid's cells get populated on first render (event bubbles up; listener catches it).
+- Removing a `<pattern-grid>` and re-adding it: still populates (listener is on seed-context, not on the grid).
+- Disconnecting seed-context: removes the listener, no further population.
+
+Demo-realistic / "fancy" coverage:
+- A grid with 1000 cells (`cells="50x20"`) populates in under 50 ms (perf budget; uses `performance.now()`).
+- Two `<pattern-grid>` elements inside one seed-context get independent per-cell randoms — different cells in different grids have different values (cells indexed 0 in grid A and cell index 0 in grid B should not collide because the per-cell seed mixes a per-grid offset).
+- Nested seed-contexts: an outer `<seed-context seed="a">` wrapping an inner `<seed-context seed="b">` wrapping a pattern-grid — the *innermost* seed-context wins because `pattern-grid:render` bubbles to it first and `stopPropagation()` is called by the populated handler (or we accept double-population and the inner wins by virtue of being deeper / running second — clarify in implementation).
+- `seed-context:populated` event fires with `{ target: <the pattern-grid>, count: N }`; bubbles.
+
+Anti-FOUC:
+- Before populated: a sampled cell has computed `opacity: 0`.
+- After populated: same cell has computed `opacity: 1`.
+- Cells outside any seed-context are unaffected (computed `opacity: 1` baseline).
+
+Total: ~22 test cases.
 
 ---
 
@@ -264,11 +288,11 @@ These don't block this design. They're noted so the implementer doesn't get stuc
 ## Acceptance criteria
 
 The design is "done" when:
-- `npm test` reports ≥20 passing Playwright tests (11 existing + ≥9 seed-context).
+- `npm test` reports ≥33 passing Playwright tests (11 existing + ~22 seed-context).
 - `npm run build` produces both `dist/pattern-grid.js` and `dist/seed-context.js`.
 - `docs/showcase.html` renders 14 visible tiles in Chrome 148+ with no console errors.
 - At least the 5 seeded pieces (mosaic, frost, crystals, staircase, rain) all show clearly random-per-cell variation when the page is reloaded with the same seed (same output) and with a different seed (different output).
-- `wc -l src/seed-context.js` ≤ 95 (≤80 executable, ≤15 JSDoc).
+- `wc -l src/seed-context.js` ≤ 110 (≤90 executable to accommodate hash + PRNG + style injection + grid-offset bookkeeping, ≤20 JSDoc).
 - `wc -l src/pattern-grid.js` unchanged at 85.
 
 ---
