@@ -30,7 +30,46 @@
     <p class="demo-description">A gallery of what's possible when you combine <code>&lt;pattern-grid&gt;</code>, modern CSS, and the seeded <code>&lt;seed-context&gt;</code> companion. Each tile is a live element — view source or expand the details below it to see exactly how it's built.</p>
 
     <div class="gallery">
-      <!-- Pieces are added in Tasks 27–32 -->
+      <!-- 1. Hex honeycomb -->
+      <figure id="sc-hex">
+        <div class="tile"><pattern-grid cells="12x12"></pattern-grid></div>
+        <figcaption><strong>Hex honeycomb</strong>Hexagonal clip-paths with HSL hue cycling.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+
+#sc-hex pattern-grid &gt; i {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: hsl(calc(sibling-index() * 6) 65% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 2. Conic pinwheels -->
+      <figure id="sc-pinwheels">
+        <div class="tile"><pattern-grid cells="6x6"></pattern-grid></div>
+        <figcaption><strong>Conic pinwheels</strong>One conic gradient per cell, hue offset by index.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="6x6"&gt;&lt;/pattern-grid&gt;
+
+#sc-pinwheels pattern-grid &gt; i {
+  background: conic-gradient(
+    from calc(sibling-index() * 10deg),
+    hsl(calc(sibling-index() * 20) 70% 55%),
+    hsl(calc(sibling-index() * 20 + 180) 70% 55%),
+    hsl(calc(sibling-index() * 20) 70% 55%)
+  );
+}</code></pre></details>
+      </figure>
+
+      <!-- 3. Tessellated triangles -->
+      <figure id="sc-triangles">
+        <div class="tile"><pattern-grid cells="10x10"></pattern-grid></div>
+        <figcaption><strong>Tessellated triangles</strong>Alternating up/down triangles via odd/even.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
+
+#sc-triangles pattern-grid &gt; i:nth-child(odd)  { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+#sc-triangles pattern-grid &gt; i:nth-child(even) { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+#sc-triangles pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 4 + 200) 70% 55%);
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
