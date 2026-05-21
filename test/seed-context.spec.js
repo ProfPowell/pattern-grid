@@ -21,4 +21,23 @@ test.describe('<seed-context>', () => {
     expect(parseInt(values.randi0, 10)).toBeGreaterThanOrEqual(0);
     expect(parseInt(values.randi0, 10)).toBeLessThanOrEqual(99);
   });
+
+  test('--randi-N is floor(--rand-N * 100)', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="t">
+        <pattern-grid cells="3x3"></pattern-grid>
+      </seed-context>
+    `);
+    const pairs = await page.locator('pattern-grid > i').evaluateAll((cells) =>
+      cells.map((el) => ({
+        rand: parseFloat(el.style.getPropertyValue('--rand-0')),
+        randi: parseInt(el.style.getPropertyValue('--randi-0'), 10),
+      })),
+    );
+    for (const { rand, randi } of pairs) {
+      expect(randi).toBe(Math.floor(rand * 100));
+    }
+  });
 });
