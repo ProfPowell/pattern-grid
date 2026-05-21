@@ -88,4 +88,20 @@ test.describe('<pattern-grid>', () => {
     );
     expect(detail).toEqual({ cols: 4, rows: 1, total: 4 });
   });
+
+  test('shim="sibling" sets --i on each cell and --n on host', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cells="3" shim="sibling"></pattern-grid>
+    `);
+    const n = await page
+      .locator('pattern-grid')
+      .evaluate((el) => el.style.getPropertyValue('--n'));
+    expect(n).toBe('3');
+    const cellTwoI = await page
+      .locator('pattern-grid > i')
+      .nth(1)
+      .evaluate((el) => el.style.getPropertyValue('--i'));
+    expect(cellTwoI).toBe('2');
+  });
 });
