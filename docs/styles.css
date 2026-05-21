@@ -1084,3 +1084,63 @@ body.dark .feature-card:hover {
   0%, 100% { transform: scale(1);   filter: brightness(1); }
   50%      { transform: scale(1.4); filter: brightness(1.6); }
 }
+
+/* --- Showcase: Clover --- */
+#sc-clover .tile { background: #fff4e0; }
+#sc-clover pattern-grid {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: 100%;
+}
+#sc-clover pattern-grid > i {
+  grid-area: 1 / 1;
+  width: 70%;
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 60) 80% 55%);
+  clip-path: ellipse(20% 50% at 50% 50%);
+  transform: rotate(calc(sibling-index() * 60deg));
+  mix-blend-mode: multiply;
+}
+
+/* --- Showcase: Mandala --- */
+#sc-mandala .tile { background: #0d0220; }
+#sc-mandala .mandala-stack {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+#sc-mandala pattern-grid {
+  position: absolute;
+  inset: 0;
+  display: block;
+  place-items: center;
+}
+#sc-mandala pattern-grid > i {
+  --idx: calc(sibling-index() - 1);
+  --n:   sibling-count();
+  --angle: calc(var(--idx) / var(--n) * 360deg);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%)
+             rotate(var(--angle))
+             translateY(var(--r, -30%));
+  background: hsl(calc(var(--idx) * 30) 75% 60%);
+  box-shadow: 0 0 8px hsl(calc(var(--idx) * 30) 75% 60%);
+}
+#sc-mandala pattern-grid:nth-of-type(1) > i { --r: -15%; width: 6%; }
+#sc-mandala pattern-grid:nth-of-type(2) > i { --r: -28%; width: 5%; }
+#sc-mandala pattern-grid:nth-of-type(3) > i { --r: -42%; width: 4%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  #sc-mandala .mandala-stack {
+    animation: sc-mandala-spin 32s linear infinite;
+  }
+  @keyframes sc-mandala-spin {
+    to { transform: rotate(360deg); }
+  }
+}

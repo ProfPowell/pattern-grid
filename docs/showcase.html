@@ -434,6 +434,43 @@
   50%      { transform: scale(1.4); filter: brightness(1.6); }
 }</code></pre></details>
       </figure>
+
+      <!-- 25. Clover -->
+      <figure id="sc-clover">
+        <div class="tile"><pattern-grid cells="6"></pattern-grid></div>
+        <figcaption><strong>Clover</strong>6 stacked petals, each rotated 60°, blended.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="6"&gt;&lt;/pattern-grid&gt;
+
+#sc-clover pattern-grid &gt; i {
+  grid-area: 1 / 1;
+  width: 70%;
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 60) 80% 55%);
+  clip-path: ellipse(20% 50% at 50% 50%);
+  transform: rotate(calc(sibling-index() * 60deg));
+  mix-blend-mode: multiply;
+}</code></pre></details>
+      </figure>
+
+      <!-- 26. Mandala -->
+      <figure id="sc-mandala">
+        <div class="tile">
+          <div class="mandala-stack">
+            <pattern-grid cells="8"></pattern-grid>
+            <pattern-grid cells="12"></pattern-grid>
+            <pattern-grid cells="24"></pattern-grid>
+          </div>
+        </div>
+        <figcaption><strong>Mandala</strong>Three nested pattern-grids form concentric rings.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;div class="mandala-stack"&gt;
+  &lt;pattern-grid cells="8"&gt;&lt;/pattern-grid&gt;   &lt;!-- inner --&gt;
+  &lt;pattern-grid cells="12"&gt;&lt;/pattern-grid&gt;  &lt;!-- middle --&gt;
+  &lt;pattern-grid cells="24"&gt;&lt;/pattern-grid&gt;  &lt;!-- outer --&gt;
+&lt;/div&gt;
+
+/* Each ring positions its cells via polar math with a
+   different --r (radius) per ring. */</code></pre></details>
+      </figure>
     </div>
   </main>
 
