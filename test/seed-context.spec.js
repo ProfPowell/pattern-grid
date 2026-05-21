@@ -105,6 +105,18 @@ test.describe('<seed-context>', () => {
     expect(rand0).not.toBe('');
   });
 
+  test('changing seed attribute triggers reseed', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="one"><pattern-grid cells="3x3"></pattern-grid></seed-context>
+    `);
+    const before = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    await page.locator('seed-context').evaluate((el) => el.setAttribute('seed', 'two'));
+    const after = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    expect(after).not.toBe(before);
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
