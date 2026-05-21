@@ -138,6 +138,27 @@ test.describe('<seed-context>', () => {
     expect(after.r6).toBe('');
   });
 
+  test('count clamps 0 to 1 and 50 to 32', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context id="lo" seed="x" count="0"><pattern-grid cells="2x1"></pattern-grid></seed-context>
+      <seed-context id="hi" seed="x" count="50"><pattern-grid cells="2x1"></pattern-grid></seed-context>
+    `);
+    const lo = await page.locator('#lo pattern-grid > i').first().evaluate((el) => ({
+      r0: el.style.getPropertyValue('--rand-0'),
+      r1: el.style.getPropertyValue('--rand-1'),
+    }));
+    expect(lo.r0).not.toBe('');
+    expect(lo.r1).toBe('');
+    const hi = await page.locator('#hi pattern-grid > i').first().evaluate((el) => ({
+      r31: el.style.getPropertyValue('--rand-31'),
+      r32: el.style.getPropertyValue('--rand-32'),
+    }));
+    expect(hi.r31).not.toBe('');
+    expect(hi.r32).toBe('');
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
