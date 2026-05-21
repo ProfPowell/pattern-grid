@@ -1243,3 +1243,52 @@ body.dark .feature-card:hover {
   background: hsl(calc(var(--d) * 720deg) 75% calc(40% + var(--d) * 50%));
   transition: background 150ms;
 }
+
+/* --- Showcase: 3D cube --- */
+#sc-cube .tile {
+  background: #0a0014;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+#sc-cube .cube-perspective {
+  perspective: 600px;
+  width: 80px;
+  height: 80px;
+}
+#sc-cube .cube-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  transform-style: preserve-3d;
+}
+#sc-cube pattern-grid {
+  display: block;
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+#sc-cube pattern-grid > i {
+  position: absolute;
+  inset: 0;
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  opacity: 0.85;
+}
+#sc-cube pattern-grid > i:nth-child(1) { transform: translateZ( 40px);                  background: #ff5470; }
+#sc-cube pattern-grid > i:nth-child(2) { transform: translateZ(-40px) rotateY(180deg);  background: #00cecb; }
+#sc-cube pattern-grid > i:nth-child(3) { transform: rotateY( 90deg)  translateZ( 40px); background: #ffed66; }
+#sc-cube pattern-grid > i:nth-child(4) { transform: rotateY(-90deg)  translateZ( 40px); background: #ffd166; }
+#sc-cube pattern-grid > i:nth-child(5) { transform: rotateX( 90deg)  translateZ( 40px); background: #b388eb; }
+#sc-cube pattern-grid > i:nth-child(6) { transform: rotateX(-90deg)  translateZ( 40px); background: #80ffdb; }
+
+@media (prefers-reduced-motion: no-preference) {
+  #sc-cube .cube-wrap {
+    animation: sc-cube-spin 14s linear infinite;
+  }
+  @keyframes sc-cube-spin {
+    from { transform: rotateX(-20deg) rotateY(  0deg); }
+    to   { transform: rotateX(-20deg) rotateY(360deg); }
+  }
+}

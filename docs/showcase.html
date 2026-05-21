@@ -614,6 +614,38 @@
           })();
         </script>
       </figure>
+
+      <!-- 31. 3D cube -->
+      <figure id="sc-cube">
+        <div class="tile">
+          <div class="cube-perspective">
+            <div class="cube-wrap">
+              <pattern-grid cells="6"></pattern-grid>
+            </div>
+          </div>
+        </div>
+        <figcaption><strong>3D cube</strong><code>cells="6"</code> → six cube faces via <code>translateZ</code> + <code>rotate</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;div class="cube-perspective"&gt;
+  &lt;div class="cube-wrap"&gt;
+    &lt;pattern-grid cells="6"&gt;&lt;/pattern-grid&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+.cube-perspective { perspective: 600px; }
+.cube-wrap { transform-style: preserve-3d; }
+#sc-cube pattern-grid &gt; i {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 80px; height: 80px;
+}
+#sc-cube pattern-grid &gt; i:nth-child(1) { transform: translateZ( 40px); background: #c33; }
+#sc-cube pattern-grid &gt; i:nth-child(2) { transform: translateZ(-40px) rotateY(180deg); background: #3c3; }
+#sc-cube pattern-grid &gt; i:nth-child(3) { transform: rotateY( 90deg) translateZ(40px); background: #33c; }
+#sc-cube pattern-grid &gt; i:nth-child(4) { transform: rotateY(-90deg) translateZ(40px); background: #cc3; }
+#sc-cube pattern-grid &gt; i:nth-child(5) { transform: rotateX( 90deg) translateZ(40px); background: #3cc; }
+#sc-cube pattern-grid &gt; i:nth-child(6) { transform: rotateX(-90deg) translateZ(40px); background: #c3c; }</code></pre></details>
+      </figure>
     </div>
   </main>
 
