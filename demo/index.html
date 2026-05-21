@@ -141,5 +141,127 @@
   &lt;template&gt;&lt;button class="tile"&gt;+&lt;/button&gt;&lt;/template&gt;
 &lt;/pattern-grid&gt;</code></pre>
   </section>
+  <section id="handauthored">
+    <h2>6. Hand-authored cells (no JS required)</h2>
+    <p>Open with NoScript or block JS — the cells still render because they are real HTML.</p>
+    <div class="demo">
+      <pattern-grid cols="3" rows="2" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+        <a href="/one" style="aspect-ratio: 1; background: #c33; display: block;"></a>
+        <a href="/two" style="aspect-ratio: 1; background: #3c3; display: block;"></a>
+        <a href="/three" style="aspect-ratio: 1; background: #33c; display: block;"></a>
+        <a href="/four" style="aspect-ratio: 1; background: #cc3; display: block;"></a>
+        <a href="/five" style="aspect-ratio: 1; background: #3cc; display: block;"></a>
+        <a href="/six" style="aspect-ratio: 1; background: #c3c; display: block;"></a>
+      </pattern-grid>
+    </div>
+    <pre><code>&lt;pattern-grid cols="3" rows="2"&gt;
+  &lt;a href="/one"&gt;&lt;/a&gt;&lt;a href="/two"&gt;&lt;/a&gt;&lt;a href="/three"&gt;&lt;/a&gt;
+  &lt;a href="/four"&gt;&lt;/a&gt;&lt;a href="/five"&gt;&lt;/a&gt;&lt;a href="/six"&gt;&lt;/a&gt;
+&lt;/pattern-grid&gt;</code></pre>
+  </section>
+
+  <section id="vb">
+    <h2>7. Vanilla Breeze tokens</h2>
+    <style>
+      #vb {
+        --vb-color-saturation: 80%;
+        --vb-color-lightness: 55%;
+        --vb-radius-sm: 8px;
+      }
+      #vb pattern-grid {
+        display: grid;
+        grid-template-columns: repeat(var(--pg-cols), 1fr);
+        gap: 4px;
+      }
+      #vb pattern-grid > i {
+        aspect-ratio: 1;
+        background: hsl(
+          calc(sibling-index() / sibling-count() * 360)
+          var(--vb-color-saturation)
+          var(--vb-color-lightness)
+        );
+        border-radius: var(--vb-radius-sm);
+      }
+    </style>
+    <div class="demo">
+      <pattern-grid cells="6x6"></pattern-grid>
+    </div>
+    <pre><code>/* VB tokens cascade into light DOM children */
+pattern-grid &gt; i {
+  background: hsl(... var(--vb-color-saturation) var(--vb-color-lightness));
+  border-radius: var(--vb-radius-sm);
+}</code></pre>
+  </section>
+
+  <section id="shim">
+    <h2>8. Sibling shim — works in Firefox</h2>
+    <style>
+      #shim pattern-grid {
+        display: grid;
+        grid-template-columns: repeat(var(--pg-cols), 1fr);
+      }
+      #shim pattern-grid > i {
+        --idx: var(--i, sibling-index());
+        aspect-ratio: 1;
+        background: hsl(calc(var(--idx) * 10) 70% 50%);
+      }
+    </style>
+    <div class="demo">
+      <p style="margin: 0 0 0.5rem 0;">With <code>shim="sibling"</code> (works everywhere):</p>
+      <pattern-grid cells="36" shim="sibling"></pattern-grid>
+      <p style="margin: 0.5rem 0;">Without shim (requires native <code>sibling-index()</code>):</p>
+      <pattern-grid cells="36"></pattern-grid>
+    </div>
+    <pre><code>&lt;pattern-grid cells="36" shim="sibling"&gt;&lt;/pattern-grid&gt;
+
+pattern-grid &gt; i {
+  --idx: var(--i, sibling-index()); /* shim first, native fallback */
+  background: hsl(calc(var(--idx) * 10) 70% 50%);
+}</code></pre>
+  </section>
+
+  <section id="seeded">
+    <h2>9. Seeded (pending &lt;seed-context&gt;)</h2>
+    <p>This example will activate once the <a href="https://github.com/ProfPowell/seed-context"><code>&lt;seed-context&gt;</code></a> companion ships. Until then it falls back to a plain grid.</p>
+    <div class="demo">
+      <pattern-grid cells="8x8"></pattern-grid>
+    </div>
+    <pre><code>&lt;seed-context seed="hello"&gt;
+  &lt;pattern-grid cells="8x8"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;</code></pre>
+  </section>
+
+  <section id="explorer">
+    <h2>10. API explorer</h2>
+    <style>
+      #explorer pattern-grid {
+        display: grid;
+        grid-template-columns: repeat(var(--pg-cols), 1fr);
+      }
+      #explorer pattern-grid > i {
+        aspect-ratio: 1;
+        background: hsl(calc(sibling-index() / sibling-count() * 360) 70% 50%);
+      }
+      #explorer label { display: inline-flex; gap: 0.5rem; align-items: center; margin-right: 1rem; }
+    </style>
+    <div class="demo">
+      <label>cols <input id="cols-slider" type="range" min="1" max="32" value="8" /> <output id="cols-out">8</output></label>
+      <label>rows <input id="rows-slider" type="range" min="1" max="32" value="8" /> <output id="rows-out">8</output></label>
+      <pattern-grid id="explorer-grid" cols="8" rows="8"></pattern-grid>
+    </div>
+    <script>
+      const grid = document.getElementById('explorer-grid');
+      const bind = (sliderId, outId, attr) => {
+        const slider = document.getElementById(sliderId);
+        const out = document.getElementById(outId);
+        slider.addEventListener('input', () => {
+          out.textContent = slider.value;
+          grid.setAttribute(attr, slider.value);
+        });
+      };
+      bind('cols-slider', 'cols-out', 'cols');
+      bind('rows-slider', 'rows-out', 'rows');
+    </script>
+  </section>
 </body>
 </html>
