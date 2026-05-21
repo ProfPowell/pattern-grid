@@ -244,6 +244,28 @@ test.describe('<seed-context>', () => {
     expect(rand0).toBe('');
   });
 
+  test('populates 1000 cells in under 50ms', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+    `);
+    const duration = await page.evaluate(() => new Promise((resolve) => {
+      const ctx = document.createElement('seed-context');
+      ctx.setAttribute('seed', 'perf');
+      document.body.appendChild(ctx);
+      ctx.addEventListener('seed-context:populated', (e) => {
+        if (e.detail.target.cellElements.length === 1000) {
+          resolve(performance.now() - t0);
+        }
+      });
+      const grid = document.createElement('pattern-grid');
+      const t0 = performance.now();
+      ctx.appendChild(grid);
+      grid.setAttribute('cells', '50x20');
+    }));
+    expect(duration).toBeLessThan(50);
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
