@@ -646,6 +646,86 @@
 #sc-cube pattern-grid &gt; i:nth-child(5) { transform: rotateX( 90deg) translateZ(40px); background: #3cc; }
 #sc-cube pattern-grid &gt; i:nth-child(6) { transform: rotateX(-90deg) translateZ(40px); background: #c3c; }</code></pre></details>
       </figure>
+
+      <!-- 32. Kaleidoscope -->
+      <figure id="sc-kaleido">
+        <div class="tile"><pattern-grid cells="12"></pattern-grid></div>
+        <figcaption><strong>Kaleidoscope</strong>12 wedges, alternately mirrored, around a center.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12"&gt;&lt;/pattern-grid&gt;
+
+#sc-kaleido pattern-grid &gt; i {
+  grid-area: 1 / 1;
+  width: 100%; aspect-ratio: 1;
+  /* 30° pie wedge from center */
+  clip-path: polygon(50% 50%, 50% 0%, 100% 0%);
+  /* same source pattern on every wedge */
+  background: conic-gradient(from -15deg,
+    hsl(0 90% 60%), hsl(40 90% 60%), hsl(80 90% 60%),
+    hsl(140 80% 55%), hsl(220 80% 55%), hsl(300 80% 55%), hsl(360 90% 60%));
+  transform: rotate(calc((sibling-index() - 1) * 30deg));
+}
+#sc-kaleido pattern-grid &gt; i:nth-child(even) {
+  transform: rotate(calc((sibling-index() - 1) * 30deg)) scale(-1, 1);
+  transform-origin: 50% 50%;
+}</code></pre></details>
+      </figure>
+
+      <!-- 33. Sierpinski (chaos game) -->
+      <figure id="sc-fractal">
+        <div class="tile"><pattern-grid id="sc-fractal-grid" cells="50x50"></pattern-grid></div>
+        <figcaption><strong>Sierpinski fractal</strong>Chaos game: random walk halfway to a vertex, lighting up cells.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid id="sc-fractal-grid" cells="50x50"&gt;&lt;/pattern-grid&gt;
+&lt;script&gt;
+  const grid = document.getElementById('sc-fractal-grid');
+  const W = 50;
+  /* three vertices of a triangle, in [0,1] grid coords */
+  const V = [
+    { x: 0.5,  y: 0.05 },
+    { x: 0.05, y: 0.95 },
+    { x: 0.95, y: 0.95 },
+  ];
+  let px = 0.5, py = 0.5;
+  function step() {
+    for (let n = 0; n &lt; 60; n++) {
+      const v = V[Math.floor(Math.random() * 3)];
+      px = (px + v.x) / 2;
+      py = (py + v.y) / 2;
+      const cell = grid.cellElements[((py * W) | 0) * W + ((px * W) | 0)];
+      if (cell) cell.classList.add('hit');
+    }
+  }
+  grid.addEventListener('pattern-grid:render', () =&gt; step(), { once: true });
+  setInterval(step, 50);
+&lt;/script&gt;</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-fractal-grid');
+            if (!grid) return;
+            const W = 50;
+            const V = [
+              { x: 0.5,  y: 0.05 },
+              { x: 0.05, y: 0.95 },
+              { x: 0.95, y: 0.95 },
+            ];
+            let px = 0.5, py = 0.5;
+            function step(iterations) {
+              for (let n = 0; n < iterations; n++) {
+                const v = V[Math.floor(Math.random() * 3)];
+                px = (px + v.x) / 2;
+                py = (py + v.y) / 2;
+                const cell = grid.cellElements[((py * W) | 0) * W + ((px * W) | 0)];
+                if (cell) cell.classList.add('hit');
+              }
+            }
+            grid.addEventListener('pattern-grid:render', () => step(60), { once: true });
+            if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              setInterval(() => step(60), 50);
+            } else {
+              step(8000);
+            }
+          })();
+        </script>
+      </figure>
     </div>
   </main>
 

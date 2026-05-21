@@ -1103,7 +1103,11 @@ body.dark .feature-card:hover {
   mix-blend-mode: multiply;
 }
 
-/* --- Showcase: Mandala --- */
+/* --- Showcase: Mandala ---
+ * Polar positioning via parent-relative top/left + cos()/sin() of an angle.
+ * (translateY % is self-relative and would collapse all cells to the center,
+ *  so we use absolute top/left in % of the parent instead.)
+ */
 #sc-mandala .tile { background: #0d0220; }
 #sc-mandala .mandala-stack {
   position: relative;
@@ -1114,27 +1118,23 @@ body.dark .feature-card:hover {
   position: absolute;
   inset: 0;
   display: block;
-  place-items: center;
 }
 #sc-mandala pattern-grid > i {
   --idx: calc(sibling-index() - 1);
-  --n:   sibling-count();
-  --angle: calc(var(--idx) / var(--n) * 360deg);
+  --angle: calc(var(--idx) / sibling-count() * 360deg);
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 8%;
+  left: calc(50% + cos(var(--angle)) * var(--r, 30%));
+  top:  calc(50% + sin(var(--angle)) * var(--r, 30%));
+  width: var(--sz, 6%);
   aspect-ratio: 1;
   border-radius: 50%;
-  transform: translate(-50%, -50%)
-             rotate(var(--angle))
-             translateY(var(--r, -30%));
-  background: hsl(calc(var(--idx) * 30) 75% 60%);
-  box-shadow: 0 0 8px hsl(calc(var(--idx) * 30) 75% 60%);
+  transform: translate(-50%, -50%);
+  background: hsl(calc(var(--idx) * 30 + var(--hue-offset, 0)) 80% 62%);
+  box-shadow: 0 0 10px hsl(calc(var(--idx) * 30 + var(--hue-offset, 0)) 80% 62%);
 }
-#sc-mandala pattern-grid:nth-of-type(1) > i { --r: -15%; width: 6%; }
-#sc-mandala pattern-grid:nth-of-type(2) > i { --r: -28%; width: 5%; }
-#sc-mandala pattern-grid:nth-of-type(3) > i { --r: -42%; width: 4%; }
+#sc-mandala pattern-grid:nth-of-type(1) > i { --r: 14%; --sz: 5.5%; --hue-offset:   0; }
+#sc-mandala pattern-grid:nth-of-type(2) > i { --r: 28%; --sz: 5%;   --hue-offset: 120; }
+#sc-mandala pattern-grid:nth-of-type(3) > i { --r: 42%; --sz: 3.5%; --hue-offset: 240; }
 
 @media (prefers-reduced-motion: no-preference) {
   #sc-mandala .mandala-stack {
@@ -1291,4 +1291,52 @@ body.dark .feature-card:hover {
     from { transform: rotateX(-20deg) rotateY(  0deg); }
     to   { transform: rotateX(-20deg) rotateY(360deg); }
   }
+}
+
+/* --- Showcase: Kaleidoscope --- */
+#sc-kaleido .tile { background: #0a0014; overflow: hidden; }
+#sc-kaleido pattern-grid {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: 100%;
+}
+#sc-kaleido pattern-grid > i {
+  grid-area: 1 / 1;
+  width: 100%;
+  aspect-ratio: 1;
+  clip-path: polygon(50% 50%, 50% 0%, 100% 0%);
+  background:
+    radial-gradient(circle at 50% 0%,
+      hsl(50 90% 65%) 0%,
+      hsl(0 80% 55%) 30%,
+      hsl(280 80% 55%) 60%,
+      hsl(200 90% 60%) 100%),
+    conic-gradient(from 0deg,
+      hsl(0 90% 60%), hsl(60 90% 60%), hsl(120 80% 60%),
+      hsl(200 90% 60%), hsl(280 80% 60%), hsl(360 90% 60%));
+  background-blend-mode: screen;
+  transform: rotate(calc((sibling-index() - 1) * 30deg));
+  transform-origin: 50% 50%;
+}
+#sc-kaleido pattern-grid > i:nth-child(even) {
+  transform: rotate(calc((sibling-index() - 1) * 30deg)) scale(-1, 1);
+}
+
+/* --- Showcase: Sierpinski fractal (chaos game) --- */
+#sc-fractal .tile { background: #0a0014; }
+#sc-fractal pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  width: 100%;
+  height: 100%;
+}
+#sc-fractal pattern-grid > i {
+  aspect-ratio: 1;
+  background: transparent;
+  transition: background 200ms, box-shadow 200ms;
+}
+#sc-fractal pattern-grid > i.hit {
+  background: hsl(280 90% 65%);
+  box-shadow: 0 0 4px hsl(280 90% 65% / 0.7);
 }
