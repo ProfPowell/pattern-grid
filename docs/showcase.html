@@ -407,6 +407,26 @@
              scale(calc(0.7 + var(--rand-2) * 0.5));
 }</code></pre></details>
       </figure>
+
+      <!-- 24. Constellation -->
+      <figure id="sc-stars">
+        <div class="tile"><seed-context seed="stars" count="3"><pattern-grid cells="20x20"></pattern-grid></seed-context></div>
+        <figcaption><strong>Constellation</strong>Sparse twinkling stars — drops into any dark hero section.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="stars" count="3"&gt;
+  &lt;pattern-grid cells="20x20"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-stars pattern-grid &gt; i {
+  background: radial-gradient(circle, #fff 0%, transparent 60%);
+  opacity: calc((var(--rand-0) - 0.88) * 100);
+  animation: twinkle 4s ease-in-out infinite;
+  animation-delay: calc(var(--rand-1) * -4s);
+}
+@keyframes twinkle {
+  0%, 100% { transform: scale(1);   filter: brightness(1);   }
+  50%      { transform: scale(1.4); filter: brightness(1.6); }
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
