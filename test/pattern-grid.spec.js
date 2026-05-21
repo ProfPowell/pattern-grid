@@ -45,4 +45,15 @@ test.describe('<pattern-grid>', () => {
     await expect(page.locator('pattern-grid > b.dot')).toHaveCount(3);
     await expect(page.locator('pattern-grid > template')).toHaveCount(1);
   });
+
+  test('hand-authored cells with matching count are preserved', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cols="2" rows="2">
+        <a href="/1"></a><a href="/2"></a><a href="/3"></a><a href="/4"></a>
+      </pattern-grid>
+    `);
+    await expect(page.locator('pattern-grid > a')).toHaveCount(4);
+    await expect(page.locator('pattern-grid > a[href="/1"]')).toHaveCount(1);
+  });
 });
