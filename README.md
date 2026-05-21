@@ -38,6 +38,26 @@ See [spec.md](./spec.md) for the full contract. TL;DR:
 - Event: `pattern-grid:render` with `{ cols, rows, total }`.
 - CSS host props set by the component: `--pg-cols`, `--pg-rows`.
 
+### `<seed-context>` companion
+
+Wrap any `<pattern-grid>` to get per-cell pseudo-random custom properties:
+
+```html
+<seed-context seed="hello">
+  <pattern-grid cells="8x8"></pattern-grid>
+</seed-context>
+
+<style>
+  pattern-grid > i {
+    background: hsl(calc(var(--rand-0) * 360deg) 70% 50%);
+  }
+</style>
+```
+
+- `seed` attribute reproduces the same randoms across reloads.
+- `count` (default 8) controls how many `--rand-N` slots per cell.
+- See the [showcase](https://profpowell.github.io/pattern-grid/showcase.html) for examples.
+
 ## Demo
 
 [https://profpowell.github.io/pattern-grid](https://profpowell.github.io/pattern-grid)

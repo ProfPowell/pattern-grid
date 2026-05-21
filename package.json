@@ -1,6 +1,6 @@
 {
   "name": "@profpowell/pattern-grid",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A vanilla web component that stamps out a CSS-Grid of empty cells and gets out of the way.",
   "type": "module",
   "main": "dist/pattern-grid.js",
