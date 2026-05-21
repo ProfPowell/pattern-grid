@@ -34,4 +34,15 @@ test.describe('<pattern-grid>', () => {
     await expect(page.locator('pattern-grid > span')).toHaveCount(4);
     await expect(page.locator('pattern-grid > i')).toHaveCount(0);
   });
+
+  test('template child is cloned per cell', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cells="3">
+        <template><b class="dot"></b></template>
+      </pattern-grid>
+    `);
+    await expect(page.locator('pattern-grid > b.dot')).toHaveCount(3);
+    await expect(page.locator('pattern-grid > template')).toHaveCount(1);
+  });
 });
