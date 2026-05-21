@@ -16,4 +16,13 @@ test.describe('<pattern-grid>', () => {
     `);
     await expect(page.locator('pattern-grid > i')).toHaveCount(12);
   });
+
+  test('attribute change regenerates cells', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cols="2" rows="2"></pattern-grid>
+    `);
+    await page.locator('pattern-grid').evaluate((el) => el.setAttribute('cols', '5'));
+    await expect(page.locator('pattern-grid > i')).toHaveCount(10);
+  });
 });
