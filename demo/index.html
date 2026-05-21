@@ -3,9 +3,143 @@
 <head>
   <meta charset="utf-8" />
   <title>pattern-grid demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/dist/pattern-grid.css" />
   <script type="module" src="/src/pattern-grid.js"></script>
+  <style>
+    :root {
+      font-family: system-ui, sans-serif;
+      --gap: 2rem;
+    }
+    body { margin: 0; padding: 2rem; max-width: 960px; margin-inline: auto; }
+    section { margin-block: 3rem; }
+    h2 { margin-bottom: 0.5rem; }
+    pre { background: #f4f4f4; padding: 1rem; overflow-x: auto; font-size: 0.85rem; }
+    .demo { border: 1px solid #ddd; padding: 1rem; margin-block: 1rem; }
+
+    /* --- Hero --- */
+    #hero pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--pg-cols), 1fr);
+      aspect-ratio: 1;
+      width: 100%;
+      max-width: 480px;
+      margin-inline: auto;
+    }
+    #hero pattern-grid > i {
+      aspect-ratio: 1;
+      background: hsl(calc(sibling-index() / sibling-count() * 360) 70% 50%);
+      animation: hero-pulse 4s ease-in-out infinite;
+      animation-delay: calc(sibling-index() * -20ms);
+    }
+    @keyframes hero-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.85); border-radius: 50%; }
+    }
+
+    /* --- Hello rainbow --- */
+    #rainbow pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--pg-cols), 1fr);
+    }
+    #rainbow pattern-grid > i {
+      aspect-ratio: 1;
+      background: hsl(calc(sibling-index() / sibling-count() * 360) 70% 50%);
+    }
+
+    /* --- Concentric rotation --- */
+    #concentric pattern-grid {
+      display: grid;
+      place-items: center;
+      aspect-ratio: 1;
+      max-width: 320px;
+      margin-inline: auto;
+    }
+    #concentric pattern-grid > i {
+      grid-area: 1 / 1;
+      width: calc(100% * sibling-index() / sibling-count());
+      aspect-ratio: 1;
+      border: 1px solid hsl(calc(sibling-index() * 11) 70% 60%);
+      border-radius: 30%;
+      transform: rotate(calc(sibling-index() * 5deg));
+    }
+
+    /* --- 2D coordinates --- */
+    #coords pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--pg-cols), 1fr);
+      --n: var(--pg-cols);
+    }
+    #coords pattern-grid > i {
+      --i: calc(sibling-index() - 1);
+      --x: calc(mod(var(--i), var(--n)));
+      --y: calc(floor(var(--i) / var(--n)));
+      aspect-ratio: 1;
+      background: hsl(calc((var(--x) + var(--y)) * 8) 70% 50%);
+    }
+
+    /* --- Template cells --- */
+    #template pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--pg-cols), 1fr);
+      gap: 0.5rem;
+    }
+    #template pattern-grid > .tile {
+      aspect-ratio: 1;
+      border: 0;
+      background: #444;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    #template pattern-grid > .tile:hover { background: hsl(200 70% 50%); }
+  </style>
 </head>
 <body>
-  <h1>pattern-grid demo</h1>
+  <h1>&lt;pattern-grid&gt;</h1>
+  <p>A vanilla web component that stamps out a CSS-Grid of empty cells and gets out of the way.</p>
+
+  <section id="hero">
+    <h2>1. Hero — animated doodle</h2>
+    <div class="demo">
+      <pattern-grid cells="16x16"></pattern-grid>
+    </div>
+  </section>
+
+  <section id="rainbow">
+    <h2>2. Hello rainbow</h2>
+    <div class="demo">
+      <pattern-grid cells="8x8"></pattern-grid>
+    </div>
+    <pre><code>&lt;pattern-grid cells="8x8"&gt;&lt;/pattern-grid&gt;</code></pre>
+  </section>
+
+  <section id="concentric">
+    <h2>3. Concentric rotation</h2>
+    <div class="demo">
+      <pattern-grid cells="32"></pattern-grid>
+    </div>
+    <pre><code>&lt;pattern-grid cells="32"&gt;&lt;/pattern-grid&gt;</code></pre>
+  </section>
+
+  <section id="coords">
+    <h2>4. 2D coordinates from sibling-index</h2>
+    <div class="demo">
+      <pattern-grid cells="16x16"></pattern-grid>
+    </div>
+    <pre><code>&lt;pattern-grid cells="16x16"&gt;&lt;/pattern-grid&gt;</code></pre>
+  </section>
+
+  <section id="template">
+    <h2>5. Template cells</h2>
+    <div class="demo">
+      <pattern-grid cells="4x4">
+        <template><button type="button" class="tile">+</button></template>
+      </pattern-grid>
+    </div>
+    <pre><code>&lt;pattern-grid cells="4x4"&gt;
+  &lt;template&gt;&lt;button class="tile"&gt;+&lt;/button&gt;&lt;/template&gt;
+&lt;/pattern-grid&gt;</code></pre>
+  </section>
 </body>
 </html>
