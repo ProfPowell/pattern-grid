@@ -117,6 +117,27 @@ test.describe('<seed-context>', () => {
     expect(after).not.toBe(before);
   });
 
+  test('changing count rewrites with new slot count', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="x" count="4"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    const before = await page.locator('pattern-grid > i').first().evaluate((el) => ({
+      r3: el.style.getPropertyValue('--rand-3'),
+      r4: el.style.getPropertyValue('--rand-4'),
+    }));
+    expect(before.r3).not.toBe('');
+    expect(before.r4).toBe('');
+    await page.locator('seed-context').evaluate((el) => el.setAttribute('count', '6'));
+    const after = await page.locator('pattern-grid > i').first().evaluate((el) => ({
+      r5: el.style.getPropertyValue('--rand-5'),
+      r6: el.style.getPropertyValue('--rand-6'),
+    }));
+    expect(after.r5).not.toBe('');
+    expect(after.r6).toBe('');
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
