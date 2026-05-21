@@ -231,6 +231,24 @@
   opacity: calc(0.3 + var(--rand-0) * 0.7);
 }</code></pre></details>
       </figure>
+
+      <!-- 14. Hover ripple -->
+      <figure id="sc-ripple">
+        <div class="tile"><pattern-grid cells="10x10"></pattern-grid></div>
+        <figcaption><strong>Hover ripple</strong>Hover any cell to light up its neighbors.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
+
+#sc-ripple pattern-grid &gt; i {
+  background: var(--bg-tertiary);
+  transition: background 0.4s, transform 0.4s;
+}
+#sc-ripple pattern-grid &gt; i:hover,
+#sc-ripple pattern-grid &gt; i:hover + i,
+#sc-ripple pattern-grid &gt; i:has(+ i:hover) {
+  background: hsl(200 80% 55%);
+  transform: scale(1.1);
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 

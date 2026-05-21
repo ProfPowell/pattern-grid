@@ -828,3 +828,22 @@ body.dark .feature-card:hover {
 #sc-rain pattern-grid > .glyph:nth-child(10n+7)::before { content: "┤"; }
 #sc-rain pattern-grid > .glyph:nth-child(10n+8)::before { content: "┬"; }
 #sc-rain pattern-grid > .glyph:nth-child(10n+9)::before { content: "┴"; }
+
+/* --- Showcase: hover ripple --- */
+#sc-ripple pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 2px;
+}
+#sc-ripple pattern-grid > i {
+  aspect-ratio: 1;
+  background: var(--bg-tertiary);
+  transition: background 0.4s, transform 0.4s;
+}
+#sc-ripple pattern-grid > i:hover,
+#sc-ripple pattern-grid > i:hover + i,
+#sc-ripple pattern-grid > i:has(+ i:hover) {
+  background: hsl(200 80% 55%);
+  transform: scale(1.1);
+  z-index: 1;
+}
