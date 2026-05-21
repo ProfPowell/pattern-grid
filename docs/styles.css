@@ -520,7 +520,7 @@ body.dark .feature-card:hover {
 }
 #seeded pattern-grid > i {
   aspect-ratio: 1;
-  background: var(--bg-tertiary);
+  background: hsl(calc(var(--rand-0) * 360deg) 70% 50%);
 }
 
 #explorer pattern-grid {
