@@ -266,6 +266,20 @@ test.describe('<seed-context>', () => {
     expect(duration).toBeLessThan(50);
   });
 
+  test('two pattern-grids inside one seed-context get independent randoms', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="x">
+        <pattern-grid id="a" cells="3x3"></pattern-grid>
+        <pattern-grid id="b" cells="3x3"></pattern-grid>
+      </seed-context>
+    `);
+    const a = await page.locator('#a > i').evaluateAll((c) => c.map((el) => el.style.getPropertyValue('--rand-0')));
+    const b = await page.locator('#b > i').evaluateAll((c) => c.map((el) => el.style.getPropertyValue('--rand-0')));
+    expect(a).not.toEqual(b);
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
