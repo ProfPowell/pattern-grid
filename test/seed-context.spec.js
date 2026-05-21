@@ -159,6 +159,32 @@ test.describe('<seed-context>', () => {
     expect(hi.r32).toBe('');
   });
 
+  test('reseed() method re-writes without attribute change', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="s"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    await page.locator('pattern-grid > i').first().evaluate((el) => el.style.setProperty('--rand-0', '0.999'));
+    await page.locator('seed-context').evaluate((el) => el.reseed());
+    const restored = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    expect(restored).not.toBe('0.999');
+  });
+
+  test('setting seed via JS property reflects to attribute and reseeds', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="one"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    const before = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    await page.locator('seed-context').evaluate((el) => { el.seed = 'two'; });
+    const attr = await page.locator('seed-context').evaluate((el) => el.getAttribute('seed'));
+    const after = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    expect(attr).toBe('two');
+    expect(after).not.toBe(before);
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
