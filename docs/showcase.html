@@ -524,6 +524,96 @@
   background: hsl(calc(sibling-index() * 7) 80% 60%);
 }</code></pre></details>
       </figure>
+
+      <!-- 29. Game of Life -->
+      <figure id="sc-gol">
+        <div class="tile"><pattern-grid id="sc-gol-grid" cells="24x24"></pattern-grid></div>
+        <figcaption><strong>Game of Life</strong>Conway's classic — 24×24, steps every 200ms.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid id="sc-gol-grid" cells="24x24"&gt;&lt;/pattern-grid&gt;
+&lt;script&gt;
+  const grid = document.getElementById('sc-gol-grid');
+  const W = 24, N = W * W;
+  let state = Array.from({ length: N }, () =&gt; +(Math.random() &lt; 0.3));
+  function step() {
+    const next = state.slice();
+    for (let i = 0; i &lt; N; i++) {
+      const x = i % W, y = (i / W) | 0;
+      let n = 0;
+      for (let dy = -1; dy &lt;= 1; dy++) for (let dx = -1; dx &lt;= 1; dx++) {
+        if (dx || dy) n += state[((y+dy+W)%W) * W + (x+dx+W)%W];
+      }
+      next[i] = state[i] ? (n === 2 || n === 3 ? 1 : 0) : (n === 3 ? 1 : 0);
+    }
+    state = next;
+    grid.cellElements.forEach((c, i) =&gt; c.classList.toggle('alive', !!state[i]));
+  }
+  grid.addEventListener('pattern-grid:render', () =&gt; { step(); }, { once: true });
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(step, 200);
+&lt;/script&gt;</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-gol-grid');
+            if (!grid) return;
+            const W = 24, N = W * W;
+            let state = Array.from({ length: N }, () => +(Math.random() < 0.3));
+            function step() {
+              const next = state.slice();
+              for (let i = 0; i < N; i++) {
+                const x = i % W, y = (i / W) | 0;
+                let n = 0;
+                for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+                  if (dx || dy) n += state[((y + dy + W) % W) * W + (x + dx + W) % W];
+                }
+                next[i] = state[i] ? (n === 2 || n === 3 ? 1 : 0) : (n === 3 ? 1 : 0);
+              }
+              state = next;
+              grid.cellElements.forEach((c, i) => c.classList.toggle('alive', !!state[i]));
+            }
+            grid.addEventListener('pattern-grid:render', () => { step(); }, { once: true });
+            if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              setInterval(step, 200);
+            }
+          })();
+        </script>
+      </figure>
+
+      <!-- 30. Mouse heatmap -->
+      <figure id="sc-heat">
+        <div class="tile"><pattern-grid id="sc-heat-grid" cells="20x20"></pattern-grid></div>
+        <figcaption><strong>Mouse heatmap</strong>Move your cursor — each cell colors by distance.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid id="sc-heat-grid" cells="20x20"&gt;&lt;/pattern-grid&gt;
+&lt;script&gt;
+  const grid = document.getElementById('sc-heat-grid');
+  grid.addEventListener('pointermove', (e) =&gt; {
+    const r = grid.getBoundingClientRect();
+    grid.style.setProperty('--mx', (e.clientX - r.left) / r.width);
+    grid.style.setProperty('--my', (e.clientY - r.top)  / r.height);
+  });
+&lt;/script&gt;
+
+@property --mx { syntax: '&lt;number&gt;'; inherits: true; initial-value: 0.5; }
+@property --my { syntax: '&lt;number&gt;'; inherits: true; initial-value: 0.5; }
+#sc-heat pattern-grid &gt; i {
+  --idx: calc(sibling-index() - 1);
+  --col: calc(mod(var(--idx), 20) / 20);
+  --row: calc(floor(calc(var(--idx) / 20)) / 20);
+  --dx: calc(var(--col) - var(--mx));
+  --dy: calc(var(--row) - var(--my));
+  --d: calc(sqrt(var(--dx) * var(--dx) + var(--dy) * var(--dy)));
+  background: hsl(calc(var(--d) * 720deg) 75% calc(40% + var(--d) * 50%));
+}</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-heat-grid');
+            if (!grid) return;
+            grid.addEventListener('pointermove', (e) => {
+              const r = grid.getBoundingClientRect();
+              grid.style.setProperty('--mx', (e.clientX - r.left) / r.width);
+              grid.style.setProperty('--my', (e.clientY - r.top) / r.height);
+            });
+          })();
+        </script>
+      </figure>
     </div>
   </main>
 
