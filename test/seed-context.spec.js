@@ -319,6 +319,29 @@ test.describe('<seed-context>', () => {
     expect(inlineOpacity).toBe('1');
   });
 
+  test('nested seed-contexts: innermost scan wins, values match a solo inner-seeded context', async ({ page }) => {
+    // Both contexts observe the pattern-grid:render event. The innermost
+    // seed-context's connectedCallback scan runs last (tree-order upgrades),
+    // so its seed is the final write. Verify this by comparing against a
+    // standalone seed-context with the same "inner" seed.
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context id="outer" seed="outer">
+        <seed-context id="inner" seed="inner">
+          <pattern-grid cells="3x3"></pattern-grid>
+        </seed-context>
+      </seed-context>
+      <seed-context id="control" seed="inner">
+        <pattern-grid cells="3x3"></pattern-grid>
+      </seed-context>
+    `);
+    const nested = await page.locator('#outer pattern-grid > i').evaluateAll((c) => c.map((el) => el.style.getPropertyValue('--rand-0')));
+    const control = await page.locator('#control pattern-grid > i').evaluateAll((c) => c.map((el) => el.style.getPropertyValue('--rand-0')));
+    expect(nested.length).toBe(9);
+    expect(nested).toEqual(control);
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
