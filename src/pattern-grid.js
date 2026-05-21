@@ -1,6 +1,21 @@
 // src/pattern-grid.js
 /**
  * <pattern-grid> — generate a CSS Grid of styleable cells.
+ *
+ * @element pattern-grid
+ *
+ * @attr {number} cols - Number of columns (1–256, clamped). Default 1.
+ * @attr {number} rows - Number of rows (1–256, clamped). Default 1.
+ * @attr {string} cells - Shorthand "NxM" or "N" (1D). Overrides cols/rows.
+ * @attr {string} cell - Tag name used for generated cells. Default "i".
+ * @attr {string} seed - Reserved for <seed-context> companion.
+ * @attr {string} shim - Set to "sibling" to opt into the sibling-index() JS fallback.
+ *
+ * @cssprop {<integer>} --pg-cols - Resolved column count (set by component).
+ * @cssprop {<integer>} --pg-rows - Resolved row count (set by component).
+ *
+ * @fires pattern-grid:render - Fired after regeneration. detail: { cols, rows, total }.
+ *
  * @see https://github.com/ProfPowell/pattern-grid
  */
 class PatternGrid extends HTMLElement {
