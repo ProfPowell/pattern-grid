@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "cp dist/pattern-grid.js docs/pattern-grid.js && cp dist/pattern-grid.css docs/pattern-grid.css",
     "preview": "vite preview",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
@@ -53,6 +54,6 @@
     "type": "git",
     "url": "git+https://github.com/ProfPowell/pattern-grid.git"
   },
-  "homepage": "https://github.com/ProfPowell/pattern-grid",
+  "homepage": "https://profpowell.github.io/pattern-grid/",
   "customElements": "custom-elements.json"
 }

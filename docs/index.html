@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;pattern-grid&gt; — Web Component</title>
+  <meta name="description" content="A vanilla web component that stamps out a CSS-Grid of empty cells and gets out of the way. Light DOM, no DSL, ~1 KB." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pattern-grid.css" />
+  <script type="module" src="pattern-grid.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;pattern-grid&gt;</a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>&lt;pattern-grid&gt;</h1>
+      <p class="tagline">A vanilla web component that stamps out a CSS-Grid of empty cells and gets out of the way. Author CSS owns the visuals.</p>
+
+      <div class="hero-demo">
+        <pattern-grid cells="16x16"></pattern-grid>
+      </div>
+
+      <div class="hero-actions">
+        <a href="demos.html" class="btn primary">View Demos</a>
+        <a href="api.html" class="btn secondary">API Documentation</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Light DOM</h3>
+          <p>Cells live in the same DOM as the host. Author CSS reaches <code>pattern-grid &gt; *</code> directly. No <code>::part()</code> contracts, no shadow boundaries.</p>
+        </div>
+        <div class="feature-card">
+          <h3>No DSL</h3>
+          <p>Two integer attributes (<code>cols</code>, <code>rows</code>) and an optional <code>&lt;template&gt;</code> slot. Style with real CSS using <code>sibling-index()</code>, <code>sibling-count()</code>, trig, and custom properties.</p>
+        </div>
+        <div class="feature-card">
+          <h3>~1 KB JS</h3>
+          <p>One ES module, zero runtime dependencies, ≤80 lines. The whole point: the component shrinks as the CSS platform grows.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Progressive Enhancement</h3>
+          <p>Hand-authored cells render without JS. The script only generates cells when the count doesn't already match <code>cols × rows</code>.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Template Cells</h3>
+          <p>Drop a <code>&lt;template&gt;</code> inside and each cell becomes a clone of its content — buttons, links, custom elements, whatever you need.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Firefox Shim</h3>
+          <p>Opt into <code>shim="sibling"</code> to get <code>--i</code> and <code>--n</code> custom properties on cells today, before <code>sibling-index()</code> is Baseline.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-start">
+      <h2>Quick Start</h2>
+      <p>Drop the script tag in and you're done. The component registers itself.</p>
+      <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/pattern-grid"&gt;&lt;/script&gt;
+
+&lt;pattern-grid cells="8x8"&gt;&lt;/pattern-grid&gt;
+
+&lt;style&gt;
+  pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--pg-cols), 1fr);
+  }
+  pattern-grid &gt; i {
+    aspect-ratio: 1;
+    background: hsl(calc(sibling-index() / sibling-count() * 360) 70% 50%);
+  }
+&lt;/style&gt;</code></pre>
+      <p>For npm-managed projects:</p>
+      <pre><code>npm install @profpowell/pattern-grid</code></pre>
+    </section>
+
+    <section>
+      <h2>Suite</h2>
+      <p>Part of the ProfPowell web component suite — small, composable, vanilla custom elements.</p>
+      <div class="related-grid">
+        <a class="related-card" href="https://profpowell.github.io/code-block/">
+          <strong>&lt;code-block&gt;</strong>
+          <span>Syntax-highlighted code blocks with line numbers and tabs.</span>
+        </a>
+        <a class="related-card" href="https://github.com/ProfPowell/browser-window">
+          <strong>&lt;browser-window&gt;</strong>
+          <span>A faux browser chrome around any content.</span>
+        </a>
+        <a class="related-card" href="https://github.com/ProfPowell/terminal-window">
+          <strong>&lt;terminal-window&gt;</strong>
+          <span>A faux terminal for shell-style content.</span>
+        </a>
+        <a class="related-card" href="https://github.com/ProfPowell/browser-console">
+          <strong>&lt;browser-console&gt;</strong>
+          <span>A devtools console UI for demos and tutorials.</span>
+        </a>
+        <a class="related-card" href="https://github.com/ProfPowell/http-component">
+          <strong>&lt;http-component&gt;</strong>
+          <span>Declarative HTTP requests as an element.</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT licensed · Source on <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a> · Part of the ProfPowell suite</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+</body>
+</html>

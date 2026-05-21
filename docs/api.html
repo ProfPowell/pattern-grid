@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference — &lt;pattern-grid&gt;</title>
+  <meta name="description" content="Complete API documentation for the pattern-grid web component — attributes, properties, methods, events, and CSS custom properties." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pattern-grid.css" />
+  <script type="module" src="pattern-grid.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;pattern-grid&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="api.html" class="active">API</a>
+        <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>API Reference</h1>
+    <p class="demo-description">Complete contract for the <code>&lt;pattern-grid&gt;</code> custom element. For background and design rationale, see the <a href="https://github.com/ProfPowell/pattern-grid/blob/main/spec.md">spec</a>.</p>
+
+    <section>
+      <h2>Attributes</h2>
+      <p>All attributes reflect to JS properties of the same camelCase name.</p>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>cols</code></td>
+            <td>integer</td>
+            <td><code>1</code></td>
+            <td>Number of columns. Range: 1–256. Values outside the range are clamped.</td>
+          </tr>
+          <tr>
+            <td><code>rows</code></td>
+            <td>integer</td>
+            <td><code>1</code></td>
+            <td>Number of rows. Range: 1–256. Values outside the range are clamped.</td>
+          </tr>
+          <tr>
+            <td><code>cells</code></td>
+            <td>string</td>
+            <td>—</td>
+            <td>Shorthand for <code>cols × rows</code>. Accepts <code>"8x8"</code> (2D) or <code>"64"</code> (1D shorthand for <code>cols=64 rows=1</code>). When present, overrides <code>cols</code> / <code>rows</code>.</td>
+          </tr>
+          <tr>
+            <td><code>cell</code></td>
+            <td>tag name</td>
+            <td><code>i</code></td>
+            <td>Tag used for generated cells. Must be a valid HTML tag. Ignored when a <code>&lt;template&gt;</code> child is provided.</td>
+          </tr>
+          <tr>
+            <td><code>shim</code></td>
+            <td>string</td>
+            <td>—</td>
+            <td>Set to <code>"sibling"</code> to opt into the <code>sibling-index()</code> JS fallback (writes <code>--i</code> per cell and <code>--n</code> on the host).</td>
+          </tr>
+          <tr>
+            <td><code>seed</code></td>
+            <td>string | number</td>
+            <td>—</td>
+            <td>Reserved for the planned <code>&lt;seed-context&gt;</code> companion. The component observes and reflects this attribute but does not act on it in v0.1.0.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Properties</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>cols</code></td>
+            <td>number</td>
+            <td>Resolved column count (clamped). Setter writes the attribute.</td>
+          </tr>
+          <tr>
+            <td><code>rows</code></td>
+            <td>number</td>
+            <td>Resolved row count (clamped). Setter writes the attribute.</td>
+          </tr>
+          <tr>
+            <td><code>cell</code></td>
+            <td>string</td>
+            <td>Cell tag name. Setter writes the attribute.</td>
+          </tr>
+          <tr>
+            <td><code>total</code></td>
+            <td>number (readonly)</td>
+            <td><code>cols * rows</code>.</td>
+          </tr>
+          <tr>
+            <td><code>cellElements</code></td>
+            <td>Element[] (readonly)</td>
+            <td>Live array of generated cells (excludes any <code>&lt;template&gt;</code> child).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Methods</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Returns</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>render()</code></td>
+            <td><code>void</code></td>
+            <td>Force regeneration of cells. Idempotent if count and tag haven't changed.</td>
+          </tr>
+          <tr>
+            <td><code>cellAt(i)</code></td>
+            <td><code>Element | null</code></td>
+            <td>Returns the i-th cell (0-indexed). Returns <code>null</code> if out of range.</td>
+          </tr>
+          <tr>
+            <td><code>cellAt(x, y)</code></td>
+            <td><code>Element | null</code></td>
+            <td>Returns the cell at column <code>x</code>, row <code>y</code> (both 0-indexed).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Events</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Detail</th>
+            <th>When</th>
+            <th>Bubbles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>pattern-grid:render</code></td>
+            <td><code>{ cols, rows, total }</code></td>
+            <td>After regeneration completes.</td>
+            <td>Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>CSS Custom Properties — Set by the Component</h2>
+      <p>The component writes these as inline styles on the host element. Author CSS reads them.</p>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--pg-cols</code></td>
+            <td><code>&lt;integer&gt;</code></td>
+            <td>Resolved column count.</td>
+          </tr>
+          <tr>
+            <td><code>--pg-rows</code></td>
+            <td><code>&lt;integer&gt;</code></td>
+            <td>Resolved row count.</td>
+          </tr>
+          <tr>
+            <td><code>--n</code></td>
+            <td><code>&lt;integer&gt;</code></td>
+            <td>Only set when <code>shim="sibling"</code>. Equals <code>total</code>.</td>
+          </tr>
+          <tr>
+            <td><code>--i</code></td>
+            <td><code>&lt;integer&gt;</code></td>
+            <td>Only set on each cell when <code>shim="sibling"</code>. 1-indexed (matches native <code>sibling-index()</code>).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>CSS Custom Properties — Optional Stylesheet</h2>
+      <p>Honored if you import <code>@profpowell/pattern-grid/css</code> (an opt-in stylesheet with sensible defaults). Otherwise inert.</p>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--pg-gap</code></td>
+            <td><code>0</code></td>
+            <td>Grid gap.</td>
+          </tr>
+          <tr>
+            <td><code>--pg-aspect</code></td>
+            <td><code>calc(var(--pg-cols) / var(--pg-rows))</code></td>
+            <td>Aspect ratio of the grid container.</td>
+          </tr>
+          <tr>
+            <td><code>--pg-cell-aspect</code></td>
+            <td><code>1</code></td>
+            <td>Aspect ratio of each cell.</td>
+          </tr>
+          <tr>
+            <td><code>--pg-bg</code></td>
+            <td><code>transparent</code></td>
+            <td>Default cell background.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Progressive Enhancement</h2>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Without it</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HTML only</td>
+            <td>No CSS, no JS</td>
+            <td>Empty <code>&lt;pattern-grid&gt;</code> element; no visual.</td>
+          </tr>
+          <tr>
+            <td>HTML + CSS</td>
+            <td>No JS</td>
+            <td>Hand-authored cells render as styled.</td>
+          </tr>
+          <tr>
+            <td>HTML + CSS + JS</td>
+            <td>Full functionality</td>
+            <td>Cells auto-generated; attributes reactive.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT licensed · Source on <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a> · Part of the ProfPowell suite</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+</body>
+</html>

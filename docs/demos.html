@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demos — &lt;pattern-grid&gt;</title>
+  <meta name="description" content="Ten live examples of the pattern-grid web component, from a hello rainbow to a live API explorer." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pattern-grid.css" />
+  <script type="module" src="pattern-grid.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;pattern-grid&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html" class="active">Demos</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Demos</h1>
+    <p class="demo-description">Each example is a live <code>&lt;pattern-grid&gt;</code> element styled with author CSS. View source on this page to see exactly how each one is built.</p>
+
+    <section class="demo-section" id="rainbow">
+      <h2>1. Hello rainbow</h2>
+      <p class="demo-description">A 64-cell grid with HSL hues driven by <code>sibling-index()</code> and <code>sibling-count()</code>.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <pattern-grid cells="8x8"></pattern-grid>
+        </div>
+        <pre><code>&lt;pattern-grid cells="8x8"&gt;&lt;/pattern-grid&gt;
+
+&lt;style&gt;
+  pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--pg-cols), 1fr);
+  }
+  pattern-grid &gt; i {
+    aspect-ratio: 1;
+    background: hsl(
+      calc(sibling-index() / sibling-count() * 360)
+      70% 50%
+    );
+  }
+&lt;/style&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="concentric">
+      <h2>2. Concentric rotation</h2>
+      <p class="demo-description">32 cells stacked in the same grid cell, each smaller and more rotated than the last. No JS animation — pure CSS.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <pattern-grid cells="32"></pattern-grid>
+        </div>
+        <pre><code>&lt;pattern-grid cells="32"&gt;&lt;/pattern-grid&gt;
+
+&lt;style&gt;
+  pattern-grid {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+  }
+  pattern-grid &gt; i {
+    grid-area: 1 / 1;
+    width: calc(100% * sibling-index() / sibling-count());
+    aspect-ratio: 1;
+    border: 1px solid hsl(calc(sibling-index() * 11) 70% 60%);
+    border-radius: 30%;
+    transform: rotate(calc(sibling-index() * 5deg));
+  }
+&lt;/style&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="coords">
+      <h2>3. 2D coordinates from the sibling shim</h2>
+      <p class="demo-description">With <code>shim="sibling"</code>, the component sets typed integer custom properties (<code>--i</code> per cell, <code>--n</code> on the host). That lets <code>mod()</code> and <code>floor()</code> recover (x, y) coordinates reliably. Color shifts on a diagonal.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <pattern-grid cells="16x16" shim="sibling"></pattern-grid>
+        </div>
+        <pre><code>&lt;pattern-grid cells="16x16" shim="sibling"&gt;&lt;/pattern-grid&gt;
+
+&lt;style&gt;
+  /* Register so CSS math types numerically */
+  @property --idx { syntax: '&lt;integer&gt;'; inherits: false; initial-value: 0; }
+  @property --x   { syntax: '&lt;integer&gt;'; inherits: false; initial-value: 0; }
+  @property --y   { syntax: '&lt;integer&gt;'; inherits: false; initial-value: 0; }
+
+  pattern-grid &gt; i {
+    --idx: calc(var(--i) - 1);
+    --x: mod(var(--idx), var(--pg-cols));
+    --y: calc((var(--idx) - var(--x)) / var(--pg-cols));
+    background: hsl(
+      calc((var(--x) + var(--y)) * 8) 70% 50%
+    );
+  }
+&lt;/style&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="template">
+      <h2>4. Template cells</h2>
+      <p class="demo-description">Provide a <code>&lt;template&gt;</code> child and each cell becomes a clone of its content. Buttons here, but it can be anything — links, images, custom elements.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <pattern-grid cells="4x4">
+            <template><button type="button" class="tile">+</button></template>
+          </pattern-grid>
+        </div>
+        <pre><code>&lt;pattern-grid cells="4x4"&gt;
+  &lt;template&gt;
+    &lt;button class="tile"&gt;+&lt;/button&gt;
+  &lt;/template&gt;
+&lt;/pattern-grid&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="handauthored">
+      <h2>5. Hand-authored cells (no JS required)</h2>
+      <p class="demo-description">When the child count already matches <code>cols × rows</code>, JS leaves them alone. This block also renders correctly with JavaScript disabled.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <pattern-grid cols="3" rows="2">
+            <a href="#one" style="background:#c33"></a>
+            <a href="#two" style="background:#3c3"></a>
+            <a href="#three" style="background:#33c"></a>
+            <a href="#four" style="background:#cc3"></a>
+            <a href="#five" style="background:#3cc"></a>
+            <a href="#six" style="background:#c3c"></a>
+          </pattern-grid>
+        </div>
+        <pre><code>&lt;pattern-grid cols="3" rows="2"&gt;
+  &lt;a href="#one"&gt;&lt;/a&gt;
+  &lt;a href="#two"&gt;&lt;/a&gt;
+  &lt;a href="#three"&gt;&lt;/a&gt;
+  &lt;a href="#four"&gt;&lt;/a&gt;
+  &lt;a href="#five"&gt;&lt;/a&gt;
+  &lt;a href="#six"&gt;&lt;/a&gt;
+&lt;/pattern-grid&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="vb">
+      <h2>6. Vanilla Breeze tokens</h2>
+      <p class="demo-description">Because cells live in the light DOM, any inherited custom properties cascade in. Here the design tokens come from a parent.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <pattern-grid cells="6x6"></pattern-grid>
+        </div>
+        <pre><code>/* VB tokens cascade into light DOM cells */
+pattern-grid &gt; i {
+  background: hsl(
+    calc(sibling-index() / sibling-count() * 360)
+    var(--vb-color-saturation)
+    var(--vb-color-lightness)
+  );
+  border-radius: var(--vb-radius-sm);
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="shim">
+      <h2>7. Sibling shim — works in Firefox today</h2>
+      <p class="demo-description">Setting <code>shim="sibling"</code> writes <code>--i</code> on each cell and <code>--n</code> on the host, so author CSS works in browsers that don't yet ship <code>sibling-index()</code>. Author CSS can prefer the native function with a fallback.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <p style="margin: 0 0 0.5rem 0; color: var(--text-secondary);">With <code>shim="sibling"</code>:</p>
+          <pattern-grid cells="36" shim="sibling"></pattern-grid>
+          <p style="margin: 1rem 0 0.5rem 0; color: var(--text-secondary);">Without shim:</p>
+          <pattern-grid cells="36"></pattern-grid>
+        </div>
+        <pre><code>&lt;pattern-grid cells="36" shim="sibling"&gt;&lt;/pattern-grid&gt;
+
+&lt;style&gt;
+  pattern-grid &gt; i {
+    /* prefer shim, fall back to native */
+    --idx: var(--i, sibling-index());
+    background: hsl(calc(var(--idx) * 10) 70% 50%);
+  }
+&lt;/style&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="seeded">
+      <h2>8. Seeded randomness (planned)</h2>
+      <p class="demo-description">When CSS <code>random()</code> isn't yet Baseline, a companion <code>&lt;seed-context&gt;</code> element (planned) will set <code>--rand-N</code> custom properties on its children using a seeded PRNG. Wrap a <code>&lt;pattern-grid&gt;</code> in it and consume the randoms from author CSS. Until that ships, this falls back to a plain grid.</p>
+      <div class="side-by-side">
+        <div class="demo-frame">
+          <pattern-grid cells="8x8"></pattern-grid>
+        </div>
+        <pre><code>&lt;seed-context seed="hello"&gt;
+  &lt;pattern-grid cells="8x8"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+&lt;style&gt;
+  pattern-grid &gt; i {
+    background: hsl(calc(var(--rand-1) * 360) 70% 50%);
+  }
+&lt;/style&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="demo-section" id="explorer">
+      <h2>9. API explorer</h2>
+      <p class="demo-description">Drag the sliders to mutate <code>cols</code> and <code>rows</code> attributes live. The component listens to attribute changes and regenerates cells.</p>
+      <div class="demo-frame">
+        <div class="controls">
+          <label>cols <input id="cols-slider" type="range" min="1" max="32" value="8" /> <output id="cols-out">8</output></label>
+          <label>rows <input id="rows-slider" type="range" min="1" max="32" value="8" /> <output id="rows-out">8</output></label>
+        </div>
+        <pattern-grid id="explorer-grid" cols="8" rows="8"></pattern-grid>
+      </div>
+    </section>
+
+    <section class="demo-section" id="render-event">
+      <h2>10. The render event</h2>
+      <p class="demo-description">Every regeneration fires a <code>pattern-grid:render</code> event with the new <code>{ cols, rows, total }</code> in its detail. Useful for tying side effects to grid changes.</p>
+      <pre><code>document.querySelector('pattern-grid')
+  .addEventListener('pattern-grid:render', (e) =&gt; {
+    console.log('Regenerated:', e.detail);
+    // e.detail === { cols: 8, rows: 8, total: 64 }
+  });</code></pre>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT licensed · Source on <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a> · Part of the ProfPowell suite</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    // API explorer wiring
+    const grid = document.getElementById('explorer-grid');
+    const bind = (sliderId, outId, attr) => {
+      const slider = document.getElementById(sliderId);
+      const out = document.getElementById(outId);
+      slider.addEventListener('input', () => {
+        out.textContent = slider.value;
+        grid.setAttribute(attr, slider.value);
+      });
+    };
+    bind('cols-slider', 'cols-out', 'cols');
+    bind('rows-slider', 'rows-out', 'rows');
+  </script>
+</body>
+</html>
