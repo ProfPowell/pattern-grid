@@ -1,0 +1,11 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('<pattern-grid>', () => {
+  test('generates cols × rows cells from cells="8x8"', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cells="8x8"></pattern-grid>
+    `);
+    await expect(page.locator('pattern-grid > i')).toHaveCount(64);
+  });
+});
