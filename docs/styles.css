@@ -847,3 +847,229 @@ body.dark .feature-card:hover {
   transform: scale(1.1);
   z-index: 1;
 }
+
+/* --- Showcase: Matrix rain --- */
+#sc-matrix .tile { background: #000; }
+#sc-matrix pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  height: 100%;
+}
+#sc-matrix pattern-grid > .col {
+  position: relative;
+  height: 100%;
+  background-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 255, 80, 0.0) 30%,
+    rgba(0, 255, 80, 0.9) 55%,
+    rgba(180, 255, 200, 1) 60%,
+    transparent 90%
+  );
+  background-size: 100% 200%;
+  background-repeat: no-repeat;
+  animation: sc-matrix-fall 4.5s linear infinite;
+  animation-delay: calc(sibling-index() * -0.35s);
+}
+@keyframes sc-matrix-fall {
+  from { background-position-y: -100%; }
+  to   { background-position-y: 200%; }
+}
+#sc-matrix pattern-grid > .col::before {
+  position: absolute;
+  inset: 0;
+  white-space: pre-wrap;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.05;
+  color: #0a4;
+  text-align: center;
+  content: "ｱ\Aｲ\Aｳ\Aｴ\Aｵ\Aｶ\Aｷ\Aｸ\Aｹ\Aｺ\Aｻ\Aｼ\Aｽ\Aｾ\Aｿ\Aﾀ\Aﾁ\Aﾂ\Aﾃ\Aﾄ\Aﾅ\Aﾆ\Aﾇ\Aﾈ\Aﾉ\Aﾊ\Aﾋ\Aﾌ\Aﾍ\Aﾎ\Aﾏ\Aﾐ\Aﾑ\Aﾒ\Aﾓ\Aﾔ\Aﾕ\Aﾖ\Aﾗ\Aﾘ\Aﾙ\Aﾚ";
+}
+
+/* --- Showcase: Plasma --- */
+#sc-plasma pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-plasma pattern-grid > i {
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from calc(sibling-index() * 13deg),
+    hsl(calc(sibling-index() * 7) 80% 60%),
+    hsl(calc(sibling-index() * 7 + 180) 80% 60%)
+  );
+  animation: sc-plasma-anim 6s linear infinite;
+  animation-delay: calc(sibling-index() * -20ms);
+}
+@keyframes sc-plasma-anim {
+  to { filter: hue-rotate(360deg); }
+}
+
+/* --- Showcase: Raster bars --- */
+#sc-raster pattern-grid {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-auto-rows: 1fr;
+  height: 100%;
+}
+#sc-raster pattern-grid > i {
+  background: hsl(calc(sibling-index() * 6) 90% 55%);
+  animation: sc-raster-anim 3s ease-in-out infinite;
+  animation-delay: calc(sibling-index() * -50ms);
+}
+@keyframes sc-raster-anim {
+  0%, 100% { filter: brightness(0.9); }
+  50%      { filter: brightness(1.5) saturate(1.6); }
+}
+
+/* --- Showcase: Wireframe sphere --- */
+#sc-sphere .tile { background: #050015; }
+#sc-sphere pattern-grid {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: sc-sphere-spin 18s linear infinite;
+}
+#sc-sphere pattern-grid > i {
+  --idx: calc(sibling-index() - 1);
+  --phi: calc(acos(1 - 2 * var(--idx) / 240));
+  --theta: calc(var(--idx) * 137.5deg);
+  position: absolute;
+  left: calc(50% + sin(var(--phi)) * cos(var(--theta)) * 40%);
+  top:  calc(50% + cos(var(--phi)) * 40%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: hsl(180 70% calc(45% + sin(var(--theta)) * 35%));
+  transform: translate(-50%, -50%);
+}
+@keyframes sc-sphere-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- Showcase: Sea Ranch stripes --- */
+#sc-searanch pattern-grid {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-auto-rows: 1fr;
+  height: 100%;
+}
+#sc-searanch pattern-grid > i {
+  background: hsl(
+    var(--vb-stripe-hue, calc(var(--rand-0) * 360deg))
+    75%
+    55%
+  );
+  clip-path: polygon(
+    0 calc(var(--rand-1) * 35%),
+    100% 0,
+    100% calc(100% - var(--rand-1) * 35%),
+    0 100%
+  );
+}
+
+/* --- Showcase: Push Pin mosaic --- */
+#sc-pushpin .tile { background: #f4ecd8; }
+#sc-pushpin pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 6px;
+  padding: 8px;
+}
+#sc-pushpin pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(var(--rand-1) * 360deg) 75% 55%);
+  filter: drop-shadow(3px 3px 0 #111);
+}
+#sc-pushpin pattern-grid > i:nth-child(4n+0) { clip-path: circle(46% at 50% 50%); }
+#sc-pushpin pattern-grid > i:nth-child(4n+1) { clip-path: inset(8%); }
+#sc-pushpin pattern-grid > i:nth-child(4n+2) { clip-path: polygon(50% 5%, 95% 95%, 5% 95%); }
+#sc-pushpin pattern-grid > i:nth-child(4n+3) { clip-path: polygon(50% 5%, 95% 35%, 78% 90%, 22% 90%, 5% 35%); }
+
+/* --- Showcase: Bridget Riley waves --- */
+#sc-riley pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-riley pattern-grid > i {
+  --idx: calc(sibling-index() - 1);
+  --col: calc(mod(var(--idx), 40));
+  aspect-ratio: 1;
+  background: #111;
+  transform: scaleY(calc(0.6 + sin(var(--col) * 9deg) * 0.4));
+  transform-origin: center;
+}
+#sc-riley pattern-grid > i:nth-child(even) {
+  background: #f8f5ef;
+}
+
+/* --- Showcase: Halftone dots --- */
+#sc-halftone .tile { background: var(--vb-paper, #fff8e7); }
+#sc-halftone pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-halftone pattern-grid > i {
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    var(--vb-ink, #c2185b) calc(var(--rand-0) * 50%),
+    transparent calc(var(--rand-0) * 50% + 1%)
+  );
+}
+
+/* --- Showcase: Emoji shower --- */
+#sc-emoji pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-emoji pattern-grid > .em {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  transform: rotate(calc((var(--randi-1) - 50) * 4deg))
+             scale(calc(0.7 + var(--rand-2) * 0.5));
+}
+#sc-emoji pattern-grid > .em::before { content: "🌸"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+1)::before { content: "⭐"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+2)::before { content: "🍋"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+3)::before { content: "🌈"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+4)::before { content: "🐙"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+5)::before { content: "🦄"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+6)::before { content: "🍄"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+7)::before { content: "🌊"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+8)::before { content: "🔥"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+9)::before { content: "🌀"; }
+
+/* --- Showcase: Constellation ---
+ * seed-context writes opacity:1 inline as anti-FOUC, so we render the star
+ * on a ::before pseudo-element whose opacity isn't touched. The opacity
+ * calc clamps to 0 for cells where --rand-0 < 0.88, leaving ~12% lit.
+ */
+#sc-stars .tile { background: var(--vb-night, #0a0a1e); }
+#sc-stars pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-stars pattern-grid > i {
+  position: relative;
+  aspect-ratio: 1;
+  background: transparent;
+}
+#sc-stars pattern-grid > i::before {
+  content: "";
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--vb-star, #fff) 0%, transparent 65%);
+  opacity: calc((var(--rand-0) - 0.88) * 100);
+  animation: sc-stars-twinkle 4s ease-in-out infinite;
+  animation-delay: calc(var(--rand-1) * -4s);
+}
+@keyframes sc-stars-twinkle {
+  0%, 100% { transform: scale(1);   filter: brightness(1); }
+  50%      { transform: scale(1.4); filter: brightness(1.6); }
+}

@@ -248,6 +248,185 @@
   transform: scale(1.1);
 }</code></pre></details>
       </figure>
+
+      <!-- 15. Matrix rain -->
+      <figure id="sc-matrix">
+        <div class="tile"><pattern-grid cols="14" rows="1"><template><span class="col"></span></template></pattern-grid></div>
+        <figcaption><strong>Matrix rain</strong>Vertical columns of falling katakana characters.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="14" rows="1"&gt;
+  &lt;template&gt;&lt;span class="col"&gt;&lt;/span&gt;&lt;/template&gt;
+&lt;/pattern-grid&gt;
+
+#sc-matrix .col {
+  /* repeating linear-gradient of katakana glyphs scrolls vertically */
+  background: linear-gradient(180deg, transparent, #0f3 50%, transparent);
+  animation: fall 6s linear infinite;
+  animation-delay: calc(sibling-index() * -0.5s);
+}
+@keyframes fall { to { background-position-y: 200%; } }</code></pre></details>
+      </figure>
+
+      <!-- 16. Plasma -->
+      <figure id="sc-plasma">
+        <div class="tile"><pattern-grid cells="14x14"></pattern-grid></div>
+        <figcaption><strong>Plasma</strong>Amiga-demo plasma via animated conic gradients.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+
+#sc-plasma pattern-grid &gt; i {
+  background: conic-gradient(
+    from calc(sibling-index() * 13deg),
+    hsl(calc(sibling-index() * 7) 80% 60%),
+    hsl(calc(sibling-index() * 7 + 180) 80% 60%)
+  );
+  animation: plasma 6s linear infinite;
+  animation-delay: calc(sibling-index() * -20ms);
+}
+@keyframes plasma {
+  to { filter: hue-rotate(360deg); }
+}</code></pre></details>
+      </figure>
+
+      <!-- 17. Raster bars -->
+      <figure id="sc-raster">
+        <div class="tile"><pattern-grid cols="1" rows="60"></pattern-grid></div>
+        <figcaption><strong>Raster bars</strong>Scrolling color bands. Hello, Amiga.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="1" rows="60"&gt;&lt;/pattern-grid&gt;
+
+#sc-raster pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 6) 90% 55%);
+  animation: scroll 3s linear infinite;
+  animation-delay: calc(sibling-index() * -50ms);
+}
+@keyframes scroll {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.4) saturate(1.5); }
+}</code></pre></details>
+      </figure>
+
+      <!-- 18. Wireframe sphere -->
+      <figure id="sc-sphere">
+        <div class="tile"><pattern-grid cells="240"></pattern-grid></div>
+        <figcaption><strong>Wireframe sphere</strong>Spherical projection of dots, rotating slowly.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="240"&gt;&lt;/pattern-grid&gt;
+
+#sc-sphere pattern-grid &gt; i {
+  /* fibonacci sphere lattice */
+  --i: calc(sibling-index() - 1);
+  --phi: calc(acos(1 - 2 * var(--i) / 240));
+  --theta: calc(var(--i) * 137.5deg);
+  position: absolute;
+  left: calc(50% + sin(var(--phi)) * cos(var(--theta)) * 40%);
+  top:  calc(50% + cos(var(--phi)) * 40%);
+  width:  calc(4px + sin(var(--phi)) * sin(var(--theta)) * 4px + 4px);
+  background: hsl(180 50% calc(60% + sin(var(--phi)) * sin(var(--theta)) * 30%));
+}</code></pre></details>
+      </figure>
+
+      <!-- 19. Sea Ranch stripes -->
+      <figure id="sc-searanch">
+        <div class="tile"><seed-context seed="ranch" count="2"><pattern-grid cols="1" rows="12"></pattern-grid></seed-context></div>
+        <figcaption><strong>Sea Ranch stripes</strong>Bold diagonal supergraphic bands.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="ranch" count="2"&gt;
+  &lt;pattern-grid cols="1" rows="12"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-searanch pattern-grid &gt; i {
+  background: hsl(var(--vb-stripe-hue, calc(var(--rand-0) * 360)) 75% 55%);
+  clip-path: polygon(0 calc(var(--rand-1) * 30%), 100% 0, 100% calc(100% - var(--rand-1) * 30%), 0 100%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 20. Push Pin mosaic -->
+      <figure id="sc-pushpin">
+        <div class="tile"><seed-context seed="pushpin" count="2"><pattern-grid cells="6x6"></pattern-grid></seed-context></div>
+        <figcaption><strong>Push Pin mosaic</strong>Chunky flat shapes, thick outlines, festival-poster colors.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="pushpin" count="2"&gt;
+  &lt;pattern-grid cells="6x6"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+/* 4 shapes picked by --randi-0 % 4, hue from --rand-1 */
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+0) { clip-path: circle(46% at 50% 50%); }
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+1) { clip-path: inset(8%); }
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+2) { clip-path: polygon(50% 5%, 95% 95%, 5% 95%); }
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+3) { clip-path: polygon(50% 5%, 95% 35%, 78% 90%, 22% 90%, 5% 35%); }
+#sc-pushpin pattern-grid &gt; i {
+  background: hsl(calc(var(--rand-1) * 360deg) 75% 55%);
+  filter: drop-shadow(3px 3px 0 #111);
+}</code></pre></details>
+      </figure>
+
+      <!-- 21. Bridget Riley waves -->
+      <figure id="sc-riley">
+        <div class="tile"><pattern-grid cells="40x20"></pattern-grid></div>
+        <figcaption><strong>Bridget Riley waves</strong>Black/white cells warped by a sine wave.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="40x20"&gt;&lt;/pattern-grid&gt;
+
+#sc-riley pattern-grid &gt; i {
+  --col: calc(mod(sibling-index() - 1, 40));
+  background: black;
+  transform: scaleY(calc(0.6 + sin(var(--col) * 9deg) * 0.4));
+}
+#sc-riley pattern-grid &gt; i:nth-child(even) { background: white; }</code></pre></details>
+      </figure>
+
+      <!-- 22. Halftone dots -->
+      <figure id="sc-halftone">
+        <div class="tile"><seed-context seed="halftone"><pattern-grid cells="20x20"></pattern-grid></seed-context></div>
+        <figcaption><strong>Halftone dots</strong>Print-style dots whose radius comes from <code>--rand-0</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="halftone"&gt;
+  &lt;pattern-grid cells="20x20"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-halftone pattern-grid &gt; i {
+  background: radial-gradient(
+    circle,
+    var(--vb-ink, #c2185b) calc(var(--rand-0) * 50%),
+    transparent calc(var(--rand-0) * 50% + 1%)
+  );
+}</code></pre></details>
+      </figure>
+
+      <!-- 23. Emoji shower -->
+      <figure id="sc-emoji">
+        <div class="tile"><seed-context seed="emoji" count="3"><pattern-grid cells="10x10"><template><span class="em"></span></template></pattern-grid></seed-context></div>
+        <figcaption><strong>Emoji shower</strong>Random emoji glyph per cell from a 10-glyph palette.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="emoji" count="3"&gt;
+  &lt;pattern-grid cells="10x10"&gt;
+    &lt;template&gt;&lt;span class="em"&gt;&lt;/span&gt;&lt;/template&gt;
+  &lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-emoji .em::before {
+  content: "🌸"; /* default, overridden by :nth-child(10n+k) */
+}
+#sc-emoji .em:nth-child(10n+1)::before { content: "⭐"; }
+#sc-emoji .em:nth-child(10n+2)::before { content: "🍋"; }
+/* ... 7 more rotations ... */
+#sc-emoji .em {
+  transform: rotate(calc((var(--randi-1) - 50) * 4deg))
+             scale(calc(0.7 + var(--rand-2) * 0.5));
+}</code></pre></details>
+      </figure>
+
+      <!-- 24. Constellation -->
+      <figure id="sc-stars">
+        <div class="tile"><seed-context seed="stars" count="3"><pattern-grid cells="20x20"></pattern-grid></seed-context></div>
+        <figcaption><strong>Constellation</strong>Sparse twinkling stars — drops into any dark hero section.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="stars" count="3"&gt;
+  &lt;pattern-grid cells="20x20"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-stars pattern-grid &gt; i {
+  background: radial-gradient(circle, #fff 0%, transparent 60%);
+  opacity: calc((var(--rand-0) - 0.88) * 100);
+  animation: twinkle 4s ease-in-out infinite;
+  animation-delay: calc(var(--rand-1) * -4s);
+}
+@keyframes twinkle {
+  0%, 100% { transform: scale(1);   filter: brightness(1);   }
+  50%      { transform: scale(1.4); filter: brightness(1.6); }
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
