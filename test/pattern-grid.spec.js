@@ -104,4 +104,12 @@ test.describe('<pattern-grid>', () => {
       .evaluate((el) => el.style.getPropertyValue('--i'));
     expect(cellTwoI).toBe('2');
   });
+
+  test('clamps cols and rows to [1, 256]', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cols="9999" rows="0"></pattern-grid>
+    `);
+    await expect(page.locator('pattern-grid > i')).toHaveCount(256);
+  });
 });
