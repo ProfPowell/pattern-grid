@@ -1084,3 +1084,211 @@ body.dark .feature-card:hover {
   0%, 100% { transform: scale(1);   filter: brightness(1); }
   50%      { transform: scale(1.4); filter: brightness(1.6); }
 }
+
+/* --- Showcase: Clover --- */
+#sc-clover .tile { background: #fff4e0; }
+#sc-clover pattern-grid {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: 100%;
+}
+#sc-clover pattern-grid > i {
+  grid-area: 1 / 1;
+  width: 70%;
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 60) 80% 55%);
+  clip-path: ellipse(20% 50% at 50% 50%);
+  transform: rotate(calc(sibling-index() * 60deg));
+  mix-blend-mode: multiply;
+}
+
+/* --- Showcase: Mandala --- */
+#sc-mandala .tile { background: #0d0220; }
+#sc-mandala .mandala-stack {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+#sc-mandala pattern-grid {
+  position: absolute;
+  inset: 0;
+  display: block;
+  place-items: center;
+}
+#sc-mandala pattern-grid > i {
+  --idx: calc(sibling-index() - 1);
+  --n:   sibling-count();
+  --angle: calc(var(--idx) / var(--n) * 360deg);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%)
+             rotate(var(--angle))
+             translateY(var(--r, -30%));
+  background: hsl(calc(var(--idx) * 30) 75% 60%);
+  box-shadow: 0 0 8px hsl(calc(var(--idx) * 30) 75% 60%);
+}
+#sc-mandala pattern-grid:nth-of-type(1) > i { --r: -15%; width: 6%; }
+#sc-mandala pattern-grid:nth-of-type(2) > i { --r: -28%; width: 5%; }
+#sc-mandala pattern-grid:nth-of-type(3) > i { --r: -42%; width: 4%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  #sc-mandala .mandala-stack {
+    animation: sc-mandala-spin 32s linear infinite;
+  }
+  @keyframes sc-mandala-spin {
+    to { transform: rotate(360deg); }
+  }
+}
+
+/* Hide inline filter SVGs (defs only, no visible content) */
+.filter-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* --- Showcase: Goo blobs --- */
+#sc-goo .tile {
+  background: #14002b;
+  filter: url(#sc-goo-filter);
+  overflow: hidden;
+}
+#sc-goo pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 14px;
+  padding: 14px;
+  width: 100%;
+  height: 100%;
+}
+#sc-goo pattern-grid > i {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: hsl(calc(sibling-index() * 11) 85% 60%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  #sc-goo pattern-grid > i {
+    animation: sc-goo-drift 4.5s ease-in-out infinite;
+    animation-delay: calc(sibling-index() * -90ms);
+  }
+  @keyframes sc-goo-drift {
+    0%, 100% { translate: 0   0;   }
+    25%      { translate: 30%  -10%; }
+    50%      { translate: -10% 35%; }
+    75%      { translate: -25% -20%; }
+  }
+}
+
+/* --- Showcase: Turbulence --- */
+#sc-turb .tile { background: #000; overflow: hidden; }
+#sc-turb pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  width: 100%;
+  height: 100%;
+  filter: url(#sc-turb-filter);
+}
+#sc-turb pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 7) 85% 60%);
+}
+
+/* --- Showcase: Game of Life --- */
+#sc-gol .tile { background: #050a0d; }
+#sc-gol pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 1px;
+  padding: 4px;
+  width: 100%;
+  height: 100%;
+}
+#sc-gol pattern-grid > i {
+  aspect-ratio: 1;
+  background: rgba(0, 255, 80, 0.04);
+  transition: background 100ms;
+}
+#sc-gol pattern-grid > i.alive {
+  background: #1fff80;
+  box-shadow: 0 0 6px #1fff80;
+}
+
+/* --- Showcase: Mouse heatmap --- */
+@property --mx { syntax: '<number>'; inherits: true; initial-value: 0.5; }
+@property --my { syntax: '<number>'; inherits: true; initial-value: 0.5; }
+@property --col { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --row { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --d { syntax: '<number>'; inherits: false; initial-value: 0; }
+
+#sc-heat pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  --mx: 0.5;
+  --my: 0.5;
+}
+#sc-heat pattern-grid > i {
+  aspect-ratio: 1;
+  --idx: calc(sibling-index() - 1);
+  --col: calc(mod(var(--idx), 20) / 20);
+  --row: calc(floor(calc(var(--idx) / 20)) / 20);
+  --dx: calc(var(--col) - var(--mx));
+  --dy: calc(var(--row) - var(--my));
+  --d: calc(sqrt(var(--dx) * var(--dx) + var(--dy) * var(--dy)));
+  background: hsl(calc(var(--d) * 720deg) 75% calc(40% + var(--d) * 50%));
+  transition: background 150ms;
+}
+
+/* --- Showcase: 3D cube --- */
+#sc-cube .tile {
+  background: #0a0014;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+#sc-cube .cube-perspective {
+  perspective: 800px;
+  width: 180px;
+  height: 180px;
+}
+#sc-cube .cube-wrap {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  transform-style: preserve-3d;
+}
+#sc-cube pattern-grid {
+  display: block;
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+#sc-cube pattern-grid > i {
+  position: absolute;
+  inset: 0;
+  width: 180px;
+  height: 180px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  opacity: 0.85;
+}
+#sc-cube pattern-grid > i:nth-child(1) { transform: translateZ( 90px);                  background: #ff5470; }
+#sc-cube pattern-grid > i:nth-child(2) { transform: translateZ(-90px) rotateY(180deg);  background: #00cecb; }
+#sc-cube pattern-grid > i:nth-child(3) { transform: rotateY( 90deg)  translateZ( 90px); background: #ffed66; }
+#sc-cube pattern-grid > i:nth-child(4) { transform: rotateY(-90deg)  translateZ( 90px); background: #ffd166; }
+#sc-cube pattern-grid > i:nth-child(5) { transform: rotateX( 90deg)  translateZ( 90px); background: #b388eb; }
+#sc-cube pattern-grid > i:nth-child(6) { transform: rotateX(-90deg)  translateZ( 90px); background: #80ffdb; }
+
+@media (prefers-reduced-motion: no-preference) {
+  #sc-cube .cube-wrap {
+    animation: sc-cube-spin 14s linear infinite;
+  }
+  @keyframes sc-cube-spin {
+    from { transform: rotateX(-20deg) rotateY(  0deg); }
+    to   { transform: rotateX(-20deg) rotateY(360deg); }
+  }
+}
