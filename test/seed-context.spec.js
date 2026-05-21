@@ -207,6 +207,24 @@ test.describe('<seed-context>', () => {
     expect(after).not.toBe('');
   });
 
+  test('new pattern-grid appended into seed-context populates on render', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="x"></seed-context>
+    `);
+    await page.evaluate(() => {
+      const grid = document.createElement('pattern-grid');
+      // Append first, then set cells so attributeChangedCallback fires while
+      // connected — that triggers render() and the bubbling pattern-grid:render
+      // event reaches seed-context's listener.
+      document.querySelector('seed-context').appendChild(grid);
+      grid.setAttribute('cells', '2x2');
+    });
+    const rand0 = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    expect(rand0).not.toBe('');
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
