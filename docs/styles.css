@@ -969,3 +969,38 @@ body.dark .feature-card:hover {
     0 100%
   );
 }
+
+/* --- Showcase: Push Pin mosaic --- */
+#sc-pushpin .tile { background: #f4ecd8; }
+#sc-pushpin pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 6px;
+  padding: 8px;
+}
+#sc-pushpin pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(var(--rand-1) * 360deg) 75% 55%);
+  filter: drop-shadow(3px 3px 0 #111);
+}
+#sc-pushpin pattern-grid > i:nth-child(4n+0) { clip-path: circle(46% at 50% 50%); }
+#sc-pushpin pattern-grid > i:nth-child(4n+1) { clip-path: inset(8%); }
+#sc-pushpin pattern-grid > i:nth-child(4n+2) { clip-path: polygon(50% 5%, 95% 95%, 5% 95%); }
+#sc-pushpin pattern-grid > i:nth-child(4n+3) { clip-path: polygon(50% 5%, 95% 35%, 78% 90%, 22% 90%, 5% 35%); }
+
+/* --- Showcase: Bridget Riley waves --- */
+#sc-riley pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-riley pattern-grid > i {
+  --idx: calc(sibling-index() - 1);
+  --col: calc(mod(var(--idx), 40));
+  aspect-ratio: 1;
+  background: #111;
+  transform: scaleY(calc(0.6 + sin(var(--col) * 9deg) * 0.4));
+  transform-origin: center;
+}
+#sc-riley pattern-grid > i:nth-child(even) {
+  background: #f8f5ef;
+}

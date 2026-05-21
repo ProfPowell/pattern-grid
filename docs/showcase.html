@@ -335,6 +335,39 @@
   clip-path: polygon(0 calc(var(--rand-1) * 30%), 100% 0, 100% calc(100% - var(--rand-1) * 30%), 0 100%);
 }</code></pre></details>
       </figure>
+
+      <!-- 20. Push Pin mosaic -->
+      <figure id="sc-pushpin">
+        <div class="tile"><seed-context seed="pushpin" count="2"><pattern-grid cells="6x6"></pattern-grid></seed-context></div>
+        <figcaption><strong>Push Pin mosaic</strong>Chunky flat shapes, thick outlines, festival-poster colors.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="pushpin" count="2"&gt;
+  &lt;pattern-grid cells="6x6"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+/* 4 shapes picked by --randi-0 % 4, hue from --rand-1 */
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+0) { clip-path: circle(46% at 50% 50%); }
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+1) { clip-path: inset(8%); }
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+2) { clip-path: polygon(50% 5%, 95% 95%, 5% 95%); }
+#sc-pushpin pattern-grid &gt; i:nth-child(4n+3) { clip-path: polygon(50% 5%, 95% 35%, 78% 90%, 22% 90%, 5% 35%); }
+#sc-pushpin pattern-grid &gt; i {
+  background: hsl(calc(var(--rand-1) * 360deg) 75% 55%);
+  filter: drop-shadow(3px 3px 0 #111);
+}</code></pre></details>
+      </figure>
+
+      <!-- 21. Bridget Riley waves -->
+      <figure id="sc-riley">
+        <div class="tile"><pattern-grid cells="40x20"></pattern-grid></div>
+        <figcaption><strong>Bridget Riley waves</strong>Black/white cells warped by a sine wave.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="40x20"&gt;&lt;/pattern-grid&gt;
+
+#sc-riley pattern-grid &gt; i {
+  --col: calc(mod(sibling-index() - 1, 40));
+  background: black;
+  transform: scaleY(calc(0.6 + sin(var(--col) * 9deg) * 0.4));
+}
+#sc-riley pattern-grid &gt; i:nth-child(even) { background: white; }</code></pre></details>
+      </figure>
     </div>
   </main>
 
