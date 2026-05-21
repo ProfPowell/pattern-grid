@@ -112,4 +112,16 @@ test.describe('<pattern-grid>', () => {
     `);
     await expect(page.locator('pattern-grid > i')).toHaveCount(256);
   });
+
+  test('cellAt(x, y) returns the correct cell', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cells="3x3"></pattern-grid>
+    `);
+    const isSame = await page.evaluate(() => {
+      const grid = document.querySelector('pattern-grid');
+      return grid.cellAt(1, 1) === grid.cellAt(4);
+    });
+    expect(isSame).toBe(true);
+  });
 });
