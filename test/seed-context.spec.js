@@ -280,6 +280,25 @@ test.describe('<seed-context>', () => {
     expect(a).not.toEqual(b);
   });
 
+  test('dispatches seed-context:populated event with correct detail', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="evt"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    const detail = await page.evaluate(() => new Promise((resolve) => {
+      document.querySelector('seed-context').addEventListener(
+        'seed-context:populated',
+        (e) => resolve({ tagName: e.detail.target.tagName, count: e.detail.count, bubbles: e.bubbles }),
+        { once: true },
+      );
+      document.querySelector('seed-context').reseed();
+    }));
+    expect(detail.tagName).toBe('PATTERN-GRID');
+    expect(detail.count).toBe(8);
+    expect(detail.bubbles).toBe(true);
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
