@@ -71,4 +71,21 @@ test.describe('<pattern-grid>', () => {
     expect(cols).toBe('8');
     expect(rows).toBe('4');
   });
+
+  test('dispatches pattern-grid:render event', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cells="4"></pattern-grid>
+    `);
+    const detail = await page.evaluate(
+      () =>
+        new Promise((resolve) => {
+          document
+            .querySelector('pattern-grid')
+            .addEventListener('pattern-grid:render', (e) => resolve(e.detail), { once: true });
+          document.querySelector('pattern-grid').render();
+        }),
+    );
+    expect(detail).toEqual({ cols: 4, rows: 1, total: 4 });
+  });
 });
