@@ -76,7 +76,7 @@
             <td><code>seed</code></td>
             <td>string | number</td>
             <td>—</td>
-            <td>Reserved for the planned <code>&lt;seed-context&gt;</code> companion. The component observes and reflects this attribute but does not act on it in v0.1.0.</td>
+            <td>Observed and reflected. Not interpreted by <code>&lt;pattern-grid&gt;</code> itself; the companion <a href="#seed-context"><code>&lt;seed-context&gt;</code></a> reads its own <code>seed</code> attribute to drive per-cell randomness.</td>
           </tr>
         </tbody>
       </table>
@@ -277,7 +277,7 @@
     </section>
     <hr style="margin-block: 3rem; border: 0; border-top: 1px solid var(--border-color);" />
 
-    <h1>&lt;seed-context&gt;</h1>
+    <h1 id="seed-context">&lt;seed-context&gt;</h1>
     <p class="demo-description">Companion element that wraps one or more <code>&lt;pattern-grid&gt;</code> elements and writes per-cell <code>--rand-N</code> (float) and <code>--randi-N</code> (integer) custom properties using a seeded PRNG.</p>
 
     <section>
