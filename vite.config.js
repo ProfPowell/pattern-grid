@@ -3,9 +3,12 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/pattern-grid.js',
+      entry: {
+        'pattern-grid': 'src/pattern-grid.js',
+        'seed-context': 'src/seed-context.js',
+      },
       formats: ['es'],
-      fileName: () => 'pattern-grid.js',
+      fileName: (_format, entryName) => `${entryName}.js`,
     },
     outDir: 'dist',
     emptyOutDir: false,

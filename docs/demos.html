@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="pattern-grid.css" />
   <script type="module" src="pattern-grid.js"></script>
+  <script type="module" src="seed-context.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -16,6 +17,7 @@
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="demos.html" class="active">Demos</a>
+        <a href="showcase.html">Showcase</a>
         <a href="api.html">API</a>
         <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a>
         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
@@ -190,11 +192,13 @@ pattern-grid &gt; i {
     </section>
 
     <section class="demo-section" id="seeded">
-      <h2>8. Seeded randomness (planned)</h2>
-      <p class="demo-description">When CSS <code>random()</code> isn't yet Baseline, a companion <code>&lt;seed-context&gt;</code> element (planned) will set <code>--rand-N</code> custom properties on its children using a seeded PRNG. Wrap a <code>&lt;pattern-grid&gt;</code> in it and consume the randoms from author CSS. Until that ships, this falls back to a plain grid.</p>
+      <h2>8. Seeded randomness</h2>
+      <p class="demo-description">Wrap a <code>&lt;pattern-grid&gt;</code> in <code>&lt;seed-context&gt;</code> and the component writes <code>--rand-0</code>...<code>--rand-7</code> floats and matching <code>--randi-0</code>...<code>--randi-7</code> integers on each cell, derived from a seeded mulberry32 PRNG. Same seed reproduces the same randoms across reloads.</p>
       <div class="side-by-side">
         <div class="demo-frame">
-          <pattern-grid cells="8x8"></pattern-grid>
+          <seed-context seed="hello">
+            <pattern-grid cells="8x8"></pattern-grid>
+          </seed-context>
         </div>
         <pre><code>&lt;seed-context seed="hello"&gt;
   &lt;pattern-grid cells="8x8"&gt;&lt;/pattern-grid&gt;
@@ -202,7 +206,9 @@ pattern-grid &gt; i {
 
 &lt;style&gt;
   pattern-grid &gt; i {
-    background: hsl(calc(var(--rand-1) * 360) 70% 50%);
+    background: hsl(
+      calc(var(--rand-0) * 360deg) 70% 50%
+    );
   }
 &lt;/style&gt;</code></pre>
       </div>

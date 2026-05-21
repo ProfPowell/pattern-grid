@@ -1,6 +1,6 @@
 {
   "name": "@profpowell/pattern-grid",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A vanilla web component that stamps out a CSS-Grid of empty cells and gets out of the way.",
   "type": "module",
   "main": "dist/pattern-grid.js",
@@ -12,11 +12,18 @@
       "import": "./dist/pattern-grid.js",
       "default": "./dist/pattern-grid.js"
     },
-    "./css": "./dist/pattern-grid.css"
+    "./css": "./dist/pattern-grid.css",
+    "./seed-context": {
+      "types": "./seed-context.d.ts",
+      "import": "./dist/seed-context.js",
+      "default": "./dist/seed-context.js"
+    },
+    "./seed-context.css": "./dist/seed-context.css"
   },
   "files": [
     "dist",
     "pattern-grid.d.ts",
+    "seed-context.d.ts",
     "custom-elements.json",
     "README.md",
     "LICENSE"
@@ -24,7 +31,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "cp dist/pattern-grid.js docs/pattern-grid.js && cp dist/pattern-grid.css docs/pattern-grid.css",
+    "postbuild": "cp dist/pattern-grid.js docs/pattern-grid.js && cp dist/pattern-grid.css docs/pattern-grid.css && cp dist/seed-context.js docs/seed-context.js && cp dist/seed-context.css docs/seed-context.css",
     "preview": "vite preview",
     "test": "playwright test",
     "test:ui": "playwright test --ui",

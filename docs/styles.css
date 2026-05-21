@@ -520,7 +520,7 @@ body.dark .feature-card:hover {
 }
 #seeded pattern-grid > i {
   aspect-ratio: 1;
-  background: var(--bg-tertiary);
+  background: hsl(calc(var(--rand-0) * 360deg) 70% 50%);
 }
 
 #explorer pattern-grid {
@@ -577,4 +577,273 @@ body.dark .feature-card:hover {
   .tagline {
     font-size: 1rem;
   }
+}
+
+/* --- Showcase gallery --- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-block: 2rem;
+}
+
+.gallery figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gallery .tile {
+  aspect-ratio: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-primary);
+}
+
+.gallery .tile > * {
+  width: 100%;
+  height: 100%;
+}
+
+.gallery figcaption {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.gallery figcaption strong {
+  color: var(--text-primary);
+  margin-right: 0.5rem;
+}
+
+.gallery details {
+  font-size: 0.8rem;
+}
+
+.gallery details summary {
+  cursor: pointer;
+  color: var(--link-color);
+}
+
+.gallery details pre {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  max-height: 240px;
+  overflow: auto;
+}
+
+/* --- Showcase: hex honeycomb --- */
+#sc-hex pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-hex pattern-grid > i {
+  aspect-ratio: 1;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: hsl(calc(sibling-index() * 6) 65% 55%);
+}
+
+/* --- Showcase: conic pinwheels --- */
+#sc-pinwheels pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-pinwheels pattern-grid > i {
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from calc(sibling-index() * 10deg),
+    hsl(calc(sibling-index() * 20) 70% 55%),
+    hsl(calc(sibling-index() * 20 + 180) 70% 55%),
+    hsl(calc(sibling-index() * 20) 70% 55%)
+  );
+}
+
+/* --- Showcase: tessellated triangles --- */
+#sc-triangles pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-triangles pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 4 + 200) 70% 55%);
+}
+#sc-triangles pattern-grid > i:nth-child(odd)  { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+#sc-triangles pattern-grid > i:nth-child(even) { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+
+/* --- Showcase: sine bars --- */
+#sc-sine pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  align-items: end;
+  height: 100%;
+}
+#sc-sine pattern-grid > i {
+  align-self: end;
+  height: calc(50% + sin(sibling-index() * 30deg) * 50%);
+  background: hsl(calc(sibling-index() * 15) 70% 55%);
+}
+
+/* --- Showcase: Fibonacci spiral --- */
+#sc-fib .tile { background: #111; }
+#sc-fib pattern-grid {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+#sc-fib pattern-grid > i {
+  --r: calc(sqrt(sibling-index()) * 2.4%);
+  --a: calc(sibling-index() * 137.5deg);
+  position: absolute;
+  left: calc(50% + cos(var(--a)) * var(--r));
+  top:  calc(50% + sin(var(--a)) * var(--r));
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  transform: translate(-50%, -50%);
+}
+
+/* --- Showcase: concentric bloom --- */
+#sc-bloom pattern-grid {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 100%;
+  aspect-ratio: 1;
+  width: 100%;
+}
+#sc-bloom pattern-grid > i {
+  grid-area: 1 / 1;
+  width: calc(100% * sibling-index() / sibling-count());
+  aspect-ratio: 1;
+  border: 2px solid hsla(calc(sibling-index() * 7) 80% 60% / 0.6);
+  border-radius: 50%;
+}
+
+/* --- Showcase: diagonal wipe --- */
+#sc-wipe pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-wipe pattern-grid > i {
+  --idx: calc(sibling-index() - 1);
+  aspect-ratio: 1;
+  background: hsl(220 70% 50%);
+  animation: sc-wipe-anim 3s ease-in-out infinite;
+  animation-delay: calc(var(--idx) * 12ms);
+}
+@keyframes sc-wipe-anim {
+  0%, 100% { background: hsl(220 70% 50%); }
+  50%      { background: hsl(50 90% 60%); }
+}
+
+/* --- Showcase: pulse field --- */
+#sc-pulse pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-pulse pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  animation: sc-pulse-anim 2.4s ease-in-out infinite;
+  animation-delay: calc(sibling-index() * -30ms);
+}
+@keyframes sc-pulse-anim {
+  0%, 100% { transform: scale(1);   border-radius: 0%;  }
+  50%      { transform: scale(0.6); border-radius: 50%; }
+}
+
+/* --- Showcase: random mosaic --- */
+#sc-mosaic pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-mosaic pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(var(--rand-0) * 360deg) 70% 55%);
+}
+
+/* --- Showcase: frosted scatter --- */
+#sc-frost pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-frost pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(220 80% 65% / calc(0.3 + var(--rand-0) * 0.7));
+  transform: rotate(calc((var(--randi-1) - 50) * 1deg));
+}
+
+/* --- Showcase: crystals --- */
+#sc-crystals pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-crystals pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(var(--rand-1) * 360deg) 70% 55%);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+#sc-crystals pattern-grid > i:nth-child(odd) {
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+
+/* --- Showcase: random staircase --- */
+#sc-staircase pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-staircase pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 4) 70% 55%);
+  transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
+}
+
+/* --- Showcase: Unicode rain --- */
+#sc-rain .tile { background: #0a0a0a; }
+#sc-rain pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-rain pattern-grid > .glyph {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: hsl(140 80% calc(40% + var(--rand-0) * 40%));
+  font-family: ui-monospace, monospace;
+  font-size: 1rem;
+  opacity: calc(0.3 + var(--rand-0) * 0.7);
+}
+#sc-rain pattern-grid > .glyph::before {
+  content: "─";
+}
+#sc-rain pattern-grid > .glyph:nth-child(10n+1)::before { content: "│"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+2)::before { content: "┌"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+3)::before { content: "┐"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+4)::before { content: "└"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+5)::before { content: "┘"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+6)::before { content: "├"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+7)::before { content: "┤"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+8)::before { content: "┬"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+9)::before { content: "┴"; }
+
+/* --- Showcase: hover ripple --- */
+#sc-ripple pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 2px;
+}
+#sc-ripple pattern-grid > i {
+  aspect-ratio: 1;
+  background: var(--bg-tertiary);
+  transition: background 0.4s, transform 0.4s;
+}
+#sc-ripple pattern-grid > i:hover,
+#sc-ripple pattern-grid > i:hover + i,
+#sc-ripple pattern-grid > i:has(+ i:hover) {
+  background: hsl(200 80% 55%);
+  transform: scale(1.1);
+  z-index: 1;
 }

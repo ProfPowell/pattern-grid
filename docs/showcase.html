@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Showcase — &lt;pattern-grid&gt;</title>
+  <meta name="description" content="A gallery of pattern-grid demos covering geometric, gradient, procedural, animated, random, text, and interactive effects." />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="pattern-grid.js"></script>
+  <script type="module" src="seed-context.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;pattern-grid&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="showcase.html" class="active">Showcase</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Showcase</h1>
+    <p class="demo-description">A gallery of what's possible when you combine <code>&lt;pattern-grid&gt;</code>, modern CSS, and the seeded <code>&lt;seed-context&gt;</code> companion. Each tile is a live element — view source or expand the details below it to see exactly how it's built.</p>
+
+    <div class="gallery">
+      <!-- 1. Hex honeycomb -->
+      <figure id="sc-hex">
+        <div class="tile"><pattern-grid cells="12x12"></pattern-grid></div>
+        <figcaption><strong>Hex honeycomb</strong>Hexagonal clip-paths with HSL hue cycling.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+
+#sc-hex pattern-grid &gt; i {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: hsl(calc(sibling-index() * 6) 65% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 2. Conic pinwheels -->
+      <figure id="sc-pinwheels">
+        <div class="tile"><pattern-grid cells="6x6"></pattern-grid></div>
+        <figcaption><strong>Conic pinwheels</strong>One conic gradient per cell, hue offset by index.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="6x6"&gt;&lt;/pattern-grid&gt;
+
+#sc-pinwheels pattern-grid &gt; i {
+  background: conic-gradient(
+    from calc(sibling-index() * 10deg),
+    hsl(calc(sibling-index() * 20) 70% 55%),
+    hsl(calc(sibling-index() * 20 + 180) 70% 55%),
+    hsl(calc(sibling-index() * 20) 70% 55%)
+  );
+}</code></pre></details>
+      </figure>
+
+      <!-- 3. Tessellated triangles -->
+      <figure id="sc-triangles">
+        <div class="tile"><pattern-grid cells="10x10"></pattern-grid></div>
+        <figcaption><strong>Tessellated triangles</strong>Alternating up/down triangles via odd/even.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
+
+#sc-triangles pattern-grid &gt; i:nth-child(odd)  { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+#sc-triangles pattern-grid &gt; i:nth-child(even) { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+#sc-triangles pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 4 + 200) 70% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 4. Sine bars -->
+      <figure id="sc-sine">
+        <div class="tile"><pattern-grid cols="24" rows="1"></pattern-grid></div>
+        <figcaption><strong>Sine bars</strong>Heights drive by <code>sin(sibling-index() * 30deg)</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="24" rows="1"&gt;&lt;/pattern-grid&gt;
+
+#sc-sine pattern-grid &gt; i {
+  align-self: end;
+  height: calc(50% + sin(sibling-index() * 30deg) * 50%);
+  background: hsl(calc(sibling-index() * 15) 70% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 5. Fibonacci spiral -->
+      <figure id="sc-fib">
+        <div class="tile"><pattern-grid cells="400"></pattern-grid></div>
+        <figcaption><strong>Fibonacci spiral</strong>400 dots positioned by polar math.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="400"&gt;&lt;/pattern-grid&gt;
+
+#sc-fib pattern-grid {
+  display: block;
+  position: relative;
+}
+#sc-fib pattern-grid &gt; i {
+  --r: calc(sqrt(sibling-index()) * 2.4%);
+  --a: calc(sibling-index() * 137.5deg);
+  position: absolute;
+  left: calc(50% + cos(var(--a)) * var(--r));
+  top:  calc(50% + sin(var(--a)) * var(--r));
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  transform: translate(-50%, -50%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 6. Concentric bloom -->
+      <figure id="sc-bloom">
+        <div class="tile"><pattern-grid cells="48"></pattern-grid></div>
+        <figcaption><strong>Concentric bloom</strong>48 stacked rings, glowing outward.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="48"&gt;&lt;/pattern-grid&gt;
+
+#sc-bloom pattern-grid &gt; i {
+  grid-area: 1 / 1;
+  width:  calc(100% * sibling-index() / sibling-count());
+  aspect-ratio: 1;
+  border: 2px solid hsla(calc(sibling-index() * 7) 80% 60% / 0.6);
+  border-radius: 50%;
+}</code></pre></details>
+      </figure>
+
+      <!-- 7. Diagonal wipe -->
+      <figure id="sc-wipe">
+        <div class="tile"><pattern-grid cells="14x14"></pattern-grid></div>
+        <figcaption><strong>Diagonal wipe</strong>Animation delay grows along (x+y).</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+
+#sc-wipe pattern-grid &gt; i {
+  --idx: calc(sibling-index() - 1);
+  background: hsl(220 70% 50%);
+  animation: wipe 3s ease-in-out infinite;
+  animation-delay: calc(var(--idx) * 12ms);
+}
+@keyframes wipe {
+  0%, 100% { background: hsl(220 70% 50%); }
+  50%      { background: hsl(50 90% 60%); }
+}</code></pre></details>
+      </figure>
+
+      <!-- 8. Pulse field -->
+      <figure id="sc-pulse">
+        <div class="tile"><pattern-grid cells="12x12"></pattern-grid></div>
+        <figcaption><strong>Pulse field</strong>Staggered scale pulses per cell.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+
+#sc-pulse pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  animation: pulse 2.4s ease-in-out infinite;
+  animation-delay: calc(sibling-index() * -30ms);
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1);   border-radius: 0%;  }
+  50%      { transform: scale(0.6); border-radius: 50%; }
+}</code></pre></details>
+      </figure>
+
+      <!-- 9. Random mosaic -->
+      <figure id="sc-mosaic">
+        <div class="tile"><seed-context seed="mosaic"><pattern-grid cells="14x14"></pattern-grid></seed-context></div>
+        <figcaption><strong>Random mosaic</strong>Per-cell HSL from <code>--rand-0</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="mosaic"&gt;
+  &lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-mosaic pattern-grid &gt; i {
+  background: hsl(calc(var(--rand-0) * 360deg) 70% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 10. Frosted scatter -->
+      <figure id="sc-frost">
+        <div class="tile"><seed-context seed="frost"><pattern-grid cells="14x14"></pattern-grid></seed-context></div>
+        <figcaption><strong>Frosted scatter</strong>Random opacity plus tiny rotation per cell.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="frost"&gt;
+  &lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-frost pattern-grid &gt; i {
+  background: hsl(220 80% 65% / calc(0.3 + var(--rand-0) * 0.7));
+  transform: rotate(calc((var(--randi-1) - 50) * 1deg));
+}</code></pre></details>
+      </figure>
+
+      <!-- 11. Crystals -->
+      <figure id="sc-crystals">
+        <div class="tile"><seed-context seed="cryst" count="2"><pattern-grid cells="10x10"></pattern-grid></seed-context></div>
+        <figcaption><strong>Crystals</strong>Two clip-path triangles, random hue.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="cryst" count="2"&gt;
+  &lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-crystals pattern-grid &gt; i:nth-child(odd)  { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+#sc-crystals pattern-grid &gt; i:nth-child(even) { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+#sc-crystals pattern-grid &gt; i {
+  background: hsl(calc(var(--rand-1) * 360deg) 70% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 12. Random staircase -->
+      <figure id="sc-staircase">
+        <div class="tile"><seed-context seed="stair"><pattern-grid cells="12x12"></pattern-grid></seed-context></div>
+        <figcaption><strong>Random staircase</strong>Vertical offset from <code>--rand-0</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="stair"&gt;
+  &lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-staircase pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 4) 70% 55%);
+  transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
+}</code></pre></details>
+      </figure>
+
+      <!-- 13. Unicode rain -->
+      <figure id="sc-rain">
+        <div class="tile"><seed-context seed="rain"><pattern-grid cells="12x12"><template><span class="glyph"></span></template></pattern-grid></seed-context></div>
+        <figcaption><strong>Unicode rain</strong>Box-drawing glyph palette over a green opacity field.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="rain"&gt;
+  &lt;pattern-grid cells="12x12"&gt;
+    &lt;template&gt;&lt;span class="glyph"&gt;&lt;/span&gt;&lt;/template&gt;
+  &lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-rain .glyph::before { content: "─"; }
+#sc-rain .glyph:nth-child(10n+1)::before { content: "│"; }
+/* ... 8 more rotations of nth-child ... */
+#sc-rain .glyph {
+  color: hsl(140 80% calc(40% + var(--rand-0) * 40%));
+  opacity: calc(0.3 + var(--rand-0) * 0.7);
+}</code></pre></details>
+      </figure>
+
+      <!-- 14. Hover ripple -->
+      <figure id="sc-ripple">
+        <div class="tile"><pattern-grid cells="10x10"></pattern-grid></div>
+        <figcaption><strong>Hover ripple</strong>Hover any cell to light up its neighbors.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
+
+#sc-ripple pattern-grid &gt; i {
+  background: var(--bg-tertiary);
+  transition: background 0.4s, transform 0.4s;
+}
+#sc-ripple pattern-grid &gt; i:hover,
+#sc-ripple pattern-grid &gt; i:hover + i,
+#sc-ripple pattern-grid &gt; i:has(+ i:hover) {
+  background: hsl(200 80% 55%);
+  transform: scale(1.1);
+}</code></pre></details>
+      </figure>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT licensed · Source on <a href="https://github.com/ProfPowell/pattern-grid">GitHub</a> · Part of the ProfPowell suite</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+</body>
+</html>
