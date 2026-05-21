@@ -1004,3 +1004,42 @@ body.dark .feature-card:hover {
 #sc-riley pattern-grid > i:nth-child(even) {
   background: #f8f5ef;
 }
+
+/* --- Showcase: Halftone dots --- */
+#sc-halftone .tile { background: var(--vb-paper, #fff8e7); }
+#sc-halftone pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-halftone pattern-grid > i {
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    var(--vb-ink, #c2185b) calc(var(--rand-0) * 50%),
+    transparent calc(var(--rand-0) * 50% + 1%)
+  );
+}
+
+/* --- Showcase: Emoji shower --- */
+#sc-emoji pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-emoji pattern-grid > .em {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  transform: rotate(calc((var(--randi-1) - 50) * 4deg))
+             scale(calc(0.7 + var(--rand-2) * 0.5));
+}
+#sc-emoji pattern-grid > .em::before { content: "🌸"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+1)::before { content: "⭐"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+2)::before { content: "🍋"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+3)::before { content: "🌈"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+4)::before { content: "🐙"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+5)::before { content: "🦄"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+6)::before { content: "🍄"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+7)::before { content: "🌊"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+8)::before { content: "🔥"; }
+#sc-emoji pattern-grid > .em:nth-child(10n+9)::before { content: "🌀"; }

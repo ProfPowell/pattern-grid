@@ -368,6 +368,45 @@
 }
 #sc-riley pattern-grid &gt; i:nth-child(even) { background: white; }</code></pre></details>
       </figure>
+
+      <!-- 22. Halftone dots -->
+      <figure id="sc-halftone">
+        <div class="tile"><seed-context seed="halftone"><pattern-grid cells="20x20"></pattern-grid></seed-context></div>
+        <figcaption><strong>Halftone dots</strong>Print-style dots whose radius comes from <code>--rand-0</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="halftone"&gt;
+  &lt;pattern-grid cells="20x20"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-halftone pattern-grid &gt; i {
+  background: radial-gradient(
+    circle,
+    var(--vb-ink, #c2185b) calc(var(--rand-0) * 50%),
+    transparent calc(var(--rand-0) * 50% + 1%)
+  );
+}</code></pre></details>
+      </figure>
+
+      <!-- 23. Emoji shower -->
+      <figure id="sc-emoji">
+        <div class="tile"><seed-context seed="emoji" count="3"><pattern-grid cells="10x10"><template><span class="em"></span></template></pattern-grid></seed-context></div>
+        <figcaption><strong>Emoji shower</strong>Random emoji glyph per cell from a 10-glyph palette.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="emoji" count="3"&gt;
+  &lt;pattern-grid cells="10x10"&gt;
+    &lt;template&gt;&lt;span class="em"&gt;&lt;/span&gt;&lt;/template&gt;
+  &lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-emoji .em::before {
+  content: "🌸"; /* default, overridden by :nth-child(10n+k) */
+}
+#sc-emoji .em:nth-child(10n+1)::before { content: "⭐"; }
+#sc-emoji .em:nth-child(10n+2)::before { content: "🍋"; }
+/* ... 7 more rotations ... */
+#sc-emoji .em {
+  transform: rotate(calc((var(--randi-1) - 50) * 4deg))
+             scale(calc(0.7 + var(--rand-2) * 0.5));
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
