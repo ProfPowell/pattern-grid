@@ -40,4 +40,28 @@ test.describe('<seed-context>', () => {
       expect(randi).toBe(Math.floor(rand * 100));
     }
   });
+
+  test('default count=8 writes --rand-0..7 and --randi-0..7', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="x">
+        <pattern-grid cells="2x1"></pattern-grid>
+      </seed-context>
+    `);
+    const props = await page.locator('pattern-grid > i').first().evaluate((el) => {
+      const out = {};
+      for (let k = 0; k < 8; k++) {
+        out[`rand-${k}`] = el.style.getPropertyValue(`--rand-${k}`);
+        out[`randi-${k}`] = el.style.getPropertyValue(`--randi-${k}`);
+      }
+      out['rand-8'] = el.style.getPropertyValue('--rand-8');
+      return out;
+    });
+    for (let k = 0; k < 8; k++) {
+      expect(props[`rand-${k}`]).not.toBe('');
+      expect(props[`randi-${k}`]).not.toBe('');
+    }
+    expect(props['rand-8']).toBe('');
+  });
 });
