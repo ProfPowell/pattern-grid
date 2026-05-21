@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="pattern-grid.css" />
   <script type="module" src="pattern-grid.js"></script>
+  <script type="module" src="seed-context.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -270,6 +271,80 @@
             <td>Full functionality</td>
             <td>Cells auto-generated; attributes reactive.</td>
           </tr>
+        </tbody>
+      </table>
+    </section>
+    <hr style="margin-block: 3rem; border: 0; border-top: 1px solid var(--border-color);" />
+
+    <h1>&lt;seed-context&gt;</h1>
+    <p class="demo-description">Companion element that wraps one or more <code>&lt;pattern-grid&gt;</code> elements and writes per-cell <code>--rand-N</code> (float) and <code>--randi-N</code> (integer) custom properties using a seeded PRNG.</p>
+
+    <section>
+      <h2>Attributes</h2>
+      <table class="api-table">
+        <thead>
+          <tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>seed</code></td>
+            <td>string | number</td>
+            <td><code>""</code></td>
+            <td>Seed value. Same seed produces the same randoms across reloads. Hashed to a 32-bit integer for the PRNG.</td>
+          </tr>
+          <tr>
+            <td><code>count</code></td>
+            <td>integer</td>
+            <td><code>8</code></td>
+            <td>Number of <code>--rand-N</code> slots per cell. Range 1–32, clamped.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Properties &amp; Methods</h2>
+      <table class="api-table">
+        <thead>
+          <tr><th>Member</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>seed</code></td><td>string</td><td>Read/write, reflects attribute.</td></tr>
+          <tr><td><code>count</code></td><td>number</td><td>Read/write, reflects attribute (clamped on read).</td></tr>
+          <tr><td><code>seedHash</code></td><td>number (readonly)</td><td>32-bit hash of <code>seed</code>.</td></tr>
+          <tr><td><code>prng</code></td><td>() =&gt; number (readonly)</td><td>Factory: returns a fresh seeded generator.</td></tr>
+          <tr><td><code>reseed()</code></td><td>void</td><td>Re-writes randoms on all known cells without changing attributes.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Events</h2>
+      <table class="api-table">
+        <thead>
+          <tr><th>Event</th><th>Detail</th><th>When</th><th>Bubbles</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>seed-context:populated</code></td>
+            <td><code>{ target, count }</code></td>
+            <td>After a grid's cells are populated. <code>target</code> is the populated pattern-grid.</td>
+            <td>Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>CSS Custom Properties Written per Cell</h2>
+      <p>For <code>count = N</code>:</p>
+      <table class="api-table">
+        <thead>
+          <tr><th>Property</th><th>Range</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--rand-0</code> … <code>--rand-{N-1}</code></td><td><code>[0, 1)</code></td><td>Float, suitable for continuous values.</td></tr>
+          <tr><td><code>--randi-0</code> … <code>--randi-{N-1}</code></td><td><code>[0, 99]</code></td><td>Integer, equals <code>floor(rand-N * 100)</code>.</td></tr>
         </tbody>
       </table>
     </section>
