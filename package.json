@@ -31,7 +31,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "cp dist/pattern-grid.js docs/pattern-grid.js && cp dist/pattern-grid.css docs/pattern-grid.css && cp dist/seed-context.js docs/seed-context.js && cp dist/seed-context.css docs/seed-context.css",
     "preview": "vite preview",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
