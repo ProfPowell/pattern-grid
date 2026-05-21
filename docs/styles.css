@@ -1020,7 +1020,12 @@ body.dark .feature-card:hover {
   );
 }
 
-/* --- Showcase: Emoji shower --- */
+/* --- Showcase: Emoji shower ---
+ * Each emoji keeps its static random tilt + scale (from --randi-1, --rand-2)
+ * and adds an animated bob/wobble via the standalone `translate` and `rotate`
+ * properties, which compose with the base `transform` instead of replacing it.
+ * Per-cell `animation-delay` from --rand-0 keeps each emoji on its own phase.
+ */
 #sc-emoji pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
@@ -1032,6 +1037,12 @@ body.dark .feature-card:hover {
   font-size: 1.4rem;
   transform: rotate(calc((var(--randi-1) - 50) * 4deg))
              scale(calc(0.7 + var(--rand-2) * 0.5));
+  animation: sc-emoji-shower 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--rand-0) * -3.6s);
+}
+@keyframes sc-emoji-shower {
+  0%, 100% { translate: 0 -10%; rotate: -6deg; }
+  50%      { translate: 0  10%; rotate:  6deg; }
 }
 #sc-emoji pattern-grid > .em::before { content: "🌸"; }
 #sc-emoji pattern-grid > .em:nth-child(10n+1)::before { content: "⭐"; }

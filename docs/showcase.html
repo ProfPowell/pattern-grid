@@ -389,22 +389,29 @@
       <!-- 23. Emoji shower -->
       <figure id="sc-emoji">
         <div class="tile"><seed-context seed="emoji" count="3"><pattern-grid cells="10x10"><template><span class="em"></span></template></pattern-grid></seed-context></div>
-        <figcaption><strong>Emoji shower</strong>Random emoji glyph per cell from a 10-glyph palette.</figcaption>
+        <figcaption><strong>Emoji shower</strong>Random emoji palette with a staggered bob/wobble per cell.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;seed-context seed="emoji" count="3"&gt;
   &lt;pattern-grid cells="10x10"&gt;
     &lt;template&gt;&lt;span class="em"&gt;&lt;/span&gt;&lt;/template&gt;
   &lt;/pattern-grid&gt;
 &lt;/seed-context&gt;
 
-#sc-emoji .em::before {
-  content: "🌸"; /* default, overridden by :nth-child(10n+k) */
-}
+#sc-emoji .em::before { content: "🌸"; }
 #sc-emoji .em:nth-child(10n+1)::before { content: "⭐"; }
 #sc-emoji .em:nth-child(10n+2)::before { content: "🍋"; }
 /* ... 7 more rotations ... */
+
 #sc-emoji .em {
+  /* static random tilt + scale */
   transform: rotate(calc((var(--randi-1) - 50) * 4deg))
              scale(calc(0.7 + var(--rand-2) * 0.5));
+  /* animated bob + wobble; standalone properties compose with transform */
+  animation: shower 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--rand-0) * -3.6s);
+}
+@keyframes shower {
+  0%, 100% { translate: 0 -10%; rotate: -6deg; }
+  50%      { translate: 0  10%; rotate:  6deg; }
 }</code></pre></details>
       </figure>
 
