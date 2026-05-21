@@ -156,6 +156,62 @@
   50%      { transform: scale(0.6); border-radius: 50%; }
 }</code></pre></details>
       </figure>
+
+      <!-- 9. Random mosaic -->
+      <figure id="sc-mosaic">
+        <div class="tile"><seed-context seed="mosaic"><pattern-grid cells="14x14"></pattern-grid></seed-context></div>
+        <figcaption><strong>Random mosaic</strong>Per-cell HSL from <code>--rand-0</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="mosaic"&gt;
+  &lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-mosaic pattern-grid &gt; i {
+  background: hsl(calc(var(--rand-0) * 360deg) 70% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 10. Frosted scatter -->
+      <figure id="sc-frost">
+        <div class="tile"><seed-context seed="frost"><pattern-grid cells="14x14"></pattern-grid></seed-context></div>
+        <figcaption><strong>Frosted scatter</strong>Random opacity plus tiny rotation per cell.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="frost"&gt;
+  &lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-frost pattern-grid &gt; i {
+  background: hsl(220 80% 65% / calc(0.3 + var(--rand-0) * 0.7));
+  transform: rotate(calc((var(--randi-1) - 50) * 1deg));
+}</code></pre></details>
+      </figure>
+
+      <!-- 11. Crystals -->
+      <figure id="sc-crystals">
+        <div class="tile"><seed-context seed="cryst" count="2"><pattern-grid cells="10x10"></pattern-grid></seed-context></div>
+        <figcaption><strong>Crystals</strong>Two clip-path triangles, random hue.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="cryst" count="2"&gt;
+  &lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-crystals pattern-grid &gt; i:nth-child(odd)  { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+#sc-crystals pattern-grid &gt; i:nth-child(even) { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+#sc-crystals pattern-grid &gt; i {
+  background: hsl(calc(var(--rand-1) * 360deg) 70% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 12. Random staircase -->
+      <figure id="sc-staircase">
+        <div class="tile"><seed-context seed="stair"><pattern-grid cells="12x12"></pattern-grid></seed-context></div>
+        <figcaption><strong>Random staircase</strong>Vertical offset from <code>--rand-0</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="stair"&gt;
+  &lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-staircase pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 4) 70% 55%);
+  transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 

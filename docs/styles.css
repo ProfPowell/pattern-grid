@@ -754,3 +754,49 @@ body.dark .feature-card:hover {
   0%, 100% { transform: scale(1);   border-radius: 0%;  }
   50%      { transform: scale(0.6); border-radius: 50%; }
 }
+
+/* --- Showcase: random mosaic --- */
+#sc-mosaic pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-mosaic pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(var(--rand-0) * 360deg) 70% 55%);
+}
+
+/* --- Showcase: frosted scatter --- */
+#sc-frost pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-frost pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(220 80% 65% / calc(0.3 + var(--rand-0) * 0.7));
+  transform: rotate(calc((var(--randi-1) - 50) * 1deg));
+}
+
+/* --- Showcase: crystals --- */
+#sc-crystals pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-crystals pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(var(--rand-1) * 360deg) 70% 55%);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+#sc-crystals pattern-grid > i:nth-child(odd) {
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+
+/* --- Showcase: random staircase --- */
+#sc-staircase pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-staircase pattern-grid > i {
+  aspect-ratio: 1;
+  background: hsl(calc(sibling-index() * 4) 70% 55%);
+  transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
+}
