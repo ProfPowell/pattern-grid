@@ -8,4 +8,12 @@ test.describe('<pattern-grid>', () => {
     `);
     await expect(page.locator('pattern-grid > i')).toHaveCount(64);
   });
+
+  test('cols + rows attributes override defaults', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cols="4" rows="3"></pattern-grid>
+    `);
+    await expect(page.locator('pattern-grid > i')).toHaveCount(12);
+  });
 });
