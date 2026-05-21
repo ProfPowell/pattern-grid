@@ -185,6 +185,28 @@ test.describe('<seed-context>', () => {
     expect(after).not.toBe(before);
   });
 
+  test('seed-context appended after pattern-grid still populates cells', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <div id="host"><pattern-grid cells="2x2"></pattern-grid></div>
+    `);
+    const beforeWrap = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    expect(beforeWrap).toBe('');
+    await page.evaluate(() => {
+      const host = document.getElementById('host');
+      const grid = host.querySelector('pattern-grid');
+      const ctx = document.createElement('seed-context');
+      ctx.setAttribute('seed', 'late');
+      // Move grid into disconnected ctx first so connectedCallback sees it when
+      // ctx is appended to the document.
+      ctx.appendChild(grid);
+      host.appendChild(ctx);
+    });
+    const after = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    expect(after).not.toBe('');
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
