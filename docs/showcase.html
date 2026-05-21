@@ -70,6 +70,57 @@
   background: hsl(calc(sibling-index() * 4 + 200) 70% 55%);
 }</code></pre></details>
       </figure>
+
+      <!-- 4. Sine bars -->
+      <figure id="sc-sine">
+        <div class="tile"><pattern-grid cols="24" rows="1"></pattern-grid></div>
+        <figcaption><strong>Sine bars</strong>Heights drive by <code>sin(sibling-index() * 30deg)</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="24" rows="1"&gt;&lt;/pattern-grid&gt;
+
+#sc-sine pattern-grid &gt; i {
+  align-self: end;
+  height: calc(50% + sin(sibling-index() * 30deg) * 50%);
+  background: hsl(calc(sibling-index() * 15) 70% 55%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 5. Fibonacci spiral -->
+      <figure id="sc-fib">
+        <div class="tile"><pattern-grid cells="400"></pattern-grid></div>
+        <figcaption><strong>Fibonacci spiral</strong>400 dots positioned by polar math.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="400"&gt;&lt;/pattern-grid&gt;
+
+#sc-fib pattern-grid {
+  display: block;
+  position: relative;
+}
+#sc-fib pattern-grid &gt; i {
+  --r: calc(sqrt(sibling-index()) * 2.4%);
+  --a: calc(sibling-index() * 137.5deg);
+  position: absolute;
+  left: calc(50% + cos(var(--a)) * var(--r));
+  top:  calc(50% + sin(var(--a)) * var(--r));
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  transform: translate(-50%, -50%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 6. Concentric bloom -->
+      <figure id="sc-bloom">
+        <div class="tile"><pattern-grid cells="48"></pattern-grid></div>
+        <figcaption><strong>Concentric bloom</strong>48 stacked rings, glowing outward.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="48"&gt;&lt;/pattern-grid&gt;
+
+#sc-bloom pattern-grid &gt; i {
+  grid-area: 1 / 1;
+  width:  calc(100% * sibling-index() / sibling-count());
+  aspect-ratio: 1;
+  border: 2px solid hsla(calc(sibling-index() * 7) 80% 60% / 0.6);
+  border-radius: 50%;
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 

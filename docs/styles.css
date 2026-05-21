@@ -671,3 +671,53 @@ body.dark .feature-card:hover {
 }
 #sc-triangles pattern-grid > i:nth-child(odd)  { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
 #sc-triangles pattern-grid > i:nth-child(even) { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+
+/* --- Showcase: sine bars --- */
+#sc-sine pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  align-items: end;
+  height: 100%;
+}
+#sc-sine pattern-grid > i {
+  align-self: end;
+  height: calc(50% + sin(sibling-index() * 30deg) * 50%);
+  background: hsl(calc(sibling-index() * 15) 70% 55%);
+}
+
+/* --- Showcase: Fibonacci spiral --- */
+#sc-fib .tile { background: #111; }
+#sc-fib pattern-grid {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+#sc-fib pattern-grid > i {
+  --r: calc(sqrt(sibling-index()) * 2.4%);
+  --a: calc(sibling-index() * 137.5deg);
+  position: absolute;
+  left: calc(50% + cos(var(--a)) * var(--r));
+  top:  calc(50% + sin(var(--a)) * var(--r));
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  transform: translate(-50%, -50%);
+}
+
+/* --- Showcase: concentric bloom --- */
+#sc-bloom pattern-grid {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 100%;
+  aspect-ratio: 1;
+  width: 100%;
+}
+#sc-bloom pattern-grid > i {
+  grid-area: 1 / 1;
+  width: calc(100% * sibling-index() / sibling-count());
+  aspect-ratio: 1;
+  border: 2px solid hsla(calc(sibling-index() * 7) 80% 60% / 0.6);
+  border-radius: 50%;
+}
