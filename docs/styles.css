@@ -847,3 +847,78 @@ body.dark .feature-card:hover {
   transform: scale(1.1);
   z-index: 1;
 }
+
+/* --- Showcase: Matrix rain --- */
+#sc-matrix .tile { background: #000; }
+#sc-matrix pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  height: 100%;
+}
+#sc-matrix pattern-grid > .col {
+  position: relative;
+  height: 100%;
+  background-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 255, 80, 0.0) 30%,
+    rgba(0, 255, 80, 0.9) 55%,
+    rgba(180, 255, 200, 1) 60%,
+    transparent 90%
+  );
+  background-size: 100% 200%;
+  background-repeat: no-repeat;
+  animation: sc-matrix-fall 4.5s linear infinite;
+  animation-delay: calc(sibling-index() * -0.35s);
+}
+@keyframes sc-matrix-fall {
+  from { background-position-y: -100%; }
+  to   { background-position-y: 200%; }
+}
+#sc-matrix pattern-grid > .col::before {
+  position: absolute;
+  inset: 0;
+  white-space: pre-wrap;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.05;
+  color: #0a4;
+  text-align: center;
+  content: "ｱ\Aｲ\Aｳ\Aｴ\Aｵ\Aｶ\Aｷ\Aｸ\Aｹ\Aｺ\Aｻ\Aｼ\Aｽ\Aｾ\Aｿ\Aﾀ\Aﾁ\Aﾂ\Aﾃ\Aﾄ\Aﾅ\Aﾆ\Aﾇ\Aﾈ\Aﾉ\Aﾊ\Aﾋ\Aﾌ\Aﾍ\Aﾎ\Aﾏ\Aﾐ\Aﾑ\Aﾒ\Aﾓ\Aﾔ\Aﾕ\Aﾖ\Aﾗ\Aﾘ\Aﾙ\Aﾚ";
+}
+
+/* --- Showcase: Plasma --- */
+#sc-plasma pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-plasma pattern-grid > i {
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from calc(sibling-index() * 13deg),
+    hsl(calc(sibling-index() * 7) 80% 60%),
+    hsl(calc(sibling-index() * 7 + 180) 80% 60%)
+  );
+  animation: sc-plasma-anim 6s linear infinite;
+  animation-delay: calc(sibling-index() * -20ms);
+}
+@keyframes sc-plasma-anim {
+  to { filter: hue-rotate(360deg); }
+}
+
+/* --- Showcase: Raster bars --- */
+#sc-raster pattern-grid {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-auto-rows: 1fr;
+  height: 100%;
+}
+#sc-raster pattern-grid > i {
+  background: hsl(calc(sibling-index() * 6) 90% 55%);
+  animation: sc-raster-anim 3s ease-in-out infinite;
+  animation-delay: calc(sibling-index() * -50ms);
+}
+@keyframes sc-raster-anim {
+  0%, 100% { filter: brightness(0.9); }
+  50%      { filter: brightness(1.5) saturate(1.6); }
+}

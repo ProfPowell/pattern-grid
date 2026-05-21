@@ -248,6 +248,60 @@
   transform: scale(1.1);
 }</code></pre></details>
       </figure>
+
+      <!-- 15. Matrix rain -->
+      <figure id="sc-matrix">
+        <div class="tile"><pattern-grid cols="14" rows="1"><template><span class="col"></span></template></pattern-grid></div>
+        <figcaption><strong>Matrix rain</strong>Vertical columns of falling katakana characters.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="14" rows="1"&gt;
+  &lt;template&gt;&lt;span class="col"&gt;&lt;/span&gt;&lt;/template&gt;
+&lt;/pattern-grid&gt;
+
+#sc-matrix .col {
+  /* repeating linear-gradient of katakana glyphs scrolls vertically */
+  background: linear-gradient(180deg, transparent, #0f3 50%, transparent);
+  animation: fall 6s linear infinite;
+  animation-delay: calc(sibling-index() * -0.5s);
+}
+@keyframes fall { to { background-position-y: 200%; } }</code></pre></details>
+      </figure>
+
+      <!-- 16. Plasma -->
+      <figure id="sc-plasma">
+        <div class="tile"><pattern-grid cells="14x14"></pattern-grid></div>
+        <figcaption><strong>Plasma</strong>Amiga-demo plasma via animated conic gradients.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+
+#sc-plasma pattern-grid &gt; i {
+  background: conic-gradient(
+    from calc(sibling-index() * 13deg),
+    hsl(calc(sibling-index() * 7) 80% 60%),
+    hsl(calc(sibling-index() * 7 + 180) 80% 60%)
+  );
+  animation: plasma 6s linear infinite;
+  animation-delay: calc(sibling-index() * -20ms);
+}
+@keyframes plasma {
+  to { filter: hue-rotate(360deg); }
+}</code></pre></details>
+      </figure>
+
+      <!-- 17. Raster bars -->
+      <figure id="sc-raster">
+        <div class="tile"><pattern-grid cols="1" rows="60"></pattern-grid></div>
+        <figcaption><strong>Raster bars</strong>Scrolling color bands. Hello, Amiga.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="1" rows="60"&gt;&lt;/pattern-grid&gt;
+
+#sc-raster pattern-grid &gt; i {
+  background: hsl(calc(sibling-index() * 6) 90% 55%);
+  animation: scroll 3s linear infinite;
+  animation-delay: calc(sibling-index() * -50ms);
+}
+@keyframes scroll {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.4) saturate(1.5); }
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
