@@ -225,6 +225,25 @@ test.describe('<seed-context>', () => {
     expect(rand0).not.toBe('');
   });
 
+  test('disconnected seed-context stops populating new renders', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="x"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    await page.evaluate(() => {
+      const ctx = document.querySelector('seed-context');
+      ctx.remove();
+    });
+    await page.evaluate(() => {
+      const grid = document.createElement('pattern-grid');
+      document.body.appendChild(grid);
+      grid.setAttribute('cells', '2x2');
+    });
+    const rand0 = await page.locator('body > pattern-grid > i').first().evaluate((el) => el.style.getPropertyValue('--rand-0'));
+    expect(rand0).toBe('');
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
