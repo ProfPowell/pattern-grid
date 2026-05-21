@@ -56,4 +56,19 @@ test.describe('<pattern-grid>', () => {
     await expect(page.locator('pattern-grid > a')).toHaveCount(4);
     await expect(page.locator('pattern-grid > a[href="/1"]')).toHaveCount(1);
   });
+
+  test('sets --pg-cols and --pg-rows custom properties', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <pattern-grid cells="8x4"></pattern-grid>
+    `);
+    const cols = await page
+      .locator('pattern-grid')
+      .evaluate((el) => el.style.getPropertyValue('--pg-cols'));
+    const rows = await page
+      .locator('pattern-grid')
+      .evaluate((el) => el.style.getPropertyValue('--pg-rows'));
+    expect(cols).toBe('8');
+    expect(rows).toBe('4');
+  });
 });
