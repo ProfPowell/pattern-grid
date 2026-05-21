@@ -922,3 +922,50 @@ body.dark .feature-card:hover {
   0%, 100% { filter: brightness(0.9); }
   50%      { filter: brightness(1.5) saturate(1.6); }
 }
+
+/* --- Showcase: Wireframe sphere --- */
+#sc-sphere .tile { background: #050015; }
+#sc-sphere pattern-grid {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: sc-sphere-spin 18s linear infinite;
+}
+#sc-sphere pattern-grid > i {
+  --idx: calc(sibling-index() - 1);
+  --phi: calc(acos(1 - 2 * var(--idx) / 240));
+  --theta: calc(var(--idx) * 137.5deg);
+  position: absolute;
+  left: calc(50% + sin(var(--phi)) * cos(var(--theta)) * 40%);
+  top:  calc(50% + cos(var(--phi)) * 40%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: hsl(180 70% calc(45% + sin(var(--theta)) * 35%));
+  transform: translate(-50%, -50%);
+}
+@keyframes sc-sphere-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- Showcase: Sea Ranch stripes --- */
+#sc-searanch pattern-grid {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-auto-rows: 1fr;
+  height: 100%;
+}
+#sc-searanch pattern-grid > i {
+  background: hsl(
+    var(--vb-stripe-hue, calc(var(--rand-0) * 360deg))
+    75%
+    55%
+  );
+  clip-path: polygon(
+    0 calc(var(--rand-1) * 35%),
+    100% 0,
+    100% calc(100% - var(--rand-1) * 35%),
+    0 100%
+  );
+}

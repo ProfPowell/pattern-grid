@@ -302,6 +302,39 @@
   50%      { filter: brightness(1.4) saturate(1.5); }
 }</code></pre></details>
       </figure>
+
+      <!-- 18. Wireframe sphere -->
+      <figure id="sc-sphere">
+        <div class="tile"><pattern-grid cells="240"></pattern-grid></div>
+        <figcaption><strong>Wireframe sphere</strong>Spherical projection of dots, rotating slowly.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="240"&gt;&lt;/pattern-grid&gt;
+
+#sc-sphere pattern-grid &gt; i {
+  /* fibonacci sphere lattice */
+  --i: calc(sibling-index() - 1);
+  --phi: calc(acos(1 - 2 * var(--i) / 240));
+  --theta: calc(var(--i) * 137.5deg);
+  position: absolute;
+  left: calc(50% + sin(var(--phi)) * cos(var(--theta)) * 40%);
+  top:  calc(50% + cos(var(--phi)) * 40%);
+  width:  calc(4px + sin(var(--phi)) * sin(var(--theta)) * 4px + 4px);
+  background: hsl(180 50% calc(60% + sin(var(--phi)) * sin(var(--theta)) * 30%));
+}</code></pre></details>
+      </figure>
+
+      <!-- 19. Sea Ranch stripes -->
+      <figure id="sc-searanch">
+        <div class="tile"><seed-context seed="ranch" count="2"><pattern-grid cols="1" rows="12"></pattern-grid></seed-context></div>
+        <figcaption><strong>Sea Ranch stripes</strong>Bold diagonal supergraphic bands.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="ranch" count="2"&gt;
+  &lt;pattern-grid cols="1" rows="12"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-searanch pattern-grid &gt; i {
+  background: hsl(var(--vb-stripe-hue, calc(var(--rand-0) * 360)) 75% 55%);
+  clip-path: polygon(0 calc(var(--rand-1) * 30%), 100% 0, 100% calc(100% - var(--rand-1) * 30%), 0 100%);
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
