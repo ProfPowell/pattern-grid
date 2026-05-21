@@ -299,6 +299,26 @@ test.describe('<seed-context>', () => {
     expect(detail.bubbles).toBe(true);
   });
 
+  test('cells outside a seed-context are not opacity-hidden', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <pattern-grid cells="2x2"></pattern-grid>
+    `);
+    const opacity = await page.locator('pattern-grid > i').first().evaluate((el) => getComputedStyle(el).opacity);
+    expect(opacity).toBe('1');
+  });
+
+  test('cells inside a populated seed-context end up opacity 1', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="o"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    const inlineOpacity = await page.locator('pattern-grid > i').first().evaluate((el) => el.style.opacity);
+    expect(inlineOpacity).toBe('1');
+  });
+
   test('different seed yields different --rand-0 on at least one cell', async ({ page }) => {
     await page.setContent(`
       <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
