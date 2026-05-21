@@ -800,3 +800,31 @@ body.dark .feature-card:hover {
   background: hsl(calc(sibling-index() * 4) 70% 55%);
   transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
 }
+
+/* --- Showcase: Unicode rain --- */
+#sc-rain .tile { background: #0a0a0a; }
+#sc-rain pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+}
+#sc-rain pattern-grid > .glyph {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: hsl(140 80% calc(40% + var(--rand-0) * 40%));
+  font-family: ui-monospace, monospace;
+  font-size: 1rem;
+  opacity: calc(0.3 + var(--rand-0) * 0.7);
+}
+#sc-rain pattern-grid > .glyph::before {
+  content: "─";
+}
+#sc-rain pattern-grid > .glyph:nth-child(10n+1)::before { content: "│"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+2)::before { content: "┌"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+3)::before { content: "┐"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+4)::before { content: "└"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+5)::before { content: "┘"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+6)::before { content: "├"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+7)::before { content: "┤"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+8)::before { content: "┬"; }
+#sc-rain pattern-grid > .glyph:nth-child(10n+9)::before { content: "┴"; }

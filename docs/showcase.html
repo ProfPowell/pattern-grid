@@ -212,6 +212,25 @@
   transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
 }</code></pre></details>
       </figure>
+
+      <!-- 13. Unicode rain -->
+      <figure id="sc-rain">
+        <div class="tile"><seed-context seed="rain"><pattern-grid cells="12x12"><template><span class="glyph"></span></template></pattern-grid></seed-context></div>
+        <figcaption><strong>Unicode rain</strong>Box-drawing glyph palette over a green opacity field.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="rain"&gt;
+  &lt;pattern-grid cells="12x12"&gt;
+    &lt;template&gt;&lt;span class="glyph"&gt;&lt;/span&gt;&lt;/template&gt;
+  &lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-rain .glyph::before { content: "─"; }
+#sc-rain .glyph:nth-child(10n+1)::before { content: "│"; }
+/* ... 8 more rotations of nth-child ... */
+#sc-rain .glyph {
+  color: hsl(140 80% calc(40% + var(--rand-0) * 40%));
+  opacity: calc(0.3 + var(--rand-0) * 0.7);
+}</code></pre></details>
+      </figure>
     </div>
   </main>
 
