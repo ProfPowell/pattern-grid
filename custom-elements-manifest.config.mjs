@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs';
-
 export default {
   globs: ['src/**/*.js'],
   exclude: ['src/**/*.test.js'],
