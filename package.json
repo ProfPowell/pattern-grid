@@ -41,11 +41,18 @@
     "@playwright/test": "^1.57.0",
     "@custom-elements-manifest/analyzer": "^0.11.0"
   },
-  "keywords": ["web-component", "custom-element", "css-grid", "pattern", "doodle"],
+  "keywords": [
+    "web-component",
+    "custom-element",
+    "css-grid",
+    "pattern",
+    "doodle"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ProfPowell/pattern-grid.git"
   },
-  "homepage": "https://github.com/ProfPowell/pattern-grid"
+  "homepage": "https://github.com/ProfPowell/pattern-grid",
+  "customElements": "custom-elements.json"
 }
