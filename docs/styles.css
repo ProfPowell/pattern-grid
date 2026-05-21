@@ -1252,14 +1252,14 @@ body.dark .feature-card:hover {
   overflow: hidden;
 }
 #sc-cube .cube-perspective {
-  perspective: 600px;
-  width: 80px;
-  height: 80px;
+  perspective: 800px;
+  width: 180px;
+  height: 180px;
 }
 #sc-cube .cube-wrap {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 180px;
+  height: 180px;
   transform-style: preserve-3d;
 }
 #sc-cube pattern-grid {
@@ -1271,17 +1271,17 @@ body.dark .feature-card:hover {
 #sc-cube pattern-grid > i {
   position: absolute;
   inset: 0;
-  width: 80px;
-  height: 80px;
+  width: 180px;
+  height: 180px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   opacity: 0.85;
 }
-#sc-cube pattern-grid > i:nth-child(1) { transform: translateZ( 40px);                  background: #ff5470; }
-#sc-cube pattern-grid > i:nth-child(2) { transform: translateZ(-40px) rotateY(180deg);  background: #00cecb; }
-#sc-cube pattern-grid > i:nth-child(3) { transform: rotateY( 90deg)  translateZ( 40px); background: #ffed66; }
-#sc-cube pattern-grid > i:nth-child(4) { transform: rotateY(-90deg)  translateZ( 40px); background: #ffd166; }
-#sc-cube pattern-grid > i:nth-child(5) { transform: rotateX( 90deg)  translateZ( 40px); background: #b388eb; }
-#sc-cube pattern-grid > i:nth-child(6) { transform: rotateX(-90deg)  translateZ( 40px); background: #80ffdb; }
+#sc-cube pattern-grid > i:nth-child(1) { transform: translateZ( 90px);                  background: #ff5470; }
+#sc-cube pattern-grid > i:nth-child(2) { transform: translateZ(-90px) rotateY(180deg);  background: #00cecb; }
+#sc-cube pattern-grid > i:nth-child(3) { transform: rotateY( 90deg)  translateZ( 90px); background: #ffed66; }
+#sc-cube pattern-grid > i:nth-child(4) { transform: rotateY(-90deg)  translateZ( 90px); background: #ffd166; }
+#sc-cube pattern-grid > i:nth-child(5) { transform: rotateX( 90deg)  translateZ( 90px); background: #b388eb; }
+#sc-cube pattern-grid > i:nth-child(6) { transform: rotateX(-90deg)  translateZ( 90px); background: #80ffdb; }
 
 @media (prefers-reduced-motion: no-preference) {
   #sc-cube .cube-wrap {
