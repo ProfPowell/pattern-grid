@@ -1523,17 +1523,19 @@ body.dark .feature-card:hover {
 }
 
 /* --- Showcase: contribution calendar --- */
+#sc-calendar .tile { aspect-ratio: 53 / 7; padding: 4px; }
 #sc-calendar pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
   grid-auto-flow: column;
   grid-template-rows: repeat(var(--pg-rows), 1fr);
   gap: 2px;
+  width: 100%;
+  height: 100%;
   --cal-low: #161b22;
   --cal-high: #39d353;
 }
 #sc-calendar pattern-grid > button {
-  aspect-ratio: 1;
   border: 0;
   padding: 0;
   border-radius: 2px;
@@ -1558,12 +1560,11 @@ body.dark .feature-card:hover {
   --idx: var(--i, sibling-index());
   --t: calc(var(--idx) / var(--pg-cols) * 6.2832);
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: calc(50% + cos(var(--t) * 3) * 40%);
+  top:  calc(50% + sin(var(--t) * 4) * 40%);
   width: 8px;
   height: 8px;
   margin: -4px;
   border-radius: 50%;
   background: hsl(calc(var(--idx) * 1.8) 75% 60%);
-  translate: calc(cos(var(--t) * 3) * 40%) calc(sin(var(--t) * 4) * 40%);
 }
