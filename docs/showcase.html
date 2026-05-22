@@ -834,6 +834,18 @@
         </script>
       </figure>
 
+      <!-- 36. Scroll-reveal mosaic -->
+      <figure id="sc-scroll">
+        <div class="tile"><pattern-grid cols="12" rows="12"></pattern-grid></div>
+        <figcaption><strong>Scroll-reveal mosaic</strong>Each cell uses <code>animation-timeline: view()</code> — entry/exit driven entirely by scroll position. Zero JS hooks.</figcaption>
+        <details><summary>Source</summary><pre><code>#sc-scroll pattern-grid &gt; i {
+  animation: sc-reveal both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+  animation-delay: calc((var(--i, sibling-index())) * -8ms);
+}</code></pre></details>
+      </figure>
+
     </div>
   </main>
 

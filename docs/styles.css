@@ -1398,3 +1398,23 @@ body.dark .feature-card:hover {
 #sc-morph .sc-morph-controls { margin-top: 0.75rem; text-align: center; }
 #sc-morph .sc-morph-controls button { font: inherit; padding: 0.4rem 1rem; cursor: pointer; }
 ::view-transition-group(*) { animation-duration: 600ms; }
+
+/* --- Showcase: scroll-reveal --- */
+#sc-scroll pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 2px;
+}
+#sc-scroll pattern-grid > i {
+  --idx: var(--i, sibling-index());
+  aspect-ratio: 1;
+  background: hsl(calc(var(--idx) * 2.5) 70% 55%);
+  animation: sc-scroll-reveal both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+  animation-delay: calc(var(--idx) * -8ms);
+}
+@keyframes sc-scroll-reveal {
+  from { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  to   { opacity: 1; transform: none; }
+}
