@@ -571,10 +571,12 @@
               state = next;
               grid.cellElements.forEach((c, i) => c.classList.toggle('alive', !!state[i]));
             }
-            grid.addEventListener('pattern-grid:render', () => { step(); }, { once: true });
-            if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-              setInterval(step, 200);
-            }
+            grid.addEventListener('pattern-grid:render', () => {
+              step();
+              if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                setInterval(step, 200);
+              }
+            }, { once: true });
           })();
         </script>
       </figure>
@@ -719,12 +721,14 @@
                 if (cell) cell.classList.add('hit');
               }
             }
-            grid.addEventListener('pattern-grid:render', () => step(60), { once: true });
-            if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-              setInterval(() => step(60), 50);
-            } else {
-              step(8000);
-            }
+            grid.addEventListener('pattern-grid:render', () => {
+              if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                step(8000);
+              } else {
+                step(60);
+                setInterval(() => step(60), 50);
+              }
+            }, { once: true });
           })();
         </script>
       </figure>
