@@ -882,6 +882,15 @@
         </script>
       </figure>
 
+      <!-- 38. Neighbor glow -->
+      <figure id="sc-neighbor">
+        <div class="tile"><pattern-grid cells="10x10"></pattern-grid></div>
+        <figcaption><strong>Neighbor glow</strong>Hover one cell — its left/right siblings glow via <code>:has()</code> with zero JavaScript.</figcaption>
+        <details><summary>Source</summary><pre><code>#sc-neighbor i:hover,
+#sc-neighbor i:has(+ i:hover),
+#sc-neighbor i:hover + i { background: var(--accent); }</code></pre></details>
+      </figure>
+
     </div>
   </main>
 
