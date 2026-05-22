@@ -8,8 +8,10 @@
   <link rel="stylesheet" href="styles.css" />
   <script type="module" src="https://unpkg.com/@profpowell/pattern-grid"></script>
   <script type="module" src="https://unpkg.com/@profpowell/pattern-grid/seed-context"></script>
+  <script type="module" src="https://unpkg.com/@profpowell/pattern-grid/paint-worklet"></script>
 </head>
 <body>
+  <paint-worklet src="/worklets/swirl.js"></paint-worklet>
   <header class="site-header">
     <nav>
       <a href="index.html" class="nav-brand">&lt;pattern-grid&gt;</a>
@@ -726,6 +728,15 @@
           })();
         </script>
       </figure>
+
+      <!-- ============================================================ -->
+      <!-- Modern platform showcase                                     -->
+      <!-- Pieces 34-43 demonstrate platform features css-doodle's      -->
+      <!-- Shadow-DOM/DSL architecture cannot reach.                    -->
+      <!-- ============================================================ -->
+
+      <h2 class="showcase-section">Modern platform showcase</h2>
+      <p class="showcase-section-lead">The previous pieces match what <a href="https://css-doodle.com/">css-doodle</a> does. The next ten show what <em>only</em> a light-DOM component can do — real semantic cells, View Transitions, Anchor Positioning, Popover, scroll-driven animations, <code>:has()</code>, container queries, Houdini Paint Worklet — features that live outside the Shadow-DOM wall.</p>
     </div>
   </main>
 
