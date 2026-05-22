@@ -901,6 +901,25 @@
 }</code></pre></details>
       </figure>
 
+      <!-- 40. Recursive grid -->
+      <figure id="sc-recurse">
+        <div class="tile">
+          <pattern-grid id="sc-recurse-grid" cells="3x3">
+            <template>
+              <div class="sc-recurse-cell">
+                <pattern-grid cells="3x3"></pattern-grid>
+              </div>
+            </template>
+          </pattern-grid>
+        </div>
+        <figcaption><strong>Recursive grid</strong>A <code>&lt;pattern-grid&gt;</code> whose <code>&lt;template&gt;</code> contains another <code>&lt;pattern-grid&gt;</code>. Custom elements upgrade naturally inside cloned templates — Sierpinski carpet without a DSL.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="3x3"&gt;
+  &lt;template&gt;
+    &lt;div&gt;&lt;pattern-grid cells="3x3"&gt;&lt;/pattern-grid&gt;&lt;/div&gt;
+  &lt;/template&gt;
+&lt;/pattern-grid&gt;</code></pre></details>
+      </figure>
+
     </div>
   </main>
 
