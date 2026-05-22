@@ -1460,3 +1460,23 @@ body.dark .feature-card:hover {
 #sc-neighbor pattern-grid > i:hover + i {
   background: hsl(45 95% 60%);
 }
+
+/* --- Showcase: parametric clip shapes --- */
+#sc-shape pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 4px;
+}
+#sc-shape pattern-grid > i {
+  --idx: var(--i, sibling-index());
+  aspect-ratio: 1;
+  background: hsl(calc(var(--idx) * 6) 75% 55%);
+  rotate: calc(var(--idx) * 8deg);
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2% 35%, 39% 35%
+  );
+  transition: rotate 600ms;
+}
+#sc-shape pattern-grid > i:hover { rotate: 0deg; }

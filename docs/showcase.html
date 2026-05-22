@@ -891,6 +891,16 @@
 #sc-neighbor i:hover + i { background: var(--accent); }</code></pre></details>
       </figure>
 
+      <!-- 39. Parametric clip shapes -->
+      <figure id="sc-shape">
+        <div class="tile"><pattern-grid cells="8x8" shim="sibling"></pattern-grid></div>
+        <figcaption><strong>Parametric clip shapes</strong>Six-pointed stars from trig-driven <code>clip-path: polygon()</code> — pattern-grid's answer to css-doodle's <code>@shape()</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>#sc-shape pattern-grid &gt; i {
+  clip-path: polygon(...trig...);
+  rotate: calc(var(--i, sibling-index()) * 8deg);
+}</code></pre></details>
+      </figure>
+
     </div>
   </main>
 
