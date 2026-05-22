@@ -58,6 +58,22 @@ Wrap any `<pattern-grid>` to get per-cell pseudo-random custom properties:
 - `count` (default 8) controls how many `--rand-N` slots per cell.
 - See the [showcase](https://profpowell.github.io/pattern-grid/showcase.html) for examples.
 
+### `<paint-worklet>` companion
+
+Declaratively register a Houdini Paint Worklet:
+
+```html
+<script type="module" src="https://unpkg.com/@profpowell/pattern-grid/paint-worklet"></script>
+
+<paint-worklet src="/worklets/swirl.js"></paint-worklet>
+
+<style>
+  pattern-grid > i { background: paint(swirl); }
+</style>
+```
+
+Fires `paint-worklet:registered` on success and `paint-worklet:error` on failure (including in browsers where Houdini Paint Worklet is not available — currently Safari and Firefox). Optional. Removable when authors prefer raw `CSS.paintWorklet.addModule()` calls.
+
 ## Demo
 
 [https://profpowell.github.io/pattern-grid](https://profpowell.github.io/pattern-grid)

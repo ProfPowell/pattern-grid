@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0 — unreleased
+
+- Add `<paint-worklet>` companion: declaratively registers a Houdini Paint Worklet via `src=URL`. Dispatches `paint-worklet:registered` / `paint-worklet:error`. Deduplicates same-`src` registrations across instances.
+- New `./paint-worklet` package export and `dist/paint-worklet.js` build output.
+- Showcase: new "Modern platform showcase" section with pieces 34–43:
+  - 34 step sequencer (semantic `<button>` cells + Web Audio)
+  - 35 morph layout (View Transitions API)
+  - 36 scroll-reveal mosaic (`animation-timeline: view()`)
+  - 37 anchored popovers (Popover + Anchor Positioning)
+  - 38 neighbor glow (CSS `:has()`)
+  - 39 parametric clip shapes (trig-driven `clip-path: polygon()`)
+  - 40 recursive grid (nested `<pattern-grid>` via `<template>`)
+  - 41 paint worklet swirl (Houdini Paint Worklet)
+  - 42 contribution calendar (real ARIA dates + `color-mix()`)
+  - 43 Lissajous point cloud (parametric positioning)
+
 ## 0.2.0 — unreleased
 
 - Add `<seed-context>` companion: writes per-cell `--rand-N` (float) and `--randi-N` (integer) custom properties using a seeded mulberry32 PRNG. Listens for `pattern-grid:render` from any descendant pattern-grid.
