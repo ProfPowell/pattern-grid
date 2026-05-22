@@ -11,7 +11,7 @@
   <script type="module" src="https://unpkg.com/@profpowell/pattern-grid/paint-worklet"></script>
 </head>
 <body>
-  <paint-worklet src="/worklets/swirl.js"></paint-worklet>
+  <paint-worklet src="worklets/swirl.js"></paint-worklet>
   <header class="site-header">
     <nav>
       <a href="index.html" class="nav-brand">&lt;pattern-grid&gt;</a>
@@ -932,7 +932,7 @@
           </seed-context>
         </div>
         <figcaption><strong>Paint worklet swirl</strong>Each cell calls <code>paint(swirl)</code> — a Houdini Paint Worklet registered declaratively via <code>&lt;paint-worklet src&gt;</code>. The platform answer to css-doodle's <code>@shaders()</code>.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;paint-worklet src="/worklets/swirl.js"&gt;&lt;/paint-worklet&gt;
+        <details><summary>Source</summary><pre><code>&lt;paint-worklet src="worklets/swirl.js"&gt;&lt;/paint-worklet&gt;
 
 #sc-paint pattern-grid &gt; i {
   --hue: calc(var(--i, sibling-index()) * 22);

@@ -1359,7 +1359,7 @@ body.dark .feature-card:hover {
 /* --- Showcase: step sequencer --- */
 #sc-step pattern-grid {
   display: grid;
-  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  grid-template-columns: repeat(var(--pg-cols), minmax(0, 1fr));
   gap: 3px;
 }
 #sc-step pattern-grid > button {
