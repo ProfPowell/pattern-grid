@@ -846,6 +846,42 @@
 }</code></pre></details>
       </figure>
 
+      <!-- 37. Anchored popovers -->
+      <figure id="sc-anchor">
+        <div class="tile">
+          <pattern-grid id="sc-anchor-grid" cells="6x6"></pattern-grid>
+          <div id="sc-anchor-pops"></div>
+        </div>
+        <figcaption><strong>Anchored popovers</strong>Each cell is a <code>&lt;button popovertarget&gt;</code>. Popovers dock beside their cell via CSS Anchor Positioning.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;button popovertarget="pop-N" style="anchor-name: --c-N"&gt;&lt;/button&gt;
+&lt;div id="pop-N" popover style="position-anchor: --c-N; left: anchor(right); top: anchor(top)"&gt;...&lt;/div&gt;</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-anchor-grid');
+            const pops = document.getElementById('sc-anchor-pops');
+            grid.addEventListener('pattern-grid:render', () => {
+              const cols = grid.cols;
+              grid.replaceChildren(...grid.cellElements.map((_, i) => {
+                const x = i % cols, y = Math.floor(i / cols);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.setAttribute('popovertarget', `sc-anchor-pop-${i}`);
+                btn.style.anchorName = `--sc-anchor-c-${i}`;
+                btn.style.background = `hsl(${i * 10} 65% 55%)`;
+                btn.setAttribute('aria-label', `cell ${x}, ${y}`);
+                const pop = document.createElement('div');
+                pop.id = `sc-anchor-pop-${i}`;
+                pop.setAttribute('popover', '');
+                pop.style.positionAnchor = `--sc-anchor-c-${i}`;
+                pop.textContent = `i=${i}, x=${x}, y=${y}`;
+                pops.appendChild(pop);
+                return btn;
+              }));
+            }, { once: true });
+          })();
+        </script>
+      </figure>
+
     </div>
   </main>
 
