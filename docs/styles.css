@@ -1498,3 +1498,72 @@ body.dark .feature-card:hover {
 #sc-recurse .sc-recurse-cell > pattern-grid > i:nth-child(5) {
   visibility: hidden;
 }
+
+/* --- Showcase: paint worklet swirl --- */
+#sc-paint pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 4px;
+}
+#sc-paint pattern-grid > i {
+  --idx: var(--i, sibling-index());
+  --hue: calc(var(--idx) * 22);
+  aspect-ratio: 1;
+  background: hsl(var(--hue) 60% 40%) paint(swirl);
+}
+@property --hue {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: false;
+}
+@property --rand-0 {
+  syntax: '<number>';
+  initial-value: 0.5;
+  inherits: false;
+}
+
+/* --- Showcase: contribution calendar --- */
+#sc-calendar pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  grid-auto-flow: column;
+  grid-template-rows: repeat(var(--pg-rows), 1fr);
+  gap: 2px;
+  --cal-low: #161b22;
+  --cal-high: #39d353;
+}
+#sc-calendar pattern-grid > button {
+  aspect-ratio: 1;
+  border: 0;
+  padding: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  background: color-mix(in oklch, var(--cal-low), var(--cal-high) calc(var(--randi-0, 0) * 1%));
+}
+#sc-calendar pattern-grid > button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* --- Showcase: Lissajous point cloud --- */
+#sc-lissajous .tile { aspect-ratio: 1; }
+#sc-lissajous pattern-grid {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #0f1118;
+}
+#sc-lissajous pattern-grid > i {
+  --idx: var(--i, sibling-index());
+  --t: calc(var(--idx) / var(--pg-cols) * 6.2832);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px;
+  border-radius: 50%;
+  background: hsl(calc(var(--idx) * 1.8) 75% 60%);
+  translate: calc(cos(var(--t) * 3) * 40%) calc(sin(var(--t) * 4) * 40%);
+}

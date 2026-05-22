@@ -920,6 +920,72 @@
 &lt;/pattern-grid&gt;</code></pre></details>
       </figure>
 
+      <!-- 41. Paint worklet swirl -->
+      <figure id="sc-paint">
+        <div class="tile">
+          <seed-context seed="swirl" count="1">
+            <pattern-grid cells="4x4" shim="sibling"></pattern-grid>
+          </seed-context>
+        </div>
+        <figcaption><strong>Paint worklet swirl</strong>Each cell calls <code>paint(swirl)</code> — a Houdini Paint Worklet registered declaratively via <code>&lt;paint-worklet src&gt;</code>. The platform answer to css-doodle's <code>@shaders()</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;paint-worklet src="/worklets/swirl.js"&gt;&lt;/paint-worklet&gt;
+
+#sc-paint pattern-grid &gt; i {
+  --hue: calc(var(--i, sibling-index()) * 22);
+  background: paint(swirl);
+}</code></pre></details>
+      </figure>
+
+      <!-- 42. Contribution calendar -->
+      <figure id="sc-calendar">
+        <div class="tile">
+          <seed-context seed="contrib" count="1">
+            <pattern-grid id="sc-cal-grid" cols="53" rows="7">
+              <template><button type="button" aria-label="day"></button></template>
+            </pattern-grid>
+          </seed-context>
+        </div>
+        <figcaption><strong>Contribution calendar</strong>53×7 real <code>&lt;button&gt;</code> cells — keyboard-focusable, screen-reader-readable, real dates, <code>color-mix()</code> for perceptual gradients. css-doodle's Shadow DOM cannot expose this surface.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="53" rows="7"&gt;
+  &lt;template&gt;&lt;button aria-label="day"&gt;&lt;/button&gt;&lt;/template&gt;
+&lt;/pattern-grid&gt;
+/* color via color-mix(in oklch, low, high calc(--randi-0 * 1%)) */</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-cal-grid');
+            const fmt = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            function label() {
+              const today = new Date();
+              const start = new Date(today);
+              start.setDate(start.getDate() - 371);
+              grid.cellElements.forEach((btn, i) => {
+                const col = i % 53, row = Math.floor(i / 53);
+                const d = new Date(start);
+                d.setDate(d.getDate() + col * 7 + row);
+                const count = Math.floor(parseFloat(btn.style.getPropertyValue('--randi-0') || '0') / 25);
+                btn.setAttribute('aria-label',
+                  count === 0
+                    ? `No contributions on ${fmt.format(d)}`
+                    : `${count} contribution${count === 1 ? '' : 's'} on ${fmt.format(d)}`);
+              });
+            }
+            document.addEventListener('seed-context:populated', (e) => {
+              if (e.detail.target === grid) label();
+            });
+          })();
+        </script>
+      </figure>
+
+      <!-- 43. Lissajous point cloud -->
+      <figure id="sc-lissajous">
+        <div class="tile"><pattern-grid cells="200" shim="sibling"></pattern-grid></div>
+        <figcaption><strong>Lissajous point cloud</strong>200 cells placed by <code>cos(3t)</code>/<code>sin(4t)</code> — pattern-grid's answer to css-doodle's <code>@plot()</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>#sc-lissajous pattern-grid &gt; i {
+  --t: calc(var(--i, sibling-index()) / var(--pg-cols) * 6.2832);
+  translate: calc(cos(var(--t) * 3) * 40%) calc(sin(var(--t) * 4) * 40%);
+}</code></pre></details>
+      </figure>
+
     </div>
   </main>
 
