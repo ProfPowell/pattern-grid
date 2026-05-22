@@ -6,6 +6,7 @@ export default defineConfig({
       entry: {
         'pattern-grid': 'src/pattern-grid.js',
         'seed-context': 'src/seed-context.js',
+        'paint-worklet': 'src/paint-worklet.js',
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,

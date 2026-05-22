@@ -1,6 +1,6 @@
 {
   "name": "@profpowell/pattern-grid",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A vanilla web component that stamps out a CSS-Grid of empty cells and gets out of the way.",
   "type": "module",
   "main": "dist/pattern-grid.js",
@@ -18,12 +18,18 @@
       "import": "./dist/seed-context.js",
       "default": "./dist/seed-context.js"
     },
-    "./seed-context.css": "./dist/seed-context.css"
+    "./seed-context.css": "./dist/seed-context.css",
+    "./paint-worklet": {
+      "types": "./paint-worklet.d.ts",
+      "import": "./dist/paint-worklet.js",
+      "default": "./dist/paint-worklet.js"
+    }
   },
   "files": [
     "dist",
     "pattern-grid.d.ts",
     "seed-context.d.ts",
+    "paint-worklet.d.ts",
     "custom-elements.json",
     "README.md",
     "LICENSE"
