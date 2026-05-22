@@ -1387,3 +1387,14 @@ body.dark .feature-card:hover {
   padding: 0.4rem 1rem;
   cursor: pointer;
 }
+
+/* --- Showcase: morph layout --- */
+#sc-morph pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 2px;
+}
+#sc-morph pattern-grid > i { aspect-ratio: 1; }
+#sc-morph .sc-morph-controls { margin-top: 0.75rem; text-align: center; }
+#sc-morph .sc-morph-controls button { font: inherit; padding: 0.4rem 1rem; cursor: pointer; }
+::view-transition-group(*) { animation-duration: 600ms; }

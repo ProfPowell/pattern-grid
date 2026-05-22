@@ -799,6 +799,41 @@
         </script>
       </figure>
 
+      <!-- 35. Morph layout -->
+      <figure id="sc-morph">
+        <div class="tile">
+          <pattern-grid id="sc-morph-grid" cols="8" rows="8"></pattern-grid>
+          <div class="sc-morph-controls"><button type="button" id="sc-morph-shuffle">Shuffle</button></div>
+        </div>
+        <figcaption><strong>Morph layout</strong>Per-cell <code>view-transition-name</code> animates a reshuffle natively via the View Transitions API.</figcaption>
+        <details><summary>Source</summary><pre><code>document.startViewTransition(() =&gt; {
+  // reorder cells; each has a unique view-transition-name
+});</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-morph-grid');
+            const shuffle = document.getElementById('sc-morph-shuffle');
+            function tagCells() {
+              grid.cellElements.forEach((c, i) => {
+                c.style.viewTransitionName = `sc-morph-c${i}`;
+                c.style.background = `hsl(${(i * 137.5) % 360} 70% 55%)`;
+              });
+            }
+            grid.addEventListener('pattern-grid:render', tagCells, { once: true });
+            shuffle.addEventListener('click', () => {
+              const cells = [...grid.cellElements];
+              cells.sort(() => Math.random() - 0.5);
+              const run = () => grid.replaceChildren(...cells);
+              if (document.startViewTransition) {
+                document.startViewTransition(run);
+              } else {
+                run();
+              }
+            });
+          })();
+        </script>
+      </figure>
+
     </div>
   </main>
 
