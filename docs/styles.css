@@ -1355,3 +1355,35 @@ body.dark .feature-card:hover {
   background: hsl(280 90% 65%);
   box-shadow: 0 0 4px hsl(280 90% 65% / 0.7);
 }
+
+/* --- Showcase: step sequencer --- */
+#sc-step pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 3px;
+}
+#sc-step pattern-grid > button {
+  aspect-ratio: 1;
+  border: 1px solid #444;
+  background: #1a1a24;
+  cursor: pointer;
+  padding: 0;
+  transition: background 80ms;
+}
+#sc-step pattern-grid > button[aria-pressed="true"] {
+  background: hsl(190 80% 55%);
+  border-color: hsl(190 80% 70%);
+}
+#sc-step pattern-grid > button.beat {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+#sc-step .sc-step-controls {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+#sc-step .sc-step-controls button {
+  font: inherit;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+}
