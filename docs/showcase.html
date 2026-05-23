@@ -1022,6 +1022,73 @@
       <h2 class="showcase-section">Tributes — abstract art &amp; 8-bit sprites</h2>
       <p class="showcase-section-lead">A small gallery tour: three hard-edge geometric tributes (Mondrian, Albers, Sol&nbsp;LeWitt), three painterly ones (Kandinsky, Kelly, Kusama), six pixel-sprite pieces (single sprites, an animated chomp, a hover-swap, a CSS-only sprite-sheet picker, a palette-cycling sprite, and an interactive paint scratchpad), and two pop-and-illusion crossovers (Escher tessellation, Lichtenstein POW with <code>popover</code> and CSS Anchor Positioning).</p>
 
+      <!-- 44. Mondrian — Composition with Red, Yellow & Blue -->
+      <figure id="sc-mondrian">
+        <div class="tile">
+          <div class="sc-mondrian-grid">
+            <i style="grid-area: 1 / 1 / 4 / 4" data-fill="white"></i>
+            <i style="grid-area: 1 / 4 / 3 / 7" data-fill="white"></i>
+            <i style="grid-area: 3 / 4 / 5 / 6" data-fill="white"></i>
+            <i style="grid-area: 3 / 6 / 7 / 7" data-fill="yellow"></i>
+            <i style="grid-area: 4 / 1 / 7 / 2" data-fill="white"></i>
+            <i style="grid-area: 4 / 2 / 7 / 4" data-fill="red"></i>
+            <i style="grid-area: 5 / 4 / 7 / 6" data-fill="blue"></i>
+          </div>
+        </div>
+        <figcaption><strong>Mondrian — Composition with Red, Yellow &amp; Blue</strong>Hand-authored cells with <code>grid-area</code> spans; primary colours, off-white fields, thick black gutters via <code>gap</code> + black host background. The grid here is plain CSS — <code>&lt;pattern-grid&gt;</code> would re-render uneven cell counts.</figcaption>
+        <details><summary>Source</summary><pre><code>.sc-mondrian-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 6px;
+  background: #111;
+  aspect-ratio: 1;
+}
+.sc-mondrian-grid &gt; [data-fill="red"]    { background: #dd2222; }
+.sc-mondrian-grid &gt; [data-fill="blue"]   { background: #1f3fbf; }
+.sc-mondrian-grid &gt; [data-fill="yellow"] { background: #f0d040; }
+.sc-mondrian-grid &gt; [data-fill="white"]  { background: #f4f0e6; }</code></pre></details>
+      </figure>
+
+      <!-- 45. Albers — Homage to the Square -->
+      <figure id="sc-albers">
+        <div class="tile">
+          <div class="sc-albers-layer sc-albers-l1">
+            <div class="sc-albers-layer sc-albers-l2">
+              <div class="sc-albers-layer sc-albers-l3">
+                <div class="sc-albers-layer sc-albers-l4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><strong>Albers — Homage to the Square</strong>Four nested squares, each offset downward by uneven padding. Warm palette, no recursion of <code>&lt;pattern-grid&gt;</code> needed here — pure nesting demonstrates the same compositional grammar.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;div class="sc-albers-layer sc-albers-l1"&gt;
+  &lt;div class="sc-albers-layer sc-albers-l2"&gt;
+    &lt;div class="sc-albers-layer sc-albers-l3"&gt;
+      &lt;div class="sc-albers-layer sc-albers-l4"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </figure>
+
+      <!-- 46. Sol LeWitt — algorithmic line work -->
+      <figure id="sc-lewitt">
+        <div class="tile"><pattern-grid cols="12" rows="12" shim="sibling"></pattern-grid></div>
+        <figcaption><strong>Sol LeWitt — algorithmic line work</strong>Each cell is a single 2px-thick diagonal whose angle is <code>calc(var(--i) * 17deg)</code>. Zero JavaScript art that feels hand-drawn but is entirely algorithmic.</figcaption>
+        <details><summary>Source</summary><pre><code>#sc-lewitt pattern-grid &gt; i {
+  background: #f4ede2;
+  position: relative;
+}
+#sc-lewitt pattern-grid &gt; i::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #1a1a1a;
+  clip-path: polygon(0 49%, 100% 49%, 100% 51%, 0 51%);
+  rotate: calc(var(--i) * 17deg);
+}</code></pre></details>
+      </figure>
+
     </div>
   </main>
 
