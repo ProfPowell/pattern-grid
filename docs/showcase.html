@@ -1316,6 +1316,145 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
+      <!-- 53. Sprite-sheet picker (CSS-only via :has() + radios) -->
+      <figure id="sc-picker">
+        <div class="tile">
+          <div class="sc-picker-chips">
+            <input type="radio" name="sc-picker-radio" id="sc-picker-1" checked>
+            <label for="sc-picker-1">Invader</label>
+            <input type="radio" name="sc-picker-radio" id="sc-picker-2">
+            <label for="sc-picker-2">Ghost</label>
+            <input type="radio" name="sc-picker-radio" id="sc-picker-3">
+            <label for="sc-picker-3">Mushroom</label>
+            <input type="radio" name="sc-picker-radio" id="sc-picker-4">
+            <label for="sc-picker-4">Heart</label>
+          </div>
+          <div class="sc-picker-stack">
+            <pattern-grid id="sc-pick-1" class="pixel-grid" cols="11" rows="8"></pattern-grid>
+            <pattern-grid id="sc-pick-2" class="pixel-grid" cols="8" rows="8"></pattern-grid>
+            <pattern-grid id="sc-pick-3" class="pixel-grid" cols="8" rows="8"></pattern-grid>
+            <pattern-grid id="sc-pick-4" class="pixel-grid" cols="8" rows="7"></pattern-grid>
+          </div>
+        </div>
+        <figcaption><strong>Sprite-sheet picker</strong>Four hidden radio buttons + four stacked sprites. <code>:has(input:checked)</code> picks which sprite is visible. Zero JS for the picker logic — the sprite content is loaded once per cell.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;input type="radio" name="..." id="sc-picker-1" checked&gt;
+&lt;label for="sc-picker-1"&gt;Invader&lt;/label&gt;
+…
+
+#sc-picker .sc-picker-stack &gt; pattern-grid { display: none; }
+#sc-picker:has(#sc-picker-1:checked) #sc-pick-1 { display: grid; }
+#sc-picker:has(#sc-picker-2:checked) #sc-pick-2 { display: grid; }
+…</code></pre></details>
+        <script>
+          (function () {
+            const SPRITES = {
+              'sc-pick-1':
+                "00100000100" +
+                "00010001000" +
+                "00111111100" +
+                "01101110110" +
+                "11111111111" +
+                "10111111101" +
+                "10100000101" +
+                "00011011000",
+              'sc-pick-2':
+                "00111100" +
+                "01111110" +
+                "10101011" +
+                "11111111" +
+                "11111111" +
+                "11111111" +
+                "11111111" +
+                "10101010",
+              'sc-pick-3':
+                "00111100" +
+                "01000111" +
+                "11110111" +
+                "11001011" +
+                "11000111" +
+                "01111110" +
+                "00111100" +
+                "00011000",
+              'sc-pick-4':
+                "01100110" +
+                "11111111" +
+                "11111111" +
+                "11111111" +
+                "01111110" +
+                "00111100" +
+                "00011000",
+            };
+            for (const id of Object.keys(SPRITES)) {
+              const grid = document.getElementById(id);
+              const pixels = SPRITES[id];
+              grid.addEventListener('pattern-grid:render', () => {
+                grid.innerHTML = [...pixels].map(c => `<i data-px="${c}"></i>`).join('');
+              }, { once: true });
+            }
+          })();
+        </script>
+      </figure>
+
+      <!-- 54. Palette-cycle invader -->
+      <figure id="sc-cycle">
+        <div class="tile">
+          <pattern-grid id="sc-cycle-grid" class="pixel-grid" cols="11" rows="8"></pattern-grid>
+        </div>
+        <figcaption><strong>Palette-cycle invader</strong>Same invader pixels as #50, but the foreground colour cycles through the hue wheel via <code>@property --hue</code> + <code>@keyframes</code>. CSS-only colour cycling.</figcaption>
+        <details><summary>Source</summary><pre><code>@property --hue { syntax: '&lt;angle&gt;'; inherits: true; initial-value: 0deg; }
+#sc-cycle { animation: sc-hue-cycle 4s linear infinite; }
+@keyframes sc-hue-cycle { to { --hue: 360deg; } }
+#sc-cycle [data-px="1"] { --px: hsl(var(--hue) 85% 60%); }</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-cycle-grid');
+            const pixels =
+              "00100000100" +
+              "00010001000" +
+              "00111111100" +
+              "01101110110" +
+              "11111111111" +
+              "10111111101" +
+              "10100000101" +
+              "00011011000";
+            grid.addEventListener('pattern-grid:render', () => {
+              grid.innerHTML = [...pixels].map(c => `<i data-px="${c}"></i>`).join('');
+            }, { once: true });
+          })();
+        </script>
+      </figure>
+
+      <!-- 55. Pixel-paint scratchpad -->
+      <figure id="sc-paint-pad">
+        <div class="tile">
+          <pattern-grid id="sc-paint-grid" class="pixel-grid" cols="16" rows="16">
+            <template><button type="button" data-px="0" aria-label="pixel"></button></template>
+          </pattern-grid>
+          <div class="sc-paint-legend">click cycles 0 → 1 → 2 → 3 → 0</div>
+        </div>
+        <figcaption><strong>Pixel-paint scratchpad</strong>16×16 of real <code>&lt;button&gt;</code> cells. Click cycles <code>data-px</code> through four palette slots. No save, no load — pure play.</figcaption>
+        <details><summary>Source</summary><pre><code>grid.addEventListener('click', e =&gt; {
+  const btn = e.target.closest('button[data-px]');
+  if (!btn) return;
+  btn.dataset.px = (Number(btn.dataset.px) + 1) % 4;
+});
+
+#sc-paint-pad [data-px="0"] { --px: #1a1a24; }
+#sc-paint-pad [data-px="1"] { --px: #ff5470; }
+#sc-paint-pad [data-px="2"] { --px: #ffd166; }
+#sc-paint-pad [data-px="3"] { --px: #06d6a0; }</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-paint-grid');
+            grid.addEventListener('click', e => {
+              const btn = e.target.closest('button[data-px]');
+              if (!btn) return;
+              btn.dataset.px = (Number(btn.dataset.px) + 1) % 4;
+            });
+          })();
+        </script>
+      </figure>
+
     </div>
   </main>
 

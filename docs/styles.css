@@ -1721,3 +1721,51 @@ body.dark .feature-card:hover {
 #sc-hoverswap .sc-hoverswap-tile:hover #sc-hover-idle { opacity: 0; }
 #sc-hoverswap .sc-hoverswap-tile:hover #sc-hover-jump { opacity: 1; }
 #sc-hoverswap [data-px="1"] { --px: #ff7b3d; }
+
+/* --- 53. Sprite-sheet picker --- */
+#sc-picker .sc-picker-chips { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; justify-content: center; }
+#sc-picker .sc-picker-chips input { position: absolute; opacity: 0; pointer-events: none; }
+#sc-picker .sc-picker-chips label {
+  font: inherit;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid #888;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+#sc-picker .sc-picker-chips input:checked + label {
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+}
+#sc-picker .sc-picker-stack { position: relative; aspect-ratio: 1; }
+#sc-picker .sc-picker-stack > pattern-grid { display: none; position: absolute; inset: 0; --pg-bg: #0a0a18; }
+#sc-picker:has(#sc-picker-1:checked) #sc-pick-1 { display: grid; }
+#sc-picker:has(#sc-picker-2:checked) #sc-pick-2 { display: grid; }
+#sc-picker:has(#sc-picker-3:checked) #sc-pick-3 { display: grid; }
+#sc-picker:has(#sc-picker-4:checked) #sc-pick-4 { display: grid; }
+#sc-pick-1 [data-px="1"] { --px: #2eff2e; }
+#sc-pick-2 [data-px="1"] { --px: #ff52d1; }
+#sc-pick-3 [data-px="1"] { --px: #ff5050; }
+#sc-pick-4 [data-px="1"] { --px: #e54066; }
+
+/* --- 54. Palette-cycle invader --- */
+@property --hue { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+#sc-cycle { animation: sc-hue-cycle 4s linear infinite; }
+@keyframes sc-hue-cycle { to { --hue: 360deg; } }
+#sc-cycle pattern-grid { --pg-bg: #0a0a18; aspect-ratio: 11 / 8; }
+#sc-cycle [data-px="1"] { --px: hsl(var(--hue) 85% 60%); }
+
+/* --- 55. Pixel-paint scratchpad --- */
+#sc-paint-pad pattern-grid { --pg-bg: #1a1a24; aspect-ratio: 1; }
+#sc-paint-pad [data-px="0"] { --px: #1a1a24; }
+#sc-paint-pad [data-px="1"] { --px: #ff5470; }
+#sc-paint-pad [data-px="2"] { --px: #ffd166; }
+#sc-paint-pad [data-px="3"] { --px: #06d6a0; }
+#sc-paint-pad button[data-px] { cursor: pointer; }
+#sc-paint-pad .sc-paint-legend {
+  margin-top: 0.5rem;
+  text-align: center;
+  font: 0.85rem/1.2 ui-monospace, monospace;
+  opacity: 0.7;
+}
