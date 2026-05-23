@@ -1723,7 +1723,9 @@ body.dark .feature-card:hover {
 #sc-hoverswap [data-px="1"] { --px: #ff7b3d; }
 
 /* --- 53. Sprite-sheet picker --- */
-#sc-picker .sc-picker-chips { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; justify-content: center; }
+#sc-picker .tile { aspect-ratio: auto; display: flex; flex-direction: column; gap: 8px; padding: 8px; }
+#sc-picker .tile > * { width: auto; height: auto; }
+#sc-picker .sc-picker-chips { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; flex: 0 0 auto; }
 #sc-picker .sc-picker-chips input { position: absolute; opacity: 0; pointer-events: none; }
 #sc-picker .sc-picker-chips label {
   font: inherit;
@@ -1757,8 +1759,8 @@ body.dark .feature-card:hover {
 #sc-cycle [data-px="1"] { --px: hsl(var(--hue) 85% 60%); }
 
 /* --- 55. Pixel-paint scratchpad --- */
-#sc-paint-pad pattern-grid { --pg-bg: #1a1a24; aspect-ratio: 1; }
-#sc-paint-pad [data-px="0"] { --px: #1a1a24; }
+#sc-paint-pad pattern-grid { --pg-bg: #060610; aspect-ratio: 1; gap: 1px; padding: 1px; }
+#sc-paint-pad [data-px="0"] { --px: #20202c; }
 #sc-paint-pad [data-px="1"] { --px: #ff5470; }
 #sc-paint-pad [data-px="2"] { --px: #ffd166; }
 #sc-paint-pad [data-px="3"] { --px: #06d6a0; }
