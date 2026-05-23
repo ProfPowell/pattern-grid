@@ -1722,34 +1722,81 @@ body.dark .feature-card:hover {
 #sc-hoverswap .sc-hoverswap-tile:hover #sc-hover-jump { opacity: 1; }
 #sc-hoverswap [data-px="1"] { --px: #ff7b3d; }
 
-/* --- 53. Sprite-sheet picker --- */
-#sc-picker .tile { aspect-ratio: auto; display: flex; flex-direction: column; gap: 8px; padding: 8px; }
-#sc-picker .tile > * { width: auto; height: auto; }
-#sc-picker .sc-picker-chips { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; flex: 0 0 auto; }
-#sc-picker .sc-picker-chips input { position: absolute; opacity: 0; pointer-events: none; }
-#sc-picker .sc-picker-chips label {
-  font: inherit;
-  padding: 0.3rem 0.7rem;
-  border: 1px solid #888;
-  border-radius: 4px;
-  cursor: pointer;
-  user-select: none;
+/* --- 53. Sprite-sheet atlas — many small sprites at once --- */
+#sc-sheet .tile { aspect-ratio: 1; padding: 4px; }
+#sc-sheet .sc-sheet-atlas {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  background: #0a0a18;
+  padding: 4px;
+  box-sizing: border-box;
 }
-#sc-picker .sc-picker-chips input:checked + label {
-  background: #1a73e8;
-  color: #fff;
-  border-color: #1a73e8;
-}
-#sc-picker .sc-picker-stack { position: relative; aspect-ratio: 1; }
-#sc-picker .sc-picker-stack > pattern-grid { display: none; position: absolute; inset: 0; --pg-bg: #0a0a18; }
-#sc-picker:has(#sc-picker-1:checked) #sc-pick-1 { display: grid; }
-#sc-picker:has(#sc-picker-2:checked) #sc-pick-2 { display: grid; }
-#sc-picker:has(#sc-picker-3:checked) #sc-pick-3 { display: grid; }
-#sc-picker:has(#sc-picker-4:checked) #sc-pick-4 { display: grid; }
-#sc-pick-1 [data-px="1"] { --px: #2eff2e; }
-#sc-pick-2 [data-px="1"] { --px: #ff52d1; }
-#sc-pick-3 [data-px="1"] { --px: #ff5050; }
-#sc-pick-4 [data-px="1"] { --px: #e54066; }
+#sc-sheet pattern-grid { --pg-bg: #1c2438; }
+#sc-sheet .sc-hero { --pg-bg: #2a2540; }
+
+/* per-sprite palettes */
+/* H1: knight — skin / armor-blue / sword-silver */
+#sc-sp-h1 [data-px="1"] { --px: #f4c290; }
+#sc-sp-h1 [data-px="2"] { --px: #4a6cd4; }
+#sc-sp-h1 [data-px="3"] { --px: #c8c8d0; }
+/* H2: dragon — body-green / belly-tan / fire-orange */
+#sc-sp-h2 [data-px="1"] { --px: #2a7d3f; }
+#sc-sp-h2 [data-px="2"] { --px: #c8a060; }
+#sc-sp-h2 [data-px="3"] { --px: #111; }
+#sc-sp-h2 [data-px="4"] { --px: #e05a20; }
+/* S1: heart — red */
+#sc-sp-s1 [data-px="1"] { --px: #e54066; }
+/* S2: coin — gold / highlight */
+#sc-sp-s2 [data-px="1"] { --px: #c8860a; }
+#sc-sp-s2 [data-px="2"] { --px: #f5d060; }
+/* S3: star — yellow / outline */
+#sc-sp-s3 [data-px="1"] { --px: #2a2a2a; }
+#sc-sp-s3 [data-px="2"] { --px: #f5e040; }
+/* S4: key — bronze / shine */
+#sc-sp-s4 [data-px="1"] { --px: #b87333; }
+#sc-sp-s4 [data-px="2"] { --px: #f5d080; }
+/* S5: sword — silver blade / gold hilt */
+#sc-sp-s5 [data-px="1"] { --px: #b0b8c8; }
+#sc-sp-s5 [data-px="2"] { --px: #e8e8f0; }
+#sc-sp-s5 [data-px="3"] { --px: #c8a020; }
+/* S6: shield — blue / silver trim */
+#sc-sp-s6 [data-px="1"] { --px: #3060c0; }
+#sc-sp-s6 [data-px="2"] { --px: #c0c0d0; }
+/* S7: potion — bottle-clear / liquid-cyan */
+#sc-sp-s7 [data-px="1"] { --px: #a0b8d0; }
+#sc-sp-s7 [data-px="2"] { --px: #20e8d0; }
+/* S8: gem — purple / facet-shine */
+#sc-sp-s8 [data-px="1"] { --px: #9020c0; }
+#sc-sp-s8 [data-px="2"] { --px: #e080ff; }
+/* S9: bomb — dark / fuse-orange / shine */
+#sc-sp-s9 [data-px="1"] { --px: #303030; }
+#sc-sp-s9 [data-px="2"] { --px: #f08020; }
+/* S10: mushroom — red cap / white dots / stem */
+#sc-sp-s10 [data-px="1"] { --px: #d02020; }
+#sc-sp-s10 [data-px="2"] { --px: #f0f0f0; }
+/* S11: ghost — pale / eyes */
+#sc-sp-s11 [data-px="1"] { --px: #d0d8e8; }
+#sc-sp-s11 [data-px="2"] { --px: #2040a0; }
+/* S12: flame — orange / yellow core */
+#sc-sp-s12 [data-px="1"] { --px: #e05010; }
+#sc-sp-s12 [data-px="2"] { --px: #f8e020; }
+/* S13: crown — gold / jewels */
+#sc-sp-s13 [data-px="1"] { --px: #d4a010; }
+#sc-sp-s13 [data-px="2"] { --px: #e04040; }
+/* S14: skull — bone / shadow */
+#sc-sp-s14 [data-px="1"] { --px: #e8e0c8; }
+#sc-sp-s14 [data-px="2"] { --px: #2a2a2a; }
+/* S15: arrow — green */
+#sc-sp-s15 [data-px="1"] { --px: #40c040; }
+/* S16: cherry — red / stem-brown */
+#sc-sp-s16 [data-px="1"] { --px: #406820; }
+#sc-sp-s16 [data-px="2"] { --px: #d02040; }
+/* S17: invader — bright green */
+#sc-sp-s17 [data-px="1"] { --px: #2eff2e; }
 
 /* --- 54. Palette-cycle invader --- */
 @property --hue { syntax: '<angle>'; inherits: true; initial-value: 0deg; }

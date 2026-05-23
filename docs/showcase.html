@@ -1316,72 +1316,258 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
-      <!-- 53. Sprite-sheet picker (CSS-only via :has() + radios) -->
-      <figure id="sc-picker">
+      <!-- 53. Sprite-sheet atlas — many small sprites at once -->
+      <figure id="sc-sheet">
         <div class="tile">
-          <div class="sc-picker-chips">
-            <input type="radio" name="sc-picker-radio" id="sc-picker-1" checked>
-            <label for="sc-picker-1">Invader</label>
-            <input type="radio" name="sc-picker-radio" id="sc-picker-2">
-            <label for="sc-picker-2">Ghost</label>
-            <input type="radio" name="sc-picker-radio" id="sc-picker-3">
-            <label for="sc-picker-3">Mushroom</label>
-            <input type="radio" name="sc-picker-radio" id="sc-picker-4">
-            <label for="sc-picker-4">Heart</label>
-          </div>
-          <div class="sc-picker-stack">
-            <pattern-grid id="sc-pick-1" class="pixel-grid" cols="11" rows="8"></pattern-grid>
-            <pattern-grid id="sc-pick-2" class="pixel-grid" cols="8" rows="8"></pattern-grid>
-            <pattern-grid id="sc-pick-3" class="pixel-grid" cols="8" rows="8"></pattern-grid>
-            <pattern-grid id="sc-pick-4" class="pixel-grid" cols="8" rows="7"></pattern-grid>
+          <div class="sc-sheet-atlas">
+            <!-- Heroes span 2x2 -->
+            <pattern-grid id="sc-sp-h1" class="pixel-grid sc-hero" cols="16" rows="16" style="grid-area: 1/1/3/3"></pattern-grid>
+            <pattern-grid id="sc-sp-h2" class="pixel-grid sc-hero" cols="16" rows="16" style="grid-area: 3/3/5/5"></pattern-grid>
+            <!-- 17 small sprites, 1x1 each -->
+            <pattern-grid id="sc-sp-s1"  class="pixel-grid" cols="8" rows="8" style="grid-area: 1/3"></pattern-grid>
+            <pattern-grid id="sc-sp-s2"  class="pixel-grid" cols="8" rows="8" style="grid-area: 1/4"></pattern-grid>
+            <pattern-grid id="sc-sp-s3"  class="pixel-grid" cols="8" rows="8" style="grid-area: 1/5"></pattern-grid>
+            <pattern-grid id="sc-sp-s4"  class="pixel-grid" cols="8" rows="8" style="grid-area: 2/3"></pattern-grid>
+            <pattern-grid id="sc-sp-s5"  class="pixel-grid" cols="8" rows="8" style="grid-area: 2/4"></pattern-grid>
+            <pattern-grid id="sc-sp-s6"  class="pixel-grid" cols="8" rows="8" style="grid-area: 2/5"></pattern-grid>
+            <pattern-grid id="sc-sp-s7"  class="pixel-grid" cols="8" rows="8" style="grid-area: 3/1"></pattern-grid>
+            <pattern-grid id="sc-sp-s8"  class="pixel-grid" cols="8" rows="8" style="grid-area: 3/2"></pattern-grid>
+            <pattern-grid id="sc-sp-s9"  class="pixel-grid" cols="8" rows="8" style="grid-area: 3/5"></pattern-grid>
+            <pattern-grid id="sc-sp-s10" class="pixel-grid" cols="8" rows="8" style="grid-area: 4/1"></pattern-grid>
+            <pattern-grid id="sc-sp-s11" class="pixel-grid" cols="8" rows="8" style="grid-area: 4/2"></pattern-grid>
+            <pattern-grid id="sc-sp-s12" class="pixel-grid" cols="8" rows="8" style="grid-area: 4/5"></pattern-grid>
+            <pattern-grid id="sc-sp-s13" class="pixel-grid" cols="8" rows="8" style="grid-area: 5/1"></pattern-grid>
+            <pattern-grid id="sc-sp-s14" class="pixel-grid" cols="8" rows="8" style="grid-area: 5/2"></pattern-grid>
+            <pattern-grid id="sc-sp-s15" class="pixel-grid" cols="8" rows="8" style="grid-area: 5/3"></pattern-grid>
+            <pattern-grid id="sc-sp-s16" class="pixel-grid" cols="8" rows="8" style="grid-area: 5/4"></pattern-grid>
+            <pattern-grid id="sc-sp-s17" class="pixel-grid" cols="8" rows="8" style="grid-area: 5/5"></pattern-grid>
           </div>
         </div>
-        <figcaption><strong>Sprite-sheet picker</strong>Four hidden radio buttons + four stacked sprites. <code>:has(input:checked)</code> picks which sprite is visible. Zero JS for the picker logic — the sprite content is loaded once per cell.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;input type="radio" name="..." id="sc-picker-1" checked&gt;
-&lt;label for="sc-picker-1"&gt;Invader&lt;/label&gt;
-…
+        <figcaption><strong>Sprite-sheet atlas</strong>19 distinct sprites packed into one tile, like an NES game's tile palette — two 16×16 heroes spanning 2×2 slots and seventeen 8×8 items filling the rest. Each sprite is its own <code>&lt;pattern-grid&gt;</code> with its own pixel string and palette.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;div class="sc-sheet-atlas"&gt;
+  &lt;pattern-grid class="pixel-grid sc-hero" cols="16" rows="16" style="grid-area: 1/1/3/3"&gt;&lt;/pattern-grid&gt;
+  &lt;pattern-grid class="pixel-grid" cols="8" rows="8" style="grid-area: 1/3"&gt;&lt;/pattern-grid&gt;
+  … 17 more small sprites …
+&lt;/div&gt;
 
-#sc-picker .sc-picker-stack &gt; pattern-grid { display: none; }
-#sc-picker:has(#sc-picker-1:checked) #sc-pick-1 { display: grid; }
-#sc-picker:has(#sc-picker-2:checked) #sc-pick-2 { display: grid; }
+.sc-sheet-atlas {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 4px;
+  aspect-ratio: 1;
+}
+#sc-sp-h1 [data-px="1"] { --px: #f4c290; } /* skin */
+#sc-sp-h1 [data-px="2"] { --px: #4a6cd4; } /* armor */
 …</code></pre></details>
         <script>
           (function () {
             const SPRITES = {
-              'sc-pick-1':
-                "00100000100" +
-                "00010001000" +
-                "00111111100" +
-                "01101110110" +
-                "11111111111" +
-                "10111111101" +
-                "10100000101" +
-                "00011011000",
-              'sc-pick-2':
-                "00111100" +
-                "01111110" +
-                "10101011" +
-                "11111111" +
-                "11111111" +
-                "11111111" +
-                "11111111" +
-                "10101010",
-              'sc-pick-3':
-                "00111100" +
-                "01000111" +
-                "11110111" +
-                "11001011" +
-                "11000111" +
-                "01111110" +
-                "00111100" +
-                "00011000",
-              'sc-pick-4':
+              // H1: knight (16x16 = 256 chars)
+              'sc-sp-h1':
+                "0000022220000000" +
+                "0000233320000000" +
+                "0000211120000000" +
+                "0000211120000000" +
+                "0003222230000000" +
+                "0002111120300000" +
+                "0032211223000000" +
+                "0322222222300000" +
+                "0322222222300000" +
+                "0032222223000000" +
+                "0003222230000000" +
+                "0000322300000000" +
+                "0002222220000000" +
+                "0002222220000000" +
+                "0002200220000000" +
+                "0002200220000000",
+              // H2: dragon (16x16 = 256 chars)
+              'sc-sp-h2':
+                "0000000000004400" +
+                "0000000000044400" +
+                "0044000000044000" +
+                "0444400004440000" +
+                "0044444044400000" +
+                "0004444444000000" +
+                "0024444442000000" +
+                "0244444444200000" +
+                "0244224442200000" +
+                "0044444444400000" +
+                "0004444444000000" +
+                "0044400044400000" +
+                "0444000004440000" +
+                "0440000000440000" +
+                "0400000000040000" +
+                "0000000000000000",
+              // S1: heart (8x8 = 64 chars)
+              'sc-sp-s1':
                 "01100110" +
                 "11111111" +
                 "11111111" +
                 "11111111" +
                 "01111110" +
                 "00111100" +
+                "00011000" +
+                "00000000",
+              // S2: coin (8x8 = 64 chars)
+              'sc-sp-s2':
+                "00111100" +
+                "01222210" +
+                "12221110" +
+                "12211110" +
+                "12211110" +
+                "12221110" +
+                "01222210" +
+                "00111100",
+              // S3: star (8x8 = 64 chars)
+              'sc-sp-s3':
+                "00010000" +
+                "00111000" +
+                "11111110" +
+                "01111100" +
+                "00111100" +
+                "01101110" +
+                "11000011" +
+                "00000000",
+              // S4: key (8x8 = 64 chars)
+              'sc-sp-s4':
+                "00011100" +
+                "00111110" +
+                "00110110" +
+                "00111110" +
+                "00011100" +
+                "00010000" +
+                "01111000" +
+                "00010000",
+              // S5: sword (8x8 = 64 chars)
+              'sc-sp-s5':
+                "00000011" +
+                "00000110" +
+                "00001100" +
+                "00011000" +
+                "00110000" +
+                "01133000" +
+                "11130000" +
+                "01100000",
+              // S6: shield (8x8 = 64 chars)
+              'sc-sp-s6':
+                "01111110" +
+                "11111111" +
+                "12121211" +
+                "12121211" +
+                "11212111" +
+                "01111110" +
+                "00111100" +
+                "00011000",
+              // S7: potion (8x8 = 64 chars)
+              'sc-sp-s7':
+                "00011100" +
+                "00011100" +
+                "00111110" +
+                "01222210" +
+                "12222221" +
+                "12222221" +
+                "01222210" +
+                "00111110",
+              // S8: gem (8x8 = 64 chars)
+              'sc-sp-s8':
+                "00111100" +
+                "01211210" +
+                "12112121" +
+                "12121121" +
+                "01211210" +
+                "00121100" +
+                "00011000" +
+                "00000000",
+              // S9: bomb (8x8 = 64 chars)
+              'sc-sp-s9':
+                "00020000" +
+                "00121000" +
+                "01111100" +
+                "11111110" +
+                "11121110" +
+                "11111110" +
+                "01111100" +
+                "00111000",
+              // S10: mushroom (8x8 = 64 chars)
+              'sc-sp-s10':
+                "00111100" +
+                "01111110" +
+                "11212111" +
+                "12121211" +
+                "11111111" +
+                "01111110" +
+                "00111100" +
+                "00111100",
+              // S11: ghost (8x8 = 64 chars)
+              'sc-sp-s11':
+                "00111100" +
+                "01111110" +
+                "11212111" +
+                "11111111" +
+                "11111111" +
+                "11111111" +
+                "11111111" +
+                "10100101",
+              // S12: flame (8x8 = 64 chars)
+              'sc-sp-s12':
+                "00010000" +
+                "00121000" +
+                "01212100" +
+                "01222100" +
+                "11222211" +
+                "11122211" +
+                "11222111" +
+                "01111110",
+              // S13: crown (8x8 = 64 chars)
+              'sc-sp-s13':
+                "10010001" +
+                "11111111" +
+                "11211211" +
+                "12221221" +
+                "12222221" +
+                "12222221" +
+                "01111110" +
+                "00000000",
+              // S14: skull (8x8 = 64 chars)
+              'sc-sp-s14':
+                "00111100" +
+                "01111110" +
+                "12001201" +
+                "12111201" +
+                "11111111" +
+                "01111110" +
+                "01010110" +
+                "00111100",
+              // S15: arrow (8x8 = 64 chars)
+              'sc-sp-s15':
+                "00010000" +
+                "00110000" +
+                "01111110" +
+                "11111111" +
+                "01111110" +
+                "00110000" +
+                "00010000" +
+                "00000000",
+              // S16: cherry (8x8 = 64 chars)
+              'sc-sp-s16':
+                "00000110" +
+                "00001100" +
+                "00011000" +
+                "00110000" +
+                "01100110" +
+                "11111111" +
+                "11111111" +
+                "01111110",
+              // S17: invader (8x8 = 64 chars)
+              'sc-sp-s17':
+                "00100100" +
+                "00011000" +
+                "00111100" +
+                "01101110" +
+                "11111111" +
+                "10111101" +
+                "10100001" +
                 "00011000",
             };
             for (const id of Object.keys(SPRITES)) {
