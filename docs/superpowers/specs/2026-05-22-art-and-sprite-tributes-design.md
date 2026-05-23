@@ -1,21 +1,24 @@
 # Art tributes & 8-bit sprite walls — design
 
 **Date:** 2026-05-22
-**Scope:** New showcase section adding 12 pieces (44–55) to `docs/showcase.html`.
+**Scope:** New showcase section adding 14 pieces (44–57) to `docs/showcase.html`.
 **Status:** Approved (brainstorm)
 
 ## Goal
 
-Add a third showcase section to `docs/showcase.html` that demonstrates two
+Add a third showcase section to `docs/showcase.html` that demonstrates three
 under-served categories for `<pattern-grid>`:
 
 1. Tributes to abstract artists (Mondrian, Albers, LeWitt, Kandinsky,
    Kelly, Kusama).
 2. 8-bit / sprite walls — single sprites, animated sprites, a sprite-sheet
    picker, palette cycling, and an interactive pixel scratchpad.
+3. Pop & illusion crossovers — Escher tessellation and Lichtenstein POW.
 
-The section is meant to read like a small gallery tour, alternating from
-hard-edge geometric tributes to painterly tributes to pixel-art demos.
+The section is meant to read like a small gallery tour: hard-edge
+geometric tributes, then painterly tributes, then pixel-art demos,
+ending with two pop/illusion pieces that show off platform features
+(tessellation via `clip-path`, anchor positioning + popover).
 
 ## Non-goals
 
@@ -25,14 +28,14 @@ hard-edge geometric tributes to painterly tributes to pixel-art demos.
 - No shared NES-style palette table. Each sprite demo is self-contained
   (per the user's brainstorm answer).
 - No second-round artists in this batch: Malevich, Stella, Anni Albers,
-  Agnes Martin, Warhol, Escher, Lichtenstein are explicitly deferred.
+  Agnes Martin, Warhol are explicitly deferred.
 
 ## Structure
 
 A new `<h2 class="showcase-section">Tributes — abstract art & 8-bit
 sprites</h2>` is appended to `docs/showcase.html`, after the existing
 "Modern platform showcase" section. The numbering continues at 44 and
-ends at 55. Each piece is a `<figure>` matching the existing showcase
+ends at 57. Each piece is a `<figure>` matching the existing showcase
 pattern: tile + figcaption + `<details>` Source block.
 
 Pieces are ordered by theme cluster (not by ID):
@@ -51,6 +54,8 @@ Pieces are ordered by theme cluster (not by ID):
 | 53 | Interactive sprite   | Sprite-sheet picker                         |
 | 54 | Interactive sprite   | Palette-cycle invader                       |
 | 55 | Interactive sprite   | Pixel-paint scratchpad                      |
+| 56 | Pop & illusion       | Escher — tessellating birds                 |
+| 57 | Pop & illusion       | Lichtenstein — POW                          |
 
 ## Shared CSS utilities
 
@@ -219,6 +224,43 @@ The animation interpolates `--hue` smoothly because of `@property`.
 JS click handler cycles `data-px` 0 → 1 → 2 → 3 → 0. CSS maps the four
 values to four palette colours. No save/load — pure play.
 
+### 56. Escher — tessellating birds
+
+`<pattern-grid cols="10" rows="10" shim="sibling">`. Each cell renders
+a bird-silhouette `clip-path: polygon(...)` so that adjacent cells
+interlock — the negative space of one bird is the positive space of the
+next. Two alternating palettes (light bird on dark, dark bird on light)
+driven by `:nth-child(2n)`/`:nth-child(odd)` plus row-parity via
+`calc(var(--i) / 10)` math. The clip-path is a hand-tuned set of points
+that gives a stylised bird outline; cells in even rows are reflected
+via `scale(-1, 1)` so the tessellation closes.
+
+This is the "M.C. Escher Day and Night" effect at low fidelity —
+recognisable as tessellating birds without claiming photorealism.
+
+### 57. Lichtenstein — POW
+
+`<pattern-grid cols="6" rows="4" shim="sibling">` with a Ben-Day dot
+background applied to every cell:
+
+```css
+#sc-pow pattern-grid > i {
+  background:
+    radial-gradient(circle at 50% 50%, #c00 0 28%, transparent 30%)
+      0 0 / 16px 16px;
+  background-color: #fdd835;
+}
+```
+
+One designated "hero" cell is a `<button popovertarget>` that opens an
+anchored `<div popover>` styled as a comic-book speech balloon with the
+word **POW!** in bold sans-serif, anchored above-right via CSS Anchor
+Positioning. Hover/click both trigger the popover (the button gets
+`popovertargetaction="toggle"`).
+
+Demonstrates: anchor positioning + popover + Ben-Day-dot CSS gradients
+in a pop-art tribute.
+
 ## File touch list
 
 - `docs/showcase.html` — +12 figures (~30–80 lines each including
@@ -226,7 +268,7 @@ values to four palette colours. No save/load — pure play.
 - `docs/styles.css` — new "Tributes" block at the end with the shared
   utilities and per-piece rules.
 
-Estimated diff: ~600–900 lines across the two files; almost entirely
+Estimated diff: ~700–1000 lines across the two files; almost entirely
 additive.
 
 ## Implementation order
@@ -239,6 +281,8 @@ additive.
    shared `.pixel-grid` utility, and the inline-script cell generator.
 4. **Interactive sprites (53–55)** — sprite-sheet picker, palette
    cycler, paint scratchpad.
+5. **Pop & illusion (56–57)** — Escher tessellation (clip-path tuning)
+   and Lichtenstein POW (popover + anchor positioning).
 
 Within each cluster, the pieces can be reviewed and merged together or
 individually.
@@ -262,12 +306,22 @@ individually.
   doubles the cells' attribute payload. The 5-line JS alternative
   (re-render `innerHTML` every 200 ms) is simpler. Will pick at
   implementation time.
+- **Escher tessellation (#56) tuning.** A clip-path that *truly*
+  tessellates is hard to hand-tune; we'll accept a stylised
+  bird-silhouette that *reads* as interlocking even if a few pixels
+  don't perfectly mate. The piece sells the idea, not pixel-perfect
+  Escher.
+- **Popover + anchor positioning (#57).** `[popover]` and CSS Anchor
+  Positioning are both Baseline 2024 but with Firefox catching up;
+  unsupported browsers will fall back to the button just doing nothing
+  on click. Acceptable degradation — the Ben-Day-dot tile still looks
+  like Lichtenstein.
 
 ## Acceptance criteria
 
 - New "Tributes — abstract art & 8-bit sprites" `<h2>` appears in the
   showcase, after "Modern platform showcase".
-- All 12 pieces render without console errors on the live GitHub Pages
+- All 14 pieces render without console errors on the live GitHub Pages
   build.
 - Hover, click, and animation interactions work as described above.
 - `npm test` continues to pass 36/36.
