@@ -1582,6 +1582,8 @@ body.dark .feature-card:hover {
 
 /* --- Shared sprite utilities (used by pieces 50–55, 57) --- */
 .pixel-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
   image-rendering: pixelated;
   gap: 0;
   background: var(--pg-bg, #111);
