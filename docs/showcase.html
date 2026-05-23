@@ -1484,42 +1484,57 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
             POW!
           </div>
         </div>
-        <figcaption><strong>Lichtenstein — POW</strong>Ben-Day dots painted on every cell with a CSS radial gradient. One cell is a <code>&lt;button popovertarget&gt;</code> that opens a comic-book "POW!" speech balloon anchored above-right via CSS Anchor Positioning.</figcaption>
+        <figcaption><strong>Lichtenstein — POW</strong>Ben-Day dots painted on every cell with a CSS radial gradient. One cell is a <code>&lt;button popovertarget&gt;</code> that opens a comic-book "POW!" speech balloon. Click the outlined cell.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="6" rows="4" shim="sibling"&gt;&lt;/pattern-grid&gt;
 &lt;div id="sc-pow-balloon" popover&gt;POW!&lt;/div&gt;
 
 // after render, replace one cell with a popover-trigger button
 const hero = grid.cellElements[10];
 hero.replaceWith(Object.assign(document.createElement('button'), {
-  type: 'button'
+  type: 'button', popovertarget: 'sc-pow-balloon'
 }));
+
+// JS positioning on toggle (CSS anchor() doesn't reach the top layer in Chrome yet)
+popover.addEventListener('toggle', e =&gt; {
+  if (e.newState !== 'open') return;
+  const r = hero.getBoundingClientRect();
+  popover.style.top = r.top - 80 + 'px';
+  popover.style.left = r.right + 8 + 'px';
+});
 
 #sc-pow pattern-grid &gt; i,
 #sc-pow pattern-grid &gt; button {
   background:
     radial-gradient(circle at 50% 50%, #c00 0 28%, transparent 30%) 0 0 / 16px 16px,
     #fdd835;
-}
-#sc-pow .sc-pow-hero { anchor-name: --sc-pow-hero; }
-#sc-pow-balloon {
-  position-anchor: --sc-pow-hero;
-  left: anchor(right);
-  bottom: anchor(top);
 }</code></pre></details>
         <script>
           (function () {
             const grid = document.getElementById('sc-pow-grid');
+            const popover = document.getElementById('sc-pow-balloon');
+            let hero;
+            const position = () => {
+              if (!hero || !popover.matches(':popover-open')) return;
+              const r = hero.getBoundingClientRect();
+              popover.style.top = Math.max(8, r.top - 80) + 'px';
+              popover.style.left = r.right + 8 + 'px';
+            };
             grid.addEventListener('pattern-grid:render', () => {
-              const hero = grid.cellElements[10];
-              if (!hero) return;
-              const btn = document.createElement('button');
-              btn.type = 'button';
-              btn.setAttribute('popovertarget', 'sc-pow-balloon');
-              btn.setAttribute('popovertargetaction', 'toggle');
-              btn.setAttribute('aria-label', 'Show POW');
-              btn.className = 'sc-pow-hero';
-              hero.replaceWith(btn);
+              const cell = grid.cellElements[10];
+              if (!cell) return;
+              hero = document.createElement('button');
+              hero.type = 'button';
+              hero.setAttribute('popovertarget', 'sc-pow-balloon');
+              hero.setAttribute('popovertargetaction', 'toggle');
+              hero.setAttribute('aria-label', 'Show POW');
+              hero.className = 'sc-pow-hero';
+              cell.replaceWith(hero);
             }, { once: true });
+            popover.addEventListener('toggle', (e) => {
+              if (e.newState === 'open') requestAnimationFrame(position);
+            });
+            window.addEventListener('scroll', position, { passive: true });
+            window.addEventListener('resize', position);
           })();
         </script>
       </figure>

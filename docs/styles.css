@@ -1815,19 +1815,17 @@ body.dark .feature-card:hover {
   cursor: pointer;
 }
 #sc-pow .sc-pow-hero {
-  anchor-name: --sc-pow-hero;
   outline: 3px solid #1a1a24;
   outline-offset: -3px;
 }
 #sc-pow-balloon {
-  position-anchor: --sc-pow-hero;
   position: fixed;
   inset: auto;
-  left: anchor(right);
-  bottom: anchor(top);
+  top: 0;
+  left: 0;
   width: max-content;
   height: max-content;
-  margin: 0 0 8px 8px;
+  margin: 0;
   padding: 0.6rem 1.4rem;
   font: 900 2rem/1 "Arial Black", "Helvetica Neue", sans-serif;
   color: #ffeb3b;
