@@ -1698,3 +1698,24 @@ body.dark .feature-card:hover {
   transition: scale 200ms;
 }
 #sc-kusama pattern-grid > i:hover { scale: 1.4; z-index: 2; }
+
+/* --- 50. Space Invader (single sprite) --- */
+#sc-invader pattern-grid { --pg-bg: #0a0a18; aspect-ratio: 11 / 8; }
+#sc-invader [data-px="1"] { --px: #2eff2e; }
+
+/* --- 51. Pac-Man-style chomp --- */
+#sc-chomp pattern-grid { --pg-bg: #000; aspect-ratio: 1; }
+#sc-chomp [data-px="1"] { --px: #ffeb00; }
+
+/* --- 52. Hover-swap sprite --- */
+#sc-hoverswap .sc-hoverswap-tile { position: relative; aspect-ratio: 1; }
+#sc-hoverswap .sc-hoverswap-tile > pattern-grid {
+  position: absolute;
+  inset: 0;
+  transition: opacity 200ms;
+  --pg-bg: #1c2438;
+}
+#sc-hover-jump { opacity: 0; }
+#sc-hoverswap .sc-hoverswap-tile:hover #sc-hover-idle { opacity: 0; }
+#sc-hoverswap .sc-hoverswap-tile:hover #sc-hover-jump { opacity: 1; }
+#sc-hoverswap [data-px="1"] { --px: #ff7b3d; }

@@ -1167,6 +1167,155 @@
 #sc-kusama pattern-grid &gt; i:hover { scale: 1.4; z-index: 2; }</code></pre></details>
       </figure>
 
+      <!-- 50. Space Invader (single sprite) -->
+      <figure id="sc-invader">
+        <div class="tile">
+          <pattern-grid id="sc-invader-grid" class="pixel-grid" cols="11" rows="8"></pattern-grid>
+        </div>
+        <figcaption><strong>Space-invader-style sprite</strong>11×8 grid where each cell carries <code>data-px="0|1"</code>. CSS maps <code>data-px="1"</code> to bright green. The pixel string is the source of truth.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid class="pixel-grid" cols="11" rows="8"&gt;&lt;/pattern-grid&gt;
+
+const pixels =
+  "00100000100" +
+  "00010001000" +
+  "00111111100" +
+  "01101110110" +
+  "11111111111" +
+  "10111111101" +
+  "10100000101" +
+  "00011011000";
+grid.innerHTML = [...pixels].map(c =&gt; `&lt;i data-px="${c}"&gt;&lt;/i&gt;`).join('');
+
+#sc-invader [data-px="1"] { --px: #2eff2e; }</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-invader-grid');
+            const pixels =
+              "00100000100" +
+              "00010001000" +
+              "00111111100" +
+              "01101110110" +
+              "11111111111" +
+              "10111111101" +
+              "10100000101" +
+              "00011011000";
+            const draw = () => {
+              grid.innerHTML = [...pixels].map(c => `<i data-px="${c}"></i>`).join('');
+            };
+            grid.addEventListener('pattern-grid:render', draw, { once: true });
+          })();
+        </script>
+      </figure>
+
+      <!-- 51. Pac-Man-style chomp (single sprite, animated) -->
+      <figure id="sc-chomp">
+        <div class="tile">
+          <pattern-grid id="sc-chomp-grid" class="pixel-grid" cols="13" rows="13"></pattern-grid>
+        </div>
+        <figcaption><strong>Pac-Man-style chomp</strong>Two pixel arrays — mouth open and closed — swapped every 200 ms by re-rendering <code>innerHTML</code>. CSS handles the colour.</figcaption>
+        <details><summary>Source</summary><pre><code>const frames = [
+  /* closed */ "...",
+  /* open */   "...",
+];
+let f = 0;
+const draw = () =&gt; grid.innerHTML = [...frames[f]].map(c =&gt; `&lt;i data-px="${c}"&gt;&lt;/i&gt;`).join('');
+setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
+
+#sc-chomp [data-px="1"] { --px: #ffeb00; }</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-chomp-grid');
+            const FRAMES = [
+              /* closed */
+              "0000011111000" +
+              "0011111111100" +
+              "0111111111110" +
+              "0111111111110" +
+              "1111111111111" +
+              "1111111111111" +
+              "1111111111111" +
+              "1111111111111" +
+              "1111111111111" +
+              "0111111111110" +
+              "0111111111110" +
+              "0011111111100" +
+              "0000011111000",
+              /* open */
+              "0000011111000" +
+              "0011111111100" +
+              "0111111111110" +
+              "0111111111110" +
+              "1111111000000" +
+              "1111100000000" +
+              "1110000000000" +
+              "1111100000000" +
+              "1111111000000" +
+              "0111111111110" +
+              "0111111111110" +
+              "0011111111100" +
+              "0000011111000",
+            ];
+            let f = 0;
+            const draw = () => {
+              grid.innerHTML = [...FRAMES[f]].map(c => `<i data-px="${c}"></i>`).join('');
+            };
+            grid.addEventListener('pattern-grid:render', () => {
+              draw();
+              setInterval(() => { f = 1 - f; draw(); }, 200);
+            }, { once: true });
+          })();
+        </script>
+      </figure>
+
+      <!-- 52. Hover-swap sprite (Mario-style idle → jump) -->
+      <figure id="sc-hoverswap">
+        <div class="tile sc-hoverswap-tile">
+          <pattern-grid id="sc-hover-idle" class="pixel-grid" cols="8" rows="8"></pattern-grid>
+          <pattern-grid id="sc-hover-jump" class="pixel-grid" cols="8" rows="8"></pattern-grid>
+        </div>
+        <figcaption><strong>Hover-swap sprite</strong>Two 8×8 sprites stacked in the tile. Hovering the tile fades one out and the other in. Mario-style in spirit, generic in art.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;div class="tile sc-hoverswap-tile"&gt;
+  &lt;pattern-grid class="pixel-grid" cols="8" rows="8" id="..."&gt;&lt;/pattern-grid&gt;
+  &lt;pattern-grid class="pixel-grid" cols="8" rows="8" id="..."&gt;&lt;/pattern-grid&gt;
+&lt;/div&gt;
+
+.sc-hoverswap-tile { position: relative; }
+.sc-hoverswap-tile &gt; pattern-grid { position: absolute; inset: 0; transition: opacity 200ms; }
+#sc-hover-jump { opacity: 0; }
+.sc-hoverswap-tile:hover #sc-hover-idle { opacity: 0; }
+.sc-hoverswap-tile:hover #sc-hover-jump { opacity: 1; }</code></pre></details>
+        <script>
+          (function () {
+            const IDLE =
+              "00111100" +
+              "01111110" +
+              "01011010" +
+              "01111110" +
+              "00111100" +
+              "01111110" +
+              "01100110" +
+              "01100110";
+            const JUMP =
+              "00111100" +
+              "01111110" +
+              "01011010" +
+              "01111110" +
+              "10111101" +
+              "11111111" +
+              "00100100" +
+              "01100110";
+            const PAINT = (grid, pixels) => {
+              const draw = () => {
+                grid.innerHTML = [...pixels].map(c => `<i data-px="${c}"></i>`).join('');
+              };
+              grid.addEventListener('pattern-grid:render', draw, { once: true });
+            };
+            PAINT(document.getElementById('sc-hover-idle'), IDLE);
+            PAINT(document.getElementById('sc-hover-jump'), JUMP);
+          })();
+        </script>
+      </figure>
+
     </div>
   </main>
 
