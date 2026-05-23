@@ -1397,7 +1397,7 @@ body.dark .feature-card:hover {
 #sc-morph pattern-grid > i { aspect-ratio: 1; }
 #sc-morph .sc-morph-controls { margin-top: 0.75rem; text-align: center; }
 #sc-morph .sc-morph-controls button { font: inherit; padding: 0.4rem 1rem; cursor: pointer; }
-::view-transition-group(*) { animation-duration: 600ms; }
+::view-transition-group(*) { animation-duration: 1200ms; }
 
 /* --- Showcase: scroll-reveal --- */
 #sc-scroll pattern-grid {
@@ -1418,6 +1418,13 @@ body.dark .feature-card:hover {
   from { opacity: 0; transform: scale(0.3) rotate(-20deg); }
   to   { opacity: 1; transform: none; }
 }
+#sc-scroll pattern-grid.replay > i {
+  animation: sc-scroll-reveal 700ms both;
+  animation-timeline: auto;
+  animation-delay: calc(var(--idx) * 8ms);
+}
+#sc-scroll .sc-scroll-controls { margin-top: 0.75rem; text-align: center; }
+#sc-scroll .sc-scroll-controls button { font: inherit; padding: 0.4rem 1rem; cursor: pointer; }
 
 /* --- Showcase: anchored popovers --- */
 #sc-anchor pattern-grid {
@@ -1489,7 +1496,7 @@ body.dark .feature-card:hover {
   aspect-ratio: 1;
 }
 #sc-recurse .sc-recurse-cell { aspect-ratio: 1; }
-#sc-recurse > .tile > pattern-grid > .sc-recurse-cell:nth-child(5) { visibility: hidden; }
+#sc-recurse > .tile > pattern-grid > .sc-recurse-cell:nth-of-type(5) { visibility: hidden; }
 #sc-recurse .sc-recurse-cell > pattern-grid { gap: 2px; }
 #sc-recurse .sc-recurse-cell > pattern-grid > i {
   aspect-ratio: 1;

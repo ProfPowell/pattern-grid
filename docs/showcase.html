@@ -824,7 +824,7 @@
               });
             }
             grid.addEventListener('pattern-grid:render', tagCells, { once: true });
-            shuffle.addEventListener('click', () => {
+            function doShuffle() {
               const cells = [...grid.cellElements];
               cells.sort(() => Math.random() - 0.5);
               const run = () => grid.replaceChildren(...cells);
@@ -833,21 +833,46 @@
               } else {
                 run();
               }
-            });
+            }
+            shuffle.addEventListener('click', doShuffle);
+            const io = new IntersectionObserver((entries, observer) => {
+              for (const e of entries) {
+                if (e.isIntersecting && grid.cellElements.length) {
+                  observer.disconnect();
+                  setTimeout(doShuffle, 500);
+                }
+              }
+            }, { threshold: 0.5 });
+            io.observe(document.getElementById('sc-morph'));
           })();
         </script>
       </figure>
 
       <!-- 36. Scroll-reveal mosaic -->
       <figure id="sc-scroll">
-        <div class="tile"><pattern-grid cols="12" rows="12"></pattern-grid></div>
-        <figcaption><strong>Scroll-reveal mosaic</strong>Each cell uses <code>animation-timeline: view()</code> — entry/exit driven entirely by scroll position. Zero JS hooks.</figcaption>
+        <div class="tile">
+          <pattern-grid id="sc-scroll-grid" cols="12" rows="12"></pattern-grid>
+          <div class="sc-scroll-controls"><button type="button" id="sc-scroll-replay">Replay</button></div>
+        </div>
+        <figcaption><strong>Scroll-reveal mosaic</strong>Each cell uses <code>animation-timeline: view()</code> — entry/exit driven entirely by scroll position. The Replay button retriggers the same keyframes on a time-based fallback.</figcaption>
         <details><summary>Source</summary><pre><code>#sc-scroll pattern-grid &gt; i {
   animation: sc-reveal both;
   animation-timeline: view();
   animation-range: entry 0% cover 30%;
   animation-delay: calc((var(--i, sibling-index())) * -8ms);
 }</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-scroll-grid');
+            const btn = document.getElementById('sc-scroll-replay');
+            btn.addEventListener('click', () => {
+              grid.classList.remove('replay');
+              void grid.offsetWidth;
+              grid.classList.add('replay');
+              setTimeout(() => grid.classList.remove('replay'), 2000);
+            });
+          })();
+        </script>
       </figure>
 
       <!-- 37. Anchored popovers -->
