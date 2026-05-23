@@ -1643,3 +1643,58 @@ body.dark .feature-card:hover {
   clip-path: polygon(0 49%, 100% 49%, 100% 51%, 0 51%);
   rotate: calc(sibling-index() * 17deg);
 }
+
+/* --- 47. Kandinsky — Squares with Concentric Circles --- */
+#sc-kandinsky pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 6px;
+  background: #2a2522;
+  padding: 6px;
+}
+#sc-kandinsky pattern-grid > i {
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at center,
+      hsl(calc(var(--rand-0) * 360) 75% 55%) 0 18%,
+      transparent 19%),
+    radial-gradient(circle at center,
+      hsl(calc(var(--rand-1) * 360) 75% 55%) 0 30%,
+      transparent 31%),
+    radial-gradient(circle at center,
+      hsl(calc(var(--rand-2) * 360) 75% 55%) 0 42%,
+      transparent 43%),
+    hsl(calc(var(--rand-0) * 360) 30% 90%);
+}
+
+/* --- 48. Ellsworth Kelly — Colors for a Large Wall --- */
+#sc-kelly pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 4px;
+  background: #fcfaf4;
+  padding: 4px;
+}
+#sc-kelly pattern-grid > i {
+  aspect-ratio: 1;
+  background: color-mix(in oklch,
+    hsl(calc(var(--rand-0) * 360) 85% 55%),
+    white calc(var(--rand-1) * 25%));
+}
+
+/* --- 49. Yayoi Kusama — infinity dots --- */
+#sc-kusama pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pg-cols), 1fr);
+  gap: 0;
+  background: #fff;
+}
+#sc-kusama pattern-grid > i {
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at center,
+      #c00 0 calc(var(--rand-0) * 40%),
+      #fff calc(var(--rand-0) * 40% + 1px) 100%);
+  transition: scale 200ms;
+}
+#sc-kusama pattern-grid > i:hover { scale: 1.4; z-index: 2; }

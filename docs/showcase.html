@@ -1097,6 +1097,76 @@
 }</code></pre></details>
       </figure>
 
+      <!-- 47. Kandinsky — Squares with Concentric Circles -->
+      <figure id="sc-kandinsky">
+        <div class="tile">
+          <seed-context seed="kandinsky" count="3">
+            <pattern-grid cols="4" rows="3"></pattern-grid>
+          </seed-context>
+        </div>
+        <figcaption><strong>Kandinsky — Squares with Concentric Circles</strong>4×3 cells, each a stack of four nested radial gradients driven by three seeded randoms per cell. Same painting twice in a row because the seed is stable.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="kandinsky" count="3"&gt;
+  &lt;pattern-grid cols="4" rows="3"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-kandinsky pattern-grid &gt; i {
+  background:
+    radial-gradient(circle at center,
+      hsl(calc(var(--rand-0) * 360) 75% 55%) 0 18%,
+      transparent 19%),
+    radial-gradient(circle at center,
+      hsl(calc(var(--rand-1) * 360) 75% 55%) 0 30%,
+      transparent 31%),
+    radial-gradient(circle at center,
+      hsl(calc(var(--rand-2) * 360) 75% 55%) 0 42%,
+      transparent 43%),
+    hsl(calc(var(--rand-0) * 360) 30% 90%);
+}</code></pre></details>
+      </figure>
+
+      <!-- 48. Ellsworth Kelly — Colors for a Large Wall -->
+      <figure id="sc-kelly">
+        <div class="tile">
+          <seed-context seed="kelly" count="2">
+            <pattern-grid cols="8" rows="8"></pattern-grid>
+          </seed-context>
+        </div>
+        <figcaption><strong>Ellsworth Kelly — Colors for a Large Wall</strong>8×8 flat saturated tiles, palette from seeded random hues mixed with paper-white via <code>color-mix(in oklch)</code>.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="kelly" count="2"&gt;
+  &lt;pattern-grid cols="8" rows="8"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-kelly pattern-grid &gt; i {
+  aspect-ratio: 1;
+  background: color-mix(in oklch,
+    hsl(calc(var(--rand-0) * 360) 85% 55%),
+    white calc(var(--rand-1) * 25%));
+}</code></pre></details>
+      </figure>
+
+      <!-- 49. Yayoi Kusama — infinity dots -->
+      <figure id="sc-kusama">
+        <div class="tile">
+          <seed-context seed="kusama" count="1">
+            <pattern-grid cols="16" rows="16"></pattern-grid>
+          </seed-context>
+        </div>
+        <figcaption><strong>Yayoi Kusama — infinity dots</strong>16×16 red-on-white dots whose radius comes from <code>--rand-0</code>. Hover any cell to make its dot bloom.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="kusama" count="1"&gt;
+  &lt;pattern-grid cols="16" rows="16"&gt;&lt;/pattern-grid&gt;
+&lt;/seed-context&gt;
+
+#sc-kusama pattern-grid &gt; i {
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at center,
+      #c00 0 calc(var(--rand-0) * 40%),
+      #fff calc(var(--rand-0) * 40% + 1px) 100%);
+  transition: scale 200ms;
+}
+#sc-kusama pattern-grid &gt; i:hover { scale: 1.4; z-index: 2; }</code></pre></details>
+      </figure>
+
     </div>
   </main>
 
