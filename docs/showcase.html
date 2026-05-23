@@ -1455,6 +1455,75 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
+      <!-- 56. Escher — tessellating birds -->
+      <figure id="sc-escher">
+        <div class="tile">
+          <pattern-grid cols="10" rows="10" shim="sibling"></pattern-grid>
+        </div>
+        <figcaption><strong>Escher — tessellating birds</strong>Each cell is a bird silhouette via <code>clip-path</code>. Alternate columns and rows are reflected so the negative space of one bird is the positive space of its neighbour. Stylised, not pixel-perfect — sells the tessellation idea.</figcaption>
+        <details><summary>Source</summary><pre><code>#sc-escher pattern-grid &gt; i {
+  background: #1a1a24;
+  clip-path: polygon(
+    20% 10%, 50% 0%, 80% 10%,
+    100% 35%, 90% 60%, 95% 90%,
+    70% 100%, 30% 100%, 5% 90%,
+    10% 60%, 0% 35%
+  );
+}
+#sc-escher pattern-grid &gt; i:nth-child(odd) {
+  background: #f5e6c8;
+  scale: -1 1;
+}</code></pre></details>
+      </figure>
+
+      <!-- 57. Lichtenstein — POW (popover + anchor positioning) -->
+      <figure id="sc-pow">
+        <div class="tile">
+          <pattern-grid id="sc-pow-grid" cols="6" rows="4" shim="sibling"></pattern-grid>
+          <div id="sc-pow-balloon" popover>
+            POW!
+          </div>
+        </div>
+        <figcaption><strong>Lichtenstein — POW</strong>Ben-Day dots painted on every cell with a CSS radial gradient. One cell is a <code>&lt;button popovertarget&gt;</code> that opens a comic-book "POW!" speech balloon anchored above-right via CSS Anchor Positioning.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="6" rows="4" shim="sibling"&gt;&lt;/pattern-grid&gt;
+&lt;div id="sc-pow-balloon" popover&gt;POW!&lt;/div&gt;
+
+// after render, replace one cell with a popover-trigger button
+const hero = grid.cellElements[10];
+hero.replaceWith(Object.assign(document.createElement('button'), {
+  type: 'button'
+}));
+
+#sc-pow pattern-grid &gt; i,
+#sc-pow pattern-grid &gt; button {
+  background:
+    radial-gradient(circle at 50% 50%, #c00 0 28%, transparent 30%) 0 0 / 16px 16px,
+    #fdd835;
+}
+#sc-pow .sc-pow-hero { anchor-name: --sc-pow-hero; }
+#sc-pow-balloon {
+  position-anchor: --sc-pow-hero;
+  left: anchor(right);
+  bottom: anchor(top);
+}</code></pre></details>
+        <script>
+          (function () {
+            const grid = document.getElementById('sc-pow-grid');
+            grid.addEventListener('pattern-grid:render', () => {
+              const hero = grid.cellElements[10];
+              if (!hero) return;
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.setAttribute('popovertarget', 'sc-pow-balloon');
+              btn.setAttribute('popovertargetaction', 'toggle');
+              btn.setAttribute('aria-label', 'Show POW');
+              btn.className = 'sc-pow-hero';
+              hero.replaceWith(btn);
+            }, { once: true });
+          })();
+        </script>
+      </figure>
+
     </div>
   </main>
 
