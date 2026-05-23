@@ -1822,8 +1822,11 @@ body.dark .feature-card:hover {
 #sc-pow-balloon {
   position-anchor: --sc-pow-hero;
   position: fixed;
+  inset: auto;
   left: anchor(right);
   bottom: anchor(top);
+  width: max-content;
+  height: max-content;
   margin: 0 0 8px 8px;
   padding: 0.6rem 1.4rem;
   font: 900 2rem/1 "Arial Black", "Helvetica Neue", sans-serif;
