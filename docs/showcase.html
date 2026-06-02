@@ -733,16 +733,37 @@
         </script>
       </figure>
 
+      <!-- 34. Spiral pulse (CSS-only polar animation) -->
+      <figure id="sc-swirl">
+        <div class="tile"><pattern-grid cells="20x20" shim="sibling"></pattern-grid></div>
+        <figcaption><strong>Spiral pulse</strong>400 rounded cells, each scaling on a delay derived from its own polar coordinates — <code>atan2()</code> angle plus radial distance — so the pulse sweeps outward as a rotating spiral. Pure CSS, no JS.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="20x20" shim="sibling"&gt;&lt;/pattern-grid&gt;
+
+#sc-swirl pattern-grid &gt; i {
+  --sw-i:     calc(var(--i, sibling-index()) - 1);          /* 0-based; --i from shim */
+  --sw-x:     calc(mod(var(--sw-i), var(--pg-cols)) - (var(--pg-cols) - 1) / 2);
+  --sw-y:     calc((var(--pg-cols) - 1) / 2 - round(down, var(--sw-i) / var(--pg-cols)));
+  --sw-t:     calc(var(--sw-i) / (var(--n, sibling-count()) - 1));
+  --sw-hue:   calc(mod(sin(var(--sw-t) * 90deg) * 3600, 1) * 360);
+  --sw-dist:  calc(sqrt(var(--sw-x) * var(--sw-x) + var(--sw-y) * var(--sw-y)) / sqrt(200));
+  --sw-ang:   calc(atan2(var(--sw-x), var(--sw-y)) / -360deg);
+  --sw-delay: calc(var(--sw-dist) * 9s + var(--sw-ang) * 3s - 12s);
+  translate: calc(var(--sw-x) * var(--size)) calc(var(--sw-y) * var(--size));
+  background: hsl(var(--sw-hue) 100% calc(80% - var(--sw-dist) * 60%));
+  animation: sc-swirl-pulse 1.5s var(--sw-delay) infinite ease-in-out alternate;
+}</code></pre></details>
+      </figure>
+
       <!-- ============================================================ -->
       <!-- Modern platform showcase                                     -->
-      <!-- Pieces 34-43 demonstrate platform features css-doodle's      -->
+      <!-- Pieces 35-44 demonstrate platform features css-doodle's      -->
       <!-- Shadow-DOM/DSL architecture cannot reach.                    -->
       <!-- ============================================================ -->
 
       <h2 class="showcase-section">Modern platform showcase</h2>
       <p class="showcase-section-lead">The previous pieces match what <a href="https://css-doodle.com/">css-doodle</a> does. The next ten show what <em>only</em> a light-DOM component can do — real semantic cells, View Transitions, Anchor Positioning, Popover, scroll-driven animations, <code>:has()</code>, container queries, Houdini Paint Worklet — features that live outside the Shadow-DOM wall.</p>
 
-      <!-- 34. Step sequencer -->
+      <!-- 35. Step sequencer -->
       <figure id="sc-step">
         <div class="tile">
           <pattern-grid id="sc-step-grid" cols="16" rows="4">
@@ -803,7 +824,7 @@
         </script>
       </figure>
 
-      <!-- 35. Morph layout -->
+      <!-- 36. Morph layout -->
       <figure id="sc-morph">
         <div class="tile">
           <pattern-grid id="sc-morph-grid" cols="8" rows="8"></pattern-grid>
@@ -848,7 +869,7 @@
         </script>
       </figure>
 
-      <!-- 36. Scroll-reveal mosaic -->
+      <!-- 37. Scroll-reveal mosaic -->
       <figure id="sc-scroll">
         <div class="tile">
           <pattern-grid id="sc-scroll-grid" cols="12" rows="12"></pattern-grid>
@@ -875,7 +896,7 @@
         </script>
       </figure>
 
-      <!-- 37. Anchored popovers -->
+      <!-- 38. Anchored popovers -->
       <figure id="sc-anchor">
         <div class="tile">
           <pattern-grid id="sc-anchor-grid" cells="6x6"></pattern-grid>
@@ -911,7 +932,7 @@
         </script>
       </figure>
 
-      <!-- 38. Neighbor glow -->
+      <!-- 39. Neighbor glow -->
       <figure id="sc-neighbor">
         <div class="tile"><pattern-grid cells="10x10"></pattern-grid></div>
         <figcaption><strong>Neighbor glow</strong>Hover one cell — its left/right siblings glow via <code>:has()</code> with zero JavaScript.</figcaption>
@@ -920,7 +941,7 @@
 #sc-neighbor i:hover + i { background: var(--accent); }</code></pre></details>
       </figure>
 
-      <!-- 39. Parametric clip shapes -->
+      <!-- 40. Parametric clip shapes -->
       <figure id="sc-shape">
         <div class="tile"><pattern-grid cells="8x8" shim="sibling"></pattern-grid></div>
         <figcaption><strong>Parametric clip shapes</strong>Six-pointed stars from trig-driven <code>clip-path: polygon()</code> — pattern-grid's answer to css-doodle's <code>@shape()</code>.</figcaption>
@@ -930,7 +951,7 @@
 }</code></pre></details>
       </figure>
 
-      <!-- 40. Recursive grid -->
+      <!-- 41. Recursive grid -->
       <figure id="sc-recurse">
         <div class="tile">
           <pattern-grid id="sc-recurse-grid" cells="3x3">
@@ -949,7 +970,7 @@
 &lt;/pattern-grid&gt;</code></pre></details>
       </figure>
 
-      <!-- 41. Paint worklet swirl -->
+      <!-- 42. Paint worklet swirl -->
       <figure id="sc-paint">
         <div class="tile">
           <seed-context seed="swirl" count="1">
@@ -965,7 +986,7 @@
 }</code></pre></details>
       </figure>
 
-      <!-- 42. Contribution calendar -->
+      <!-- 43. Contribution calendar -->
       <figure id="sc-calendar">
         <div class="tile">
           <seed-context seed="contrib" count="1">
@@ -1005,7 +1026,7 @@
         </script>
       </figure>
 
-      <!-- 43. Lissajous point cloud -->
+      <!-- 44. Lissajous point cloud -->
       <figure id="sc-lissajous">
         <div class="tile"><pattern-grid cells="200" shim="sibling"></pattern-grid></div>
         <figcaption><strong>Lissajous point cloud</strong>200 cells placed by <code>cos(3t)</code>/<code>sin(4t)</code> — pattern-grid's answer to css-doodle's <code>@plot()</code>.</figcaption>
@@ -1016,13 +1037,13 @@
       </figure>
 
       <!-- ============================================================ -->
-      <!-- TRIBUTES — abstract art & 8-bit sprites (pieces 44–57)        -->
+      <!-- TRIBUTES — abstract art & 8-bit sprites (pieces 45–58)        -->
       <!-- ============================================================ -->
 
       <h2 class="showcase-section">Tributes — abstract art &amp; 8-bit sprites</h2>
       <p class="showcase-section-lead">A small gallery tour: three hard-edge geometric tributes (Mondrian, Albers, Sol&nbsp;LeWitt), three painterly ones (Kandinsky, Kelly, Kusama), six pixel-sprite pieces (single sprites, an animated chomp, a hover-swap, a CSS-only sprite-sheet picker, a palette-cycling sprite, and an interactive paint scratchpad), and two pop-and-illusion crossovers (Escher tessellation, Lichtenstein POW with <code>popover</code> and CSS Anchor Positioning).</p>
 
-      <!-- 44. Mondrian — Composition with Red, Yellow & Blue -->
+      <!-- 45. Mondrian — Composition with Red, Yellow & Blue -->
       <figure id="sc-mondrian">
         <div class="tile">
           <div class="sc-mondrian-grid">
@@ -1051,7 +1072,7 @@
 .sc-mondrian-grid &gt; [data-fill="white"]  { background: #f4f0e6; }</code></pre></details>
       </figure>
 
-      <!-- 45. Albers — Homage to the Square -->
+      <!-- 46. Albers — Homage to the Square -->
       <figure id="sc-albers">
         <div class="tile">
           <div class="sc-albers-layer sc-albers-l1">
@@ -1078,7 +1099,7 @@
 .sc-albers-l4 { background: #f0c266; }</code></pre></details>
       </figure>
 
-      <!-- 46. Sol LeWitt — algorithmic line work -->
+      <!-- 47. Sol LeWitt — algorithmic line work -->
       <figure id="sc-lewitt">
         <div class="tile"><pattern-grid cols="12" rows="12"></pattern-grid></div>
         <figcaption><strong>Sol LeWitt — algorithmic line work</strong>Each cell is a single 2px-thick diagonal whose angle is <code>calc(sibling-index() * 17deg)</code>. Zero JavaScript art that feels hand-drawn but is entirely algorithmic.</figcaption>
@@ -1097,7 +1118,7 @@
 }</code></pre></details>
       </figure>
 
-      <!-- 47. Kandinsky — Squares with Concentric Circles -->
+      <!-- 48. Kandinsky — Squares with Concentric Circles -->
       <figure id="sc-kandinsky">
         <div class="tile">
           <seed-context seed="kandinsky" count="3">
@@ -1124,7 +1145,7 @@
 }</code></pre></details>
       </figure>
 
-      <!-- 48. Ellsworth Kelly — Colors for a Large Wall -->
+      <!-- 49. Ellsworth Kelly — Colors for a Large Wall -->
       <figure id="sc-kelly">
         <div class="tile">
           <seed-context seed="kelly" count="2">
@@ -1144,7 +1165,7 @@
 }</code></pre></details>
       </figure>
 
-      <!-- 49. Yayoi Kusama — infinity dots -->
+      <!-- 50. Yayoi Kusama — infinity dots -->
       <figure id="sc-kusama">
         <div class="tile">
           <seed-context seed="kusama" count="1">
@@ -1167,7 +1188,7 @@
 #sc-kusama pattern-grid &gt; i:hover { scale: 1.4; z-index: 2; }</code></pre></details>
       </figure>
 
-      <!-- 50. Space Invader (single sprite) -->
+      <!-- 51. Space Invader (single sprite) -->
       <figure id="sc-invader">
         <div class="tile">
           <pattern-grid id="sc-invader-grid" class="pixel-grid" cols="11" rows="8"></pattern-grid>
@@ -1207,7 +1228,7 @@ grid.innerHTML = [...pixels].map(c =&gt; `&lt;i data-px="${c}"&gt;&lt;/i&gt;`).j
         </script>
       </figure>
 
-      <!-- 51. Pac-Man-style chomp (single sprite, animated) -->
+      <!-- 52. Pac-Man-style chomp (single sprite, animated) -->
       <figure id="sc-chomp">
         <div class="tile">
           <pattern-grid id="sc-chomp-grid" class="pixel-grid" cols="13" rows="13"></pattern-grid>
@@ -1267,7 +1288,7 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
-      <!-- 52. Hover-swap sprite (Mario-style idle → jump) -->
+      <!-- 53. Hover-swap sprite (Mario-style idle → jump) -->
       <figure id="sc-hoverswap">
         <div class="tile sc-hoverswap-tile">
           <pattern-grid id="sc-hover-idle" class="pixel-grid" cols="8" rows="8"></pattern-grid>
@@ -1316,7 +1337,7 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
-      <!-- 53. Sprite-sheet atlas — many small sprites at once -->
+      <!-- 54. Sprite-sheet atlas — many small sprites at once -->
       <figure id="sc-sheet">
         <div class="tile">
           <div class="sc-sheet-atlas">
@@ -1581,7 +1602,7 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
-      <!-- 54. Palette-cycle invader -->
+      <!-- 55. Palette-cycle invader -->
       <figure id="sc-cycle">
         <div class="tile">
           <pattern-grid id="sc-cycle-grid" class="pixel-grid" cols="11" rows="8"></pattern-grid>
@@ -1610,7 +1631,7 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
-      <!-- 55. Pixel-paint scratchpad -->
+      <!-- 56. Pixel-paint scratchpad -->
       <figure id="sc-paint-pad">
         <div class="tile">
           <pattern-grid id="sc-paint-grid" class="pixel-grid" cols="16" rows="16">
@@ -1641,7 +1662,7 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
         </script>
       </figure>
 
-      <!-- 56. Escher — tessellating birds -->
+      <!-- 57. Escher — tessellating birds -->
       <figure id="sc-escher">
         <div class="tile">
           <pattern-grid cols="11" rows="11" shim="sibling"></pattern-grid>
@@ -1662,7 +1683,7 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
 }</code></pre></details>
       </figure>
 
-      <!-- 57. Lichtenstein — POW (popover + anchor positioning) -->
+      <!-- 58. Lichtenstein — POW (popover + anchor positioning) -->
       <figure id="sc-pow">
         <div class="tile">
           <pattern-grid id="sc-pow-grid" cols="6" rows="4" shim="sibling"></pattern-grid>

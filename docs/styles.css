@@ -1356,6 +1356,48 @@ body.dark .feature-card:hover {
   box-shadow: 0 0 4px hsl(280 90% 65% / 0.7);
 }
 
+/* --- Showcase: spiral pulse (CSS-only polar animation) --- */
+#sc-swirl .tile {
+  aspect-ratio: 1;
+  background: #000;
+  overflow: hidden;
+}
+#sc-swirl pattern-grid {
+  --size: min(4.4cqmin, 18px);
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  container-type: size;
+}
+#sc-swirl pattern-grid > i {
+  --sw-i: calc(var(--i, sibling-index()) - 1);
+  --sw-x: calc(mod(var(--sw-i), var(--pg-cols)) - (var(--pg-cols) - 1) / 2);
+  --sw-y: calc((var(--pg-cols) - 1) / 2 - round(down, var(--sw-i) / var(--pg-cols)));
+  --sw-t: calc(var(--sw-i) / (var(--n, sibling-count()) - 1));
+  --sw-hue: calc(mod(sin(var(--sw-t) * 90deg) * 3600, 1) * 360);
+  --sw-dist: calc(sqrt(var(--sw-x) * var(--sw-x) + var(--sw-y) * var(--sw-y)) / sqrt(200));
+  --sw-ang: calc(atan2(var(--sw-x), var(--sw-y)) / -360deg);
+  --sw-delay: calc(var(--sw-dist) * 9s + var(--sw-ang) * 3s - 12s);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) * -0.5);
+  border-radius: 25%;
+  background: hsl(var(--sw-hue) 100% calc(80% - var(--sw-dist) * 60%));
+  translate: calc(var(--sw-x) * var(--size)) calc(var(--sw-y) * var(--size));
+  animation: sc-swirl-pulse 1.5s var(--sw-delay) infinite ease-in-out alternate;
+}
+@keyframes sc-swirl-pulse {
+  from { scale: 0; }
+  to { scale: 0.9; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #sc-swirl pattern-grid > i { animation: none; scale: 0.85; }
+}
+
 /* --- Showcase: step sequencer --- */
 #sc-step pattern-grid {
   display: grid;
@@ -1580,7 +1622,7 @@ body.dark .feature-card:hover {
 /* Showcase: Tributes — abstract art & 8-bit sprites             */
 /* ============================================================ */
 
-/* --- Shared sprite utilities (used by pieces 50–55, 57) --- */
+/* --- Shared sprite utilities (used by pieces 51–56, 58) --- */
 .pixel-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
@@ -1598,7 +1640,7 @@ body.dark .feature-card:hover {
 }
 .pixel-grid > [data-px] { background: var(--px, transparent); }
 
-/* --- 44. Mondrian — Composition with Red, Yellow & Blue --- */
+/* --- 45. Mondrian — Composition with Red, Yellow & Blue --- */
 #sc-mondrian .sc-mondrian-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -1613,7 +1655,7 @@ body.dark .feature-card:hover {
 #sc-mondrian .sc-mondrian-grid > [data-fill="yellow"] { background: #f0d040; }
 #sc-mondrian .sc-mondrian-grid > [data-fill="white"]  { background: #f4f0e6; }
 
-/* --- 45. Albers — Homage to the Square --- */
+/* --- 46. Albers — Homage to the Square --- */
 #sc-albers .sc-albers-layer {
   aspect-ratio: 1;
   display: grid;
@@ -1625,7 +1667,7 @@ body.dark .feature-card:hover {
 #sc-albers .sc-albers-l3 { background: #d77a37; padding: 8% 8% 14% 8%; }
 #sc-albers .sc-albers-l4 { background: #f0c266; }
 
-/* --- 46. Sol LeWitt — algorithmic line work --- */
+/* --- 47. Sol LeWitt — algorithmic line work --- */
 #sc-lewitt pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
@@ -1646,7 +1688,7 @@ body.dark .feature-card:hover {
   rotate: calc(sibling-index() * 17deg);
 }
 
-/* --- 47. Kandinsky — Squares with Concentric Circles --- */
+/* --- 48. Kandinsky — Squares with Concentric Circles --- */
 #sc-kandinsky pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
@@ -1669,7 +1711,7 @@ body.dark .feature-card:hover {
     hsl(calc(var(--rand-0) * 360) 30% 90%);
 }
 
-/* --- 48. Ellsworth Kelly — Colors for a Large Wall --- */
+/* --- 49. Ellsworth Kelly — Colors for a Large Wall --- */
 #sc-kelly pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
@@ -1684,7 +1726,7 @@ body.dark .feature-card:hover {
     white calc(var(--rand-1) * 25%));
 }
 
-/* --- 49. Yayoi Kusama — infinity dots --- */
+/* --- 50. Yayoi Kusama — infinity dots --- */
 #sc-kusama pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
@@ -1701,15 +1743,15 @@ body.dark .feature-card:hover {
 }
 #sc-kusama pattern-grid > i:hover { scale: 1.4; z-index: 2; }
 
-/* --- 50. Space Invader (single sprite) --- */
+/* --- 51. Space Invader (single sprite) --- */
 #sc-invader pattern-grid { --pg-bg: #0a0a18; aspect-ratio: 11 / 8; }
 #sc-invader [data-px="1"] { --px: #2eff2e; }
 
-/* --- 51. Pac-Man-style chomp --- */
+/* --- 52. Pac-Man-style chomp --- */
 #sc-chomp pattern-grid { --pg-bg: #000; aspect-ratio: 1; }
 #sc-chomp [data-px="1"] { --px: #ffeb00; }
 
-/* --- 52. Hover-swap sprite --- */
+/* --- 53. Hover-swap sprite --- */
 #sc-hoverswap .sc-hoverswap-tile { position: relative; aspect-ratio: 1; }
 #sc-hoverswap .sc-hoverswap-tile > pattern-grid {
   position: absolute;
@@ -1722,7 +1764,7 @@ body.dark .feature-card:hover {
 #sc-hoverswap .sc-hoverswap-tile:hover #sc-hover-jump { opacity: 1; }
 #sc-hoverswap [data-px="1"] { --px: #ff7b3d; }
 
-/* --- 53. Sprite-sheet atlas — many small sprites at once --- */
+/* --- 54. Sprite-sheet atlas — many small sprites at once --- */
 #sc-sheet .tile { aspect-ratio: 1; padding: 4px; }
 #sc-sheet .sc-sheet-atlas {
   display: grid;
@@ -1798,14 +1840,14 @@ body.dark .feature-card:hover {
 /* S17: invader — bright green */
 #sc-sp-s17 [data-px="1"] { --px: #2eff2e; }
 
-/* --- 54. Palette-cycle invader --- */
+/* --- 55. Palette-cycle invader --- */
 @property --hue { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
 #sc-cycle { animation: sc-hue-cycle 4s linear infinite; }
 @keyframes sc-hue-cycle { to { --hue: 360deg; } }
 #sc-cycle pattern-grid { --pg-bg: #0a0a18; aspect-ratio: 11 / 8; }
 #sc-cycle [data-px="1"] { --px: hsl(var(--hue) 85% 60%); }
 
-/* --- 55. Pixel-paint scratchpad --- */
+/* --- 56. Pixel-paint scratchpad --- */
 #sc-paint-pad pattern-grid { --pg-bg: #060610; aspect-ratio: 1; gap: 1px; padding: 1px; }
 #sc-paint-pad [data-px="0"] { --px: #20202c; }
 #sc-paint-pad [data-px="1"] { --px: #ff5470; }
@@ -1819,7 +1861,7 @@ body.dark .feature-card:hover {
   opacity: 0.7;
 }
 
-/* --- 56. Escher — tessellating birds --- */
+/* --- 57. Escher — tessellating birds --- */
 #sc-escher pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
@@ -1842,7 +1884,7 @@ body.dark .feature-card:hover {
   scale: -1 1;
 }
 
-/* --- 57. Lichtenstein — POW --- */
+/* --- 58. Lichtenstein — POW --- */
 #sc-pow .tile { position: relative; }
 #sc-pow pattern-grid {
   display: grid;
