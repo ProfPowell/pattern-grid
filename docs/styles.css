@@ -658,7 +658,7 @@ body.dark .feature-card:hover {
 #sc-hex pattern-grid > i {
   aspect-ratio: 1;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background: hsl(calc(sibling-index() * 6) 65% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 6) 65% 55%);
 }
 
 /* --- Showcase: conic pinwheels --- */
@@ -669,10 +669,10 @@ body.dark .feature-card:hover {
 #sc-pinwheels pattern-grid > i {
   aspect-ratio: 1;
   background: conic-gradient(
-    from calc(sibling-index() * 10deg),
-    hsl(calc(sibling-index() * 20) 70% 55%),
-    hsl(calc(sibling-index() * 20 + 180) 70% 55%),
-    hsl(calc(sibling-index() * 20) 70% 55%)
+    from calc(var(--i, sibling-index()) * 10deg),
+    hsl(calc(var(--i, sibling-index()) * 20) 70% 55%),
+    hsl(calc(var(--i, sibling-index()) * 20 + 180) 70% 55%),
+    hsl(calc(var(--i, sibling-index()) * 20) 70% 55%)
   );
 }
 
@@ -683,7 +683,7 @@ body.dark .feature-card:hover {
 }
 #sc-triangles pattern-grid > i {
   aspect-ratio: 1;
-  background: hsl(calc(sibling-index() * 4 + 200) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 4 + 200) 70% 55%);
 }
 #sc-triangles pattern-grid > i:nth-child(odd)  { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
 #sc-triangles pattern-grid > i:nth-child(even) { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
@@ -697,8 +697,8 @@ body.dark .feature-card:hover {
 }
 #sc-sine pattern-grid > i {
   align-self: end;
-  height: calc(50% + sin(sibling-index() * 30deg) * 50%);
-  background: hsl(calc(sibling-index() * 15) 70% 55%);
+  height: calc(50% + sin(var(--i, sibling-index()) * 30deg) * 50%);
+  background: hsl(calc(var(--i, sibling-index()) * 15) 70% 55%);
 }
 
 /* --- Showcase: Fibonacci spiral --- */
@@ -710,15 +710,15 @@ body.dark .feature-card:hover {
   height: 100%;
 }
 #sc-fib pattern-grid > i {
-  --r: calc(sqrt(sibling-index()) * 2.4%);
-  --a: calc(sibling-index() * 137.5deg);
+  --r: calc(sqrt(var(--i, sibling-index())) * 2.4%);
+  --a: calc(var(--i, sibling-index()) * 137.5deg);
   position: absolute;
   left: calc(50% + cos(var(--a)) * var(--r));
   top:  calc(50% + sin(var(--a)) * var(--r));
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 3) 70% 55%);
   transform: translate(-50%, -50%);
 }
 
@@ -732,9 +732,9 @@ body.dark .feature-card:hover {
 }
 #sc-bloom pattern-grid > i {
   grid-area: 1 / 1;
-  width: calc(100% * sibling-index() / sibling-count());
+  width: calc(100% * var(--i, sibling-index()) / var(--n, sibling-count()));
   aspect-ratio: 1;
-  border: 2px solid hsla(calc(sibling-index() * 7) 80% 60% / 0.6);
+  border: 2px solid hsla(calc(var(--i, sibling-index()) * 7) 80% 60% / 0.6);
   border-radius: 50%;
 }
 
@@ -744,7 +744,7 @@ body.dark .feature-card:hover {
   grid-template-columns: repeat(var(--pg-cols), 1fr);
 }
 #sc-wipe pattern-grid > i {
-  --idx: calc(sibling-index() - 1);
+  --idx: calc(var(--i, sibling-index()) - 1);
   aspect-ratio: 1;
   background: hsl(220 70% 50%);
   animation: sc-wipe-anim 3s ease-in-out infinite;
@@ -762,9 +762,9 @@ body.dark .feature-card:hover {
 }
 #sc-pulse pattern-grid > i {
   aspect-ratio: 1;
-  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 3) 70% 55%);
   animation: sc-pulse-anim 2.4s ease-in-out infinite;
-  animation-delay: calc(sibling-index() * -30ms);
+  animation-delay: calc(var(--i, sibling-index()) * -30ms);
 }
 @keyframes sc-pulse-anim {
   0%, 100% { transform: scale(1);   border-radius: 0%;  }
@@ -813,7 +813,7 @@ body.dark .feature-card:hover {
 }
 #sc-staircase pattern-grid > i {
   aspect-ratio: 1;
-  background: hsl(calc(sibling-index() * 4) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 4) 70% 55%);
   transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
 }
 
@@ -885,7 +885,7 @@ body.dark .feature-card:hover {
   background-size: 100% 200%;
   background-repeat: no-repeat;
   animation: sc-matrix-fall 4.5s linear infinite;
-  animation-delay: calc(sibling-index() * -0.35s);
+  animation-delay: calc(var(--i, sibling-index()) * -0.35s);
 }
 @keyframes sc-matrix-fall {
   from { background-position-y: -100%; }
@@ -911,12 +911,12 @@ body.dark .feature-card:hover {
 #sc-plasma pattern-grid > i {
   aspect-ratio: 1;
   background: conic-gradient(
-    from calc(sibling-index() * 13deg),
-    hsl(calc(sibling-index() * 7) 80% 60%),
-    hsl(calc(sibling-index() * 7 + 180) 80% 60%)
+    from calc(var(--i, sibling-index()) * 13deg),
+    hsl(calc(var(--i, sibling-index()) * 7) 80% 60%),
+    hsl(calc(var(--i, sibling-index()) * 7 + 180) 80% 60%)
   );
   animation: sc-plasma-anim 6s linear infinite;
-  animation-delay: calc(sibling-index() * -20ms);
+  animation-delay: calc(var(--i, sibling-index()) * -20ms);
 }
 @keyframes sc-plasma-anim {
   to { filter: hue-rotate(360deg); }
@@ -930,9 +930,9 @@ body.dark .feature-card:hover {
   height: 100%;
 }
 #sc-raster pattern-grid > i {
-  background: hsl(calc(sibling-index() * 6) 90% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 6) 90% 55%);
   animation: sc-raster-anim 3s ease-in-out infinite;
-  animation-delay: calc(sibling-index() * -50ms);
+  animation-delay: calc(var(--i, sibling-index()) * -50ms);
 }
 @keyframes sc-raster-anim {
   0%, 100% { filter: brightness(0.9); }
@@ -949,7 +949,7 @@ body.dark .feature-card:hover {
   animation: sc-sphere-spin 18s linear infinite;
 }
 #sc-sphere pattern-grid > i {
-  --idx: calc(sibling-index() - 1);
+  --idx: calc(var(--i, sibling-index()) - 1);
   --phi: calc(acos(1 - 2 * var(--idx) / 240));
   --theta: calc(var(--idx) * 137.5deg);
   position: absolute;
@@ -1010,7 +1010,7 @@ body.dark .feature-card:hover {
   grid-template-columns: repeat(var(--pg-cols), 1fr);
 }
 #sc-riley pattern-grid > i {
-  --idx: calc(sibling-index() - 1);
+  --idx: calc(var(--i, sibling-index()) - 1);
   --col: calc(mod(var(--idx), 40));
   aspect-ratio: 1;
   background: #111;
@@ -1113,9 +1113,9 @@ body.dark .feature-card:hover {
   grid-area: 1 / 1;
   width: 70%;
   aspect-ratio: 1;
-  background: hsl(calc(sibling-index() * 60) 80% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 60) 80% 55%);
   clip-path: ellipse(20% 50% at 50% 50%);
-  transform: rotate(calc(sibling-index() * 60deg));
+  transform: rotate(calc(var(--i, sibling-index()) * 60deg));
   mix-blend-mode: multiply;
 }
 
@@ -1136,8 +1136,8 @@ body.dark .feature-card:hover {
   display: block;
 }
 #sc-mandala pattern-grid > i {
-  --idx: calc(sibling-index() - 1);
-  --angle: calc(var(--idx) / sibling-count() * 360deg);
+  --idx: calc(var(--i, sibling-index()) - 1);
+  --angle: calc(var(--idx) / var(--n, sibling-count()) * 360deg);
   position: absolute;
   left: calc(50% + cos(var(--angle)) * var(--r, 30%));
   top:  calc(50% + sin(var(--angle)) * var(--r, 30%));
@@ -1186,12 +1186,12 @@ body.dark .feature-card:hover {
 #sc-goo pattern-grid > i {
   aspect-ratio: 1;
   border-radius: 50%;
-  background: hsl(calc(sibling-index() * 11) 85% 60%);
+  background: hsl(calc(var(--i, sibling-index()) * 11) 85% 60%);
 }
 @media (prefers-reduced-motion: no-preference) {
   #sc-goo pattern-grid > i {
     animation: sc-goo-drift 4.5s ease-in-out infinite;
-    animation-delay: calc(sibling-index() * -90ms);
+    animation-delay: calc(var(--i, sibling-index()) * -90ms);
   }
   @keyframes sc-goo-drift {
     0%, 100% { translate: 0   0;   }
@@ -1212,7 +1212,7 @@ body.dark .feature-card:hover {
 }
 #sc-turb pattern-grid > i {
   aspect-ratio: 1;
-  background: hsl(calc(sibling-index() * 7) 85% 60%);
+  background: hsl(calc(var(--i, sibling-index()) * 7) 85% 60%);
 }
 
 /* --- Showcase: Game of Life --- */
@@ -1250,7 +1250,7 @@ body.dark .feature-card:hover {
 }
 #sc-heat pattern-grid > i {
   aspect-ratio: 1;
-  --idx: calc(sibling-index() - 1);
+  --idx: calc(var(--i, sibling-index()) - 1);
   --col: calc(mod(var(--idx), 20) / 20);
   --row: calc(floor(calc(var(--idx) / 20)) / 20);
   --dx: calc(var(--col) - var(--mx));
@@ -1332,11 +1332,11 @@ body.dark .feature-card:hover {
       hsl(0 90% 60%), hsl(60 90% 60%), hsl(120 80% 60%),
       hsl(200 90% 60%), hsl(280 80% 60%), hsl(360 90% 60%));
   background-blend-mode: screen;
-  transform: rotate(calc((sibling-index() - 1) * 30deg));
+  transform: rotate(calc((var(--i, sibling-index()) - 1) * 30deg));
   transform-origin: 50% 50%;
 }
 #sc-kaleido pattern-grid > i:nth-child(even) {
-  transform: rotate(calc((sibling-index() - 1) * 30deg)) scale(-1, 1);
+  transform: rotate(calc((var(--i, sibling-index()) - 1) * 30deg)) scale(-1, 1);
 }
 
 /* --- Showcase: Sierpinski fractal (chaos game) --- */
@@ -1543,7 +1543,7 @@ body.dark .feature-card:hover {
 #sc-recurse .sc-recurse-cell > pattern-grid { gap: 2px; }
 #sc-recurse .sc-recurse-cell > pattern-grid > i {
   aspect-ratio: 1;
-  background: hsl(calc(sibling-index() * 25) 75% 60%);
+  background: hsl(calc(var(--i, sibling-index()) * 25) 75% 60%);
 }
 #sc-recurse .sc-recurse-cell > pattern-grid > i:nth-child(5) {
   visibility: hidden;
@@ -1559,7 +1559,19 @@ body.dark .feature-card:hover {
   --idx: var(--i, sibling-index());
   --hue: calc(var(--idx) * 22);
   aspect-ratio: 1;
-  background: hsl(var(--hue) 60% 40%) paint(swirl);
+  /* Fallback for browsers without the Houdini paint() API (Firefox, Safari):
+     a pure-CSS conic-gradient swirl so the tile isn't blank. */
+  background:
+    conic-gradient(from calc(var(--hue) * 1deg),
+      hsl(var(--hue) 75% 58%), hsl(calc(var(--hue) + 130) 70% 32%),
+      hsl(calc(var(--hue) + 250) 75% 58%), hsl(var(--hue) 75% 58%)),
+    hsl(var(--hue) 60% 22%);
+}
+/* Chrome supports paint(): override the fallback with the real worklet. */
+@supports (background: paint(id)) {
+  #sc-paint pattern-grid > i {
+    background: hsl(var(--hue) 60% 40%) paint(swirl);
+  }
 }
 @property --hue {
   syntax: '<number>';
@@ -1686,7 +1698,7 @@ body.dark .feature-card:hover {
   inset: 0;
   background: #1a1a1a;
   clip-path: polygon(0 49%, 100% 49%, 100% 51%, 0 51%);
-  rotate: calc(sibling-index() * 17deg);
+  rotate: calc(var(--i, sibling-index()) * 17deg);
 }
 
 /* --- 48. Kandinsky — Squares with Concentric Circles --- */

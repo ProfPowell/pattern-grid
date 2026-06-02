@@ -33,104 +33,104 @@
     <div class="gallery">
       <!-- 1. Hex honeycomb -->
       <figure id="sc-hex">
-        <div class="tile"><pattern-grid cells="12x12"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="12x12"></pattern-grid></div>
         <figcaption><strong>Hex honeycomb</strong>Hexagonal clip-paths with HSL hue cycling.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="12x12"&gt;&lt;/pattern-grid&gt;
 
 #sc-hex pattern-grid &gt; i {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background: hsl(calc(sibling-index() * 6) 65% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 6) 65% 55%);
 }</code></pre></details>
       </figure>
 
       <!-- 2. Conic pinwheels -->
       <figure id="sc-pinwheels">
-        <div class="tile"><pattern-grid cells="6x6"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="6x6"></pattern-grid></div>
         <figcaption><strong>Conic pinwheels</strong>One conic gradient per cell, hue offset by index.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="6x6"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="6x6"&gt;&lt;/pattern-grid&gt;
 
 #sc-pinwheels pattern-grid &gt; i {
   background: conic-gradient(
-    from calc(sibling-index() * 10deg),
-    hsl(calc(sibling-index() * 20) 70% 55%),
-    hsl(calc(sibling-index() * 20 + 180) 70% 55%),
-    hsl(calc(sibling-index() * 20) 70% 55%)
+    from calc(var(--i, sibling-index()) * 10deg),
+    hsl(calc(var(--i, sibling-index()) * 20) 70% 55%),
+    hsl(calc(var(--i, sibling-index()) * 20 + 180) 70% 55%),
+    hsl(calc(var(--i, sibling-index()) * 20) 70% 55%)
   );
 }</code></pre></details>
       </figure>
 
       <!-- 3. Tessellated triangles -->
       <figure id="sc-triangles">
-        <div class="tile"><pattern-grid cells="10x10"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="10x10"></pattern-grid></div>
         <figcaption><strong>Tessellated triangles</strong>Alternating up/down triangles via odd/even.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="10x10"&gt;&lt;/pattern-grid&gt;
 
 #sc-triangles pattern-grid &gt; i:nth-child(odd)  { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
 #sc-triangles pattern-grid &gt; i:nth-child(even) { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
 #sc-triangles pattern-grid &gt; i {
-  background: hsl(calc(sibling-index() * 4 + 200) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 4 + 200) 70% 55%);
 }</code></pre></details>
       </figure>
 
       <!-- 4. Sine bars -->
       <figure id="sc-sine">
-        <div class="tile"><pattern-grid cols="24" rows="1"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cols="24" rows="1"></pattern-grid></div>
         <figcaption><strong>Sine bars</strong>Heights drive by <code>sin(sibling-index() * 30deg)</code>.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="24" rows="1"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cols="24" rows="1"&gt;&lt;/pattern-grid&gt;
 
 #sc-sine pattern-grid &gt; i {
   align-self: end;
-  height: calc(50% + sin(sibling-index() * 30deg) * 50%);
-  background: hsl(calc(sibling-index() * 15) 70% 55%);
+  height: calc(50% + sin(var(--i, sibling-index()) * 30deg) * 50%);
+  background: hsl(calc(var(--i, sibling-index()) * 15) 70% 55%);
 }</code></pre></details>
       </figure>
 
       <!-- 5. Fibonacci spiral -->
       <figure id="sc-fib">
-        <div class="tile"><pattern-grid cells="400"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="400"></pattern-grid></div>
         <figcaption><strong>Fibonacci spiral</strong>400 dots positioned by polar math.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="400"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="400"&gt;&lt;/pattern-grid&gt;
 
 #sc-fib pattern-grid {
   display: block;
   position: relative;
 }
 #sc-fib pattern-grid &gt; i {
-  --r: calc(sqrt(sibling-index()) * 2.4%);
-  --a: calc(sibling-index() * 137.5deg);
+  --r: calc(sqrt(var(--i, sibling-index())) * 2.4%);
+  --a: calc(var(--i, sibling-index()) * 137.5deg);
   position: absolute;
   left: calc(50% + cos(var(--a)) * var(--r));
   top:  calc(50% + sin(var(--a)) * var(--r));
   width: 8px; height: 8px;
   border-radius: 50%;
-  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 3) 70% 55%);
   transform: translate(-50%, -50%);
 }</code></pre></details>
       </figure>
 
       <!-- 6. Concentric bloom -->
       <figure id="sc-bloom">
-        <div class="tile"><pattern-grid cells="48"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="48"></pattern-grid></div>
         <figcaption><strong>Concentric bloom</strong>48 stacked rings, glowing outward.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="48"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="48"&gt;&lt;/pattern-grid&gt;
 
 #sc-bloom pattern-grid &gt; i {
   grid-area: 1 / 1;
-  width:  calc(100% * sibling-index() / sibling-count());
+  width:  calc(100% * var(--i, sibling-index()) / var(--n, sibling-count()));
   aspect-ratio: 1;
-  border: 2px solid hsla(calc(sibling-index() * 7) 80% 60% / 0.6);
+  border: 2px solid hsla(calc(var(--i, sibling-index()) * 7) 80% 60% / 0.6);
   border-radius: 50%;
 }</code></pre></details>
       </figure>
 
       <!-- 7. Diagonal wipe -->
       <figure id="sc-wipe">
-        <div class="tile"><pattern-grid cells="14x14"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="14x14"></pattern-grid></div>
         <figcaption><strong>Diagonal wipe</strong>Animation delay grows along (x+y).</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="14x14"&gt;&lt;/pattern-grid&gt;
 
 #sc-wipe pattern-grid &gt; i {
-  --idx: calc(sibling-index() - 1);
+  --idx: calc(var(--i, sibling-index()) - 1);
   background: hsl(220 70% 50%);
   animation: wipe 3s ease-in-out infinite;
   animation-delay: calc(var(--idx) * 12ms);
@@ -143,14 +143,14 @@
 
       <!-- 8. Pulse field -->
       <figure id="sc-pulse">
-        <div class="tile"><pattern-grid cells="12x12"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="12x12"></pattern-grid></div>
         <figcaption><strong>Pulse field</strong>Staggered scale pulses per cell.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="12x12"&gt;&lt;/pattern-grid&gt;
 
 #sc-pulse pattern-grid &gt; i {
-  background: hsl(calc(sibling-index() * 3) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 3) 70% 55%);
   animation: pulse 2.4s ease-in-out infinite;
-  animation-delay: calc(sibling-index() * -30ms);
+  animation-delay: calc(var(--i, sibling-index()) * -30ms);
 }
 @keyframes pulse {
   0%, 100% { transform: scale(1);   border-radius: 0%;  }
@@ -202,14 +202,14 @@
 
       <!-- 12. Random staircase -->
       <figure id="sc-staircase">
-        <div class="tile"><seed-context seed="stair"><pattern-grid cells="12x12"></pattern-grid></seed-context></div>
+        <div class="tile"><seed-context seed="stair"><pattern-grid shim="sibling" cells="12x12"></pattern-grid></seed-context></div>
         <figcaption><strong>Random staircase</strong>Vertical offset from <code>--rand-0</code>.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;seed-context seed="stair"&gt;
-  &lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
+  &lt;pattern-grid shim="sibling" cells="12x12"&gt;&lt;/pattern-grid&gt;
 &lt;/seed-context&gt;
 
 #sc-staircase pattern-grid &gt; i {
-  background: hsl(calc(sibling-index() * 4) 70% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 4) 70% 55%);
   transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
 }</code></pre></details>
       </figure>
@@ -253,9 +253,9 @@
 
       <!-- 15. Matrix rain -->
       <figure id="sc-matrix">
-        <div class="tile"><pattern-grid cols="14" rows="1"><template><span class="col"></span></template></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cols="14" rows="1"><template><span class="col"></span></template></pattern-grid></div>
         <figcaption><strong>Matrix rain</strong>Vertical columns of falling katakana characters.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="14" rows="1"&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cols="14" rows="1"&gt;
   &lt;template&gt;&lt;span class="col"&gt;&lt;/span&gt;&lt;/template&gt;
 &lt;/pattern-grid&gt;
 
@@ -263,25 +263,25 @@
   /* repeating linear-gradient of katakana glyphs scrolls vertically */
   background: linear-gradient(180deg, transparent, #0f3 50%, transparent);
   animation: fall 6s linear infinite;
-  animation-delay: calc(sibling-index() * -0.5s);
+  animation-delay: calc(var(--i, sibling-index()) * -0.5s);
 }
 @keyframes fall { to { background-position-y: 200%; } }</code></pre></details>
       </figure>
 
       <!-- 16. Plasma -->
       <figure id="sc-plasma">
-        <div class="tile"><pattern-grid cells="14x14"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="14x14"></pattern-grid></div>
         <figcaption><strong>Plasma</strong>Amiga-demo plasma via animated conic gradients.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="14x14"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="14x14"&gt;&lt;/pattern-grid&gt;
 
 #sc-plasma pattern-grid &gt; i {
   background: conic-gradient(
-    from calc(sibling-index() * 13deg),
-    hsl(calc(sibling-index() * 7) 80% 60%),
-    hsl(calc(sibling-index() * 7 + 180) 80% 60%)
+    from calc(var(--i, sibling-index()) * 13deg),
+    hsl(calc(var(--i, sibling-index()) * 7) 80% 60%),
+    hsl(calc(var(--i, sibling-index()) * 7 + 180) 80% 60%)
   );
   animation: plasma 6s linear infinite;
-  animation-delay: calc(sibling-index() * -20ms);
+  animation-delay: calc(var(--i, sibling-index()) * -20ms);
 }
 @keyframes plasma {
   to { filter: hue-rotate(360deg); }
@@ -290,14 +290,14 @@
 
       <!-- 17. Raster bars -->
       <figure id="sc-raster">
-        <div class="tile"><pattern-grid cols="1" rows="60"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cols="1" rows="60"></pattern-grid></div>
         <figcaption><strong>Raster bars</strong>Scrolling color bands. Hello, Amiga.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="1" rows="60"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cols="1" rows="60"&gt;&lt;/pattern-grid&gt;
 
 #sc-raster pattern-grid &gt; i {
-  background: hsl(calc(sibling-index() * 6) 90% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 6) 90% 55%);
   animation: scroll 3s linear infinite;
-  animation-delay: calc(sibling-index() * -50ms);
+  animation-delay: calc(var(--i, sibling-index()) * -50ms);
 }
 @keyframes scroll {
   0%, 100% { filter: brightness(1); }
@@ -307,13 +307,13 @@
 
       <!-- 18. Wireframe sphere -->
       <figure id="sc-sphere">
-        <div class="tile"><pattern-grid cells="240"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="240"></pattern-grid></div>
         <figcaption><strong>Wireframe sphere</strong>Spherical projection of dots, rotating slowly.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="240"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="240"&gt;&lt;/pattern-grid&gt;
 
 #sc-sphere pattern-grid &gt; i {
   /* fibonacci sphere lattice */
-  --i: calc(sibling-index() - 1);
+  --i: calc(var(--i, sibling-index()) - 1);
   --phi: calc(acos(1 - 2 * var(--i) / 240));
   --theta: calc(var(--i) * 137.5deg);
   position: absolute;
@@ -359,12 +359,12 @@
 
       <!-- 21. Bridget Riley waves -->
       <figure id="sc-riley">
-        <div class="tile"><pattern-grid cells="40x20"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="40x20"></pattern-grid></div>
         <figcaption><strong>Bridget Riley waves</strong>Black/white cells warped by a sine wave.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="40x20"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="40x20"&gt;&lt;/pattern-grid&gt;
 
 #sc-riley pattern-grid &gt; i {
-  --col: calc(mod(sibling-index() - 1, 40));
+  --col: calc(mod(var(--i, sibling-index()) - 1, 40));
   background: black;
   transform: scaleY(calc(0.6 + sin(var(--col) * 9deg) * 0.4));
 }
@@ -439,17 +439,17 @@
 
       <!-- 25. Clover -->
       <figure id="sc-clover">
-        <div class="tile"><pattern-grid cells="6"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="6"></pattern-grid></div>
         <figcaption><strong>Clover</strong>6 stacked petals, each rotated 60°, blended.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="6"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="6"&gt;&lt;/pattern-grid&gt;
 
 #sc-clover pattern-grid &gt; i {
   grid-area: 1 / 1;
   width: 70%;
   aspect-ratio: 1;
-  background: hsl(calc(sibling-index() * 60) 80% 55%);
+  background: hsl(calc(var(--i, sibling-index()) * 60) 80% 55%);
   clip-path: ellipse(20% 50% at 50% 50%);
-  transform: rotate(calc(sibling-index() * 60deg));
+  transform: rotate(calc(var(--i, sibling-index()) * 60deg));
   mix-blend-mode: multiply;
 }</code></pre></details>
       </figure>
@@ -458,16 +458,16 @@
       <figure id="sc-mandala">
         <div class="tile">
           <div class="mandala-stack">
-            <pattern-grid cells="8"></pattern-grid>
-            <pattern-grid cells="12"></pattern-grid>
-            <pattern-grid cells="24"></pattern-grid>
+            <pattern-grid shim="sibling" cells="8"></pattern-grid>
+            <pattern-grid shim="sibling" cells="12"></pattern-grid>
+            <pattern-grid shim="sibling" cells="24"></pattern-grid>
           </div>
         </div>
         <figcaption><strong>Mandala</strong>Three nested pattern-grids form concentric rings.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;div class="mandala-stack"&gt;
-  &lt;pattern-grid cells="8"&gt;&lt;/pattern-grid&gt;   &lt;!-- inner --&gt;
-  &lt;pattern-grid cells="12"&gt;&lt;/pattern-grid&gt;  &lt;!-- middle --&gt;
-  &lt;pattern-grid cells="24"&gt;&lt;/pattern-grid&gt;  &lt;!-- outer --&gt;
+  &lt;pattern-grid shim="sibling" cells="8"&gt;&lt;/pattern-grid&gt;   &lt;!-- inner --&gt;
+  &lt;pattern-grid shim="sibling" cells="12"&gt;&lt;/pattern-grid&gt;  &lt;!-- middle --&gt;
+  &lt;pattern-grid shim="sibling" cells="24"&gt;&lt;/pattern-grid&gt;  &lt;!-- outer --&gt;
 &lt;/div&gt;
 
 /* Each ring positions its cells via polar math with a
@@ -486,7 +486,7 @@
               </filter>
             </defs>
           </svg>
-          <pattern-grid cells="8x8"></pattern-grid>
+          <pattern-grid shim="sibling" cells="8x8"></pattern-grid>
         </div>
         <figcaption><strong>Goo blobs</strong>Drifting cells merge via an SVG <code>feGaussianBlur</code> + <code>feColorMatrix</code>.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;filter id="sc-goo-filter"&gt;
@@ -498,7 +498,7 @@
 #sc-goo pattern-grid &gt; i {
   /* cells drift around with a per-cell offset animation */
   animation: drift 5s ease-in-out infinite;
-  animation-delay: calc(sibling-index() * -80ms);
+  animation-delay: calc(var(--i, sibling-index()) * -80ms);
 }</code></pre></details>
       </figure>
 
@@ -513,7 +513,7 @@
               </filter>
             </defs>
           </svg>
-          <pattern-grid cells="10x10"></pattern-grid>
+          <pattern-grid shim="sibling" cells="10x10"></pattern-grid>
         </div>
         <figcaption><strong>Turbulence</strong>SVG <code>feTurbulence</code> + <code>feDisplacementMap</code> warps a colorful grid.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;filter id="sc-turb-filter"&gt;
@@ -523,7 +523,7 @@
 
 #sc-turb pattern-grid { filter: url(#sc-turb-filter); }
 #sc-turb pattern-grid &gt; i {
-  background: hsl(calc(sibling-index() * 7) 80% 60%);
+  background: hsl(calc(var(--i, sibling-index()) * 7) 80% 60%);
 }</code></pre></details>
       </figure>
 
@@ -583,9 +583,9 @@
 
       <!-- 30. Mouse heatmap -->
       <figure id="sc-heat">
-        <div class="tile"><pattern-grid id="sc-heat-grid" cells="20x20"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" id="sc-heat-grid" cells="20x20"></pattern-grid></div>
         <figcaption><strong>Mouse heatmap</strong>Move your cursor — each cell colors by distance.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid id="sc-heat-grid" cells="20x20"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" id="sc-heat-grid" cells="20x20"&gt;&lt;/pattern-grid&gt;
 &lt;script&gt;
   const grid = document.getElementById('sc-heat-grid');
   grid.addEventListener('pointermove', (e) =&gt; {
@@ -598,7 +598,7 @@
 @property --mx { syntax: '&lt;number&gt;'; inherits: true; initial-value: 0.5; }
 @property --my { syntax: '&lt;number&gt;'; inherits: true; initial-value: 0.5; }
 #sc-heat pattern-grid &gt; i {
-  --idx: calc(sibling-index() - 1);
+  --idx: calc(var(--i, sibling-index()) - 1);
   --col: calc(mod(var(--idx), 20) / 20);
   --row: calc(floor(calc(var(--idx) / 20)) / 20);
   --dx: calc(var(--col) - var(--mx));
@@ -653,9 +653,9 @@
 
       <!-- 32. Kaleidoscope -->
       <figure id="sc-kaleido">
-        <div class="tile"><pattern-grid cells="12"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cells="12"></pattern-grid></div>
         <figcaption><strong>Kaleidoscope</strong>12 wedges, alternately mirrored, around a center.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="12"&gt;&lt;/pattern-grid&gt;
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid shim="sibling" cells="12"&gt;&lt;/pattern-grid&gt;
 
 #sc-kaleido pattern-grid &gt; i {
   grid-area: 1 / 1;
@@ -666,10 +666,10 @@
   background: conic-gradient(from -15deg,
     hsl(0 90% 60%), hsl(40 90% 60%), hsl(80 90% 60%),
     hsl(140 80% 55%), hsl(220 80% 55%), hsl(300 80% 55%), hsl(360 90% 60%));
-  transform: rotate(calc((sibling-index() - 1) * 30deg));
+  transform: rotate(calc((var(--i, sibling-index()) - 1) * 30deg));
 }
 #sc-kaleido pattern-grid &gt; i:nth-child(even) {
-  transform: rotate(calc((sibling-index() - 1) * 30deg)) scale(-1, 1);
+  transform: rotate(calc((var(--i, sibling-index()) - 1) * 30deg)) scale(-1, 1);
   transform-origin: 50% 50%;
 }</code></pre></details>
       </figure>
@@ -875,7 +875,7 @@
       <!-- 37. Scroll-reveal mosaic -->
       <figure id="sc-scroll">
         <div class="tile">
-          <pattern-grid id="sc-scroll-grid" cols="12" rows="12"></pattern-grid>
+          <pattern-grid shim="sibling" id="sc-scroll-grid" cols="12" rows="12"></pattern-grid>
           <div class="sc-scroll-controls"><button type="button" id="sc-scroll-replay">Replay</button></div>
         </div>
         <figcaption><strong>Scroll-reveal mosaic</strong>Each cell uses <code>animation-timeline: view()</code> — entry/exit driven entirely by scroll position. The Replay button retriggers the same keyframes on a time-based fallback.</figcaption>
@@ -960,7 +960,7 @@
           <pattern-grid id="sc-recurse-grid" cells="3x3">
             <template>
               <div class="sc-recurse-cell">
-                <pattern-grid cells="3x3"></pattern-grid>
+                <pattern-grid shim="sibling" cells="3x3"></pattern-grid>
               </div>
             </template>
           </pattern-grid>
@@ -968,7 +968,7 @@
         <figcaption><strong>Recursive grid</strong>A <code>&lt;pattern-grid&gt;</code> whose <code>&lt;template&gt;</code> contains another <code>&lt;pattern-grid&gt;</code>. Custom elements upgrade naturally inside cloned templates — Sierpinski carpet without a DSL.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;pattern-grid cells="3x3"&gt;
   &lt;template&gt;
-    &lt;div&gt;&lt;pattern-grid cells="3x3"&gt;&lt;/pattern-grid&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;pattern-grid shim="sibling" cells="3x3"&gt;&lt;/pattern-grid&gt;&lt;/div&gt;
   &lt;/template&gt;
 &lt;/pattern-grid&gt;</code></pre></details>
       </figure>
@@ -980,12 +980,15 @@
             <pattern-grid cells="4x4" shim="sibling"></pattern-grid>
           </seed-context>
         </div>
-        <figcaption><strong>Paint worklet swirl</strong>Each cell calls <code>paint(swirl)</code> — a Houdini Paint Worklet registered declaratively via <code>&lt;paint-worklet src&gt;</code>. The platform answer to css-doodle's <code>@shaders()</code>.</figcaption>
+        <figcaption><strong>Paint worklet swirl</strong>Each cell calls <code>paint(swirl)</code> — a Houdini Paint Worklet registered declaratively via <code>&lt;paint-worklet src&gt;</code>. The platform answer to css-doodle's <code>@shaders()</code>. Firefox/Safari lack the paint API, so a CSS <code>conic-gradient</code> swirl stands in.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;paint-worklet src="worklets/swirl.js"&gt;&lt;/paint-worklet&gt;
 
 #sc-paint pattern-grid &gt; i {
   --hue: calc(var(--i, sibling-index()) * 22);
-  background: paint(swirl);
+  background: conic-gradient(...);          /* fallback: Firefox, Safari */
+}
+@supports (background: paint(id)) {        /* Chrome: real Houdini worklet */
+  #sc-paint pattern-grid &gt; i { background: hsl(var(--hue) 60% 40%) paint(swirl); }
 }</code></pre></details>
       </figure>
 
@@ -1104,7 +1107,7 @@
 
       <!-- 47. Sol LeWitt — algorithmic line work -->
       <figure id="sc-lewitt">
-        <div class="tile"><pattern-grid cols="12" rows="12"></pattern-grid></div>
+        <div class="tile"><pattern-grid shim="sibling" cols="12" rows="12"></pattern-grid></div>
         <figcaption><strong>Sol LeWitt — algorithmic line work</strong>Each cell is a single 2px-thick diagonal whose angle is <code>calc(sibling-index() * 17deg)</code>. Zero JavaScript art that feels hand-drawn but is entirely algorithmic.</figcaption>
         <details><summary>Source</summary><pre><code>#sc-lewitt pattern-grid &gt; i {
   aspect-ratio: 1;
@@ -1117,7 +1120,7 @@
   inset: 0;
   background: #1a1a1a;
   clip-path: polygon(0 49%, 100% 49%, 100% 51%, 0 51%);
-  rotate: calc(sibling-index() * 17deg);
+  rotate: calc(var(--i, sibling-index()) * 17deg);
 }</code></pre></details>
       </figure>
 
