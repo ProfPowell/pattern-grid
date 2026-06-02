@@ -816,6 +816,9 @@
                 return;
               }
               ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+              // Chrome's autoplay policy can leave a context suspended even when
+              // created in a click; resume() before scheduling or no audio plays.
+              if (ctx.state === 'suspended') ctx.resume();
               play.textContent = '⏸ Stop';
               let step = 0;
               timer = setInterval(() => { tick(step); step = (step + 1) % 16; }, 125);
@@ -1665,21 +1668,14 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
       <!-- 57. Escher — tessellating birds -->
       <figure id="sc-escher">
         <div class="tile">
-          <pattern-grid cols="11" rows="11" shim="sibling"></pattern-grid>
+          <pattern-grid cols="11" rows="11"></pattern-grid>
         </div>
-        <figcaption><strong>Escher — tessellating birds</strong>Each cell is a bird silhouette via <code>clip-path</code>. Alternate columns and rows are reflected so the negative space of one bird is the positive space of its neighbour. Stylised, not pixel-perfect — sells the tessellation idea.</figcaption>
-        <details><summary>Source</summary><pre><code>#sc-escher pattern-grid &gt; i {
-  background: #1a1a24;
-  clip-path: polygon(
-    20% 10%, 50% 0%, 80% 10%,
-    100% 35%, 90% 60%, 95% 90%,
-    70% 100%, 30% 100%, 5% 90%,
-    10% 60%, 0% 35%
-  );
-}
-#sc-escher pattern-grid &gt; i:nth-child(odd) {
-  background: #f5e6c8;
-  scale: -1 1;
+        <figcaption><strong>Escher — tessellating birds</strong>Every cell is a full square painted with one seamless gull tile, offset row to row so the flock tiles the sky with no gaps. A per-cell <code>clip-path</code> can't tessellate — any shape that recedes from the cell edges leaves background showing — so the motif lives in a tiling <code>background-image</code> instead.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="11" rows="11"&gt;&lt;/pattern-grid&gt;
+
+#sc-escher pattern-grid &gt; i {
+  /* full square; a seamless SVG gull tile, offset every other row */
+  background: url("data:image/svg+xml,&hellip;three gull paths&hellip;") 0 0 / 100% 100%;
 }</code></pre></details>
       </figure>
 
@@ -1721,7 +1717,7 @@ popover.addEventListener('toggle', e =&gt; {
             const popover = document.getElementById('sc-pow-balloon');
             let hero;
             const position = () => {
-              if (!hero || !popover.matches(':popover-open')) return;
+              if (!hero) return;
               const r = hero.getBoundingClientRect();
               popover.style.top = Math.max(8, r.top - 80) + 'px';
               popover.style.left = r.right + 8 + 'px';
@@ -1737,11 +1733,14 @@ popover.addEventListener('toggle', e =&gt; {
               hero.className = 'sc-pow-hero';
               cell.replaceWith(hero);
             }, { once: true });
-            popover.addEventListener('toggle', (e) => {
-              if (e.newState === 'open') requestAnimationFrame(position);
+            // Position before the popover paints (beforetoggle) so it never
+            // flashes at the viewport corner before snapping next to the cell.
+            popover.addEventListener('beforetoggle', (e) => {
+              if (e.newState === 'open') position();
             });
-            window.addEventListener('scroll', position, { passive: true });
-            window.addEventListener('resize', position);
+            const repositionIfOpen = () => { if (popover.matches(':popover-open')) position(); };
+            window.addEventListener('scroll', repositionIfOpen, { passive: true });
+            window.addEventListener('resize', repositionIfOpen);
           })();
         </script>
       </figure>

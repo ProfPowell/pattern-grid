@@ -1862,26 +1862,21 @@ body.dark .feature-card:hover {
 }
 
 /* --- 57. Escher — tessellating birds --- */
+/* A genuine gap-free tessellation: every cell is a full square painted with a
+   seamless two-tone bird tile, so birds interlock with no background showing
+   (per-cell clip-path can't do this — receding edges always leave gaps). */
 #sc-escher pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
   gap: 0;
-  background: #2a2a3a;
+  background: #1a1a24;
   aspect-ratio: 1;
 }
 #sc-escher pattern-grid > i {
   aspect-ratio: 1;
-  background: #1a1a24;
-  clip-path: polygon(
-    20% 10%, 50% 0%, 80% 10%,
-    100% 35%, 90% 60%, 95% 90%,
-    70% 100%, 30% 100%, 5% 90%,
-    10% 60%, 0% 35%
-  );
-}
-#sc-escher pattern-grid > i:nth-child(odd) {
-  background: #f5e6c8;
-  scale: -1 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Crect width='100' height='100' fill='%231a1a24'/%3E%3Cg fill='%23f5e6c8'%3E%3Cpath d='M12,31 Q34,5 50,25 Q66,5 88,31 Q66,23 50,37 Q34,23 12,31 Z'/%3E%3Cpath d='M-38,81 Q-16,55 0,75 Q16,55 38,81 Q16,73 0,87 Q-16,73 -38,81 Z'/%3E%3Cpath d='M62,81 Q84,55 100,75 Q116,55 138,81 Q116,73 100,87 Q84,73 62,81 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 /* --- 58. Lichtenstein — POW --- */
@@ -1901,11 +1896,20 @@ body.dark .feature-card:hover {
     #fdd835;
   border: 0;
   padding: 0;
-  cursor: pointer;
 }
+/* Only the hero cell is interactive — make that obvious. */
+#sc-pow pattern-grid > i { cursor: default; }
 #sc-pow .sc-pow-hero {
-  outline: 3px solid #1a1a24;
-  outline-offset: -3px;
+  cursor: pointer;
+  outline: 3px dashed #1a1a24;
+  outline-offset: -4px;
+  animation: sc-pow-hint 1.2s ease-in-out infinite;
+}
+@keyframes sc-pow-hint {
+  50% { outline-color: #fff; outline-style: solid; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #sc-pow .sc-pow-hero { animation: none; }
 }
 #sc-pow-balloon {
   position: fixed;
