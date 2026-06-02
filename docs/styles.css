@@ -7,6 +7,7 @@ pattern-grid:not(:defined) {
 }
 
 :root {
+  color-scheme: light;
   --bg-primary: #ffffff;
   --bg-secondary: #f6f8fa;
   --bg-tertiary: #eff1f3;
@@ -22,6 +23,7 @@ pattern-grid:not(:defined) {
 }
 
 body.dark {
+  color-scheme: dark;
   --bg-primary: #0d1117;
   --bg-secondary: #161b22;
   --bg-tertiary: #21262d;
@@ -47,7 +49,6 @@ body {
   padding: 0;
   background: var(--bg-primary);
   color: var(--text-primary);
-  transition: background 0.3s, color 0.3s;
 }
 
 a {
