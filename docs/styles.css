@@ -1283,6 +1283,9 @@ body.dark .feature-card:hover {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
+  /* pattern-grid's default container-type: inline-size establishes containment,
+     which flattens preserve-3d in Safari (cube collapses to a line). Opt out. */
+  container-type: normal;
 }
 #sc-cube pattern-grid > i {
   position: absolute;
@@ -1368,13 +1371,15 @@ body.dark .feature-card:hover {
   position: relative;
   display: block;
   width: 100%;
-  height: 100%;
+  /* aspect-ratio (not height:100%) gives container-type:size a definite block
+     size in Firefox too, so cqmin resolves and cells aren't collapsed. */
+  aspect-ratio: 1;
   container-type: size;
 }
 #sc-swirl pattern-grid > i {
   --sw-i: calc(var(--i, sibling-index()) - 1);
   --sw-x: calc(mod(var(--sw-i), var(--pg-cols)) - (var(--pg-cols) - 1) / 2);
-  --sw-y: calc((var(--pg-cols) - 1) / 2 - round(down, var(--sw-i) / var(--pg-cols)));
+  --sw-y: calc((var(--pg-cols) - 1) / 2 - round(down, var(--sw-i) / var(--pg-cols), 1));
   --sw-t: calc(var(--sw-i) / (var(--n, sibling-count()) - 1));
   --sw-hue: calc(mod(sin(var(--sw-t) * 90deg) * 3600, 1) * 360);
   --sw-dist: calc(sqrt(var(--sw-x) * var(--sw-x) + var(--sw-y) * var(--sw-y)) / sqrt(200));
@@ -1581,7 +1586,10 @@ body.dark .feature-card:hover {
 @property --rand-0 {
   syntax: '<number>';
   initial-value: 0.5;
-  inherits: false;
+  /* Must inherit: <seed-context> writes --rand-0 on each cell, and tiles like
+     Constellation read it from a pseudo-element (i::before) that has to
+     inherit the cell's value. inherits:false made every such star invisible. */
+  inherits: true;
 }
 
 /* --- Showcase: contribution calendar --- */
@@ -1670,12 +1678,14 @@ body.dark .feature-card:hover {
 
 /* --- 46. Albers — Homage to the Square --- */
 #sc-albers .sc-albers-layer {
-  aspect-ratio: 1;
+  /* No aspect-ratio on inner layers: they stretch to fill their parent's
+     (padding-offset) box. aspect-ratio + grid-stretch conflict breaks the
+     nesting in Firefox. Only the outer layer is squared. */
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
 }
-#sc-albers .sc-albers-l1 { background: #6a2818; padding: 8% 8% 14% 8%; }
+#sc-albers .sc-albers-l1 { aspect-ratio: 1; background: #6a2818; padding: 8% 8% 14% 8%; }
 #sc-albers .sc-albers-l2 { background: #b25a26; padding: 8% 8% 14% 8%; }
 #sc-albers .sc-albers-l3 { background: #d77a37; padding: 8% 8% 14% 8%; }
 #sc-albers .sc-albers-l4 { background: #f0c266; }
