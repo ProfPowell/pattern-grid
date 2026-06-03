@@ -813,7 +813,9 @@ body.dark .feature-card:hover {
 }
 #sc-staircase pattern-grid > i {
   aspect-ratio: 1;
-  background: hsl(calc(var(--i, sibling-index()) * 4) 70% 55%);
+  /* hue from a seeded random (not --i): seed-context values work in every
+     browser, and the shim doesn't write --i inside a seed-context in FF. */
+  background: hsl(calc(var(--rand-1) * 360) 70% 55%);
   transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
 }
 
@@ -1278,13 +1280,11 @@ body.dark .feature-card:hover {
   height: 180px;
   transform-style: preserve-3d;
 }
+/* display:contents removes pattern-grid's own box so the 6 faces parent to
+   .cube-wrap (a plain div). Safari won't establish a 3D rendering context on
+   the custom element itself, so the cube flattened to one face there. */
 #sc-cube pattern-grid {
-  display: block;
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  /* pattern-grid's default container-type: inline-size establishes containment,
-     which flattens preserve-3d in Safari (cube collapses to a line). Opt out. */
+  display: contents;
   container-type: normal;
 }
 #sc-cube pattern-grid > i {
@@ -1396,6 +1396,13 @@ body.dark .feature-card:hover {
   translate: calc(var(--sw-x) * var(--size)) calc(var(--sw-y) * var(--size));
   animation: sc-swirl-pulse 1.5s var(--sw-delay) infinite ease-in-out alternate;
 }
+/* Register the delay chain so it computes eagerly. Firefox otherwise fails to
+   evaluate the nested unregistered calc() (sqrt + atan2, mixed units) when it's
+   substituted into the `animation` shorthand, leaving every cell at delay:0
+   (no spiral wave). Typed @property forces concrete computed values. */
+@property --sw-dist  { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --sw-ang   { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --sw-delay { syntax: '<time>';   inherits: false; initial-value: 0s; }
 @keyframes sc-swirl-pulse {
   from { scale: 0; }
   to { scale: 0.9; }
@@ -1564,18 +1571,24 @@ body.dark .feature-card:hover {
   --idx: var(--i, sibling-index());
   --hue: calc(var(--idx) * 22);
   aspect-ratio: 1;
-  /* Fallback for browsers without the Houdini paint() API (Firefox, Safari):
-     a pure-CSS conic-gradient swirl so the tile isn't blank. */
-  background:
-    conic-gradient(from calc(var(--hue) * 1deg),
-      hsl(var(--hue) 75% 58%), hsl(calc(var(--hue) + 130) 70% 32%),
-      hsl(calc(var(--hue) + 250) 75% 58%), hsl(var(--hue) 75% 58%)),
-    hsl(var(--hue) 60% 22%);
+  background: hsl(var(--hue) 60% 40%) paint(swirl);
 }
-/* Chrome supports paint(): override the fallback with the real worklet. */
-@supports (background: paint(id)) {
-  #sc-paint pattern-grid > i {
-    background: hsl(var(--hue) 60% 40%) paint(swirl);
+/* "Not supported" notice, shown only where the paint() API is unavailable
+   (Firefox, Safari). Hidden in Chrome, which renders the worklet above. */
+#sc-paint .sc-no-support { display: none; }
+@supports not (background: paint(id)) {
+  #sc-paint seed-context { display: none; }
+  #sc-paint .sc-no-support {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 }
 @property --hue {

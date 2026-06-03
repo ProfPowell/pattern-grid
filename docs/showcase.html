@@ -202,14 +202,14 @@
 
       <!-- 12. Random staircase -->
       <figure id="sc-staircase">
-        <div class="tile"><seed-context seed="stair"><pattern-grid shim="sibling" cells="12x12"></pattern-grid></seed-context></div>
-        <figcaption><strong>Random staircase</strong>Vertical offset from <code>--rand-0</code>.</figcaption>
+        <div class="tile"><seed-context seed="stair"><pattern-grid cells="12x12"></pattern-grid></seed-context></div>
+        <figcaption><strong>Random staircase</strong>Vertical offset and hue both from seeded randoms — no <code>sibling-index()</code>, so it works in every browser.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;seed-context seed="stair"&gt;
-  &lt;pattern-grid shim="sibling" cells="12x12"&gt;&lt;/pattern-grid&gt;
+  &lt;pattern-grid cells="12x12"&gt;&lt;/pattern-grid&gt;
 &lt;/seed-context&gt;
 
 #sc-staircase pattern-grid &gt; i {
-  background: hsl(calc(var(--i, sibling-index()) * 4) 70% 55%);
+  background: hsl(calc(var(--rand-1) * 360) 70% 55%);
   transform: translateY(calc((var(--rand-0) - 0.5) * 40%));
 }</code></pre></details>
       </figure>
@@ -630,13 +630,15 @@
         </div>
         <figcaption><strong>3D cube</strong><code>cells="6"</code> → six cube faces via <code>translateZ</code> + <code>rotate</code>.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;div class="cube-perspective"&gt;
-  &lt;div class="cube-wrap"&gt;
+  &lt;div class="cube-wrap"&gt;          &lt;!-- plain div holds preserve-3d --&gt;
     &lt;pattern-grid cells="6"&gt;&lt;/pattern-grid&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
-.cube-perspective { perspective: 600px; }
 .cube-wrap { transform-style: preserve-3d; }
+/* display:contents so the faces parent to the plain div above — Safari
+   won't establish a 3D context on the custom element itself. */
+#sc-cube pattern-grid { display: contents; }
 #sc-cube pattern-grid &gt; i {
   position: absolute;
   inset: 0;
@@ -979,16 +981,17 @@
           <seed-context seed="swirl" count="1">
             <pattern-grid cells="4x4" shim="sibling"></pattern-grid>
           </seed-context>
+          <p class="sc-no-support">Houdini <code>paint()</code> isn’t supported in this browser. Open in Chrome to see the worklet.</p>
         </div>
-        <figcaption><strong>Paint worklet swirl</strong>Each cell calls <code>paint(swirl)</code> — a Houdini Paint Worklet registered declaratively via <code>&lt;paint-worklet src&gt;</code>. The platform answer to css-doodle's <code>@shaders()</code>. Firefox/Safari lack the paint API, so a CSS <code>conic-gradient</code> swirl stands in.</figcaption>
+        <figcaption><strong>Paint worklet swirl</strong>Each cell calls <code>paint(swirl)</code> — a Houdini Paint Worklet registered declaratively via <code>&lt;paint-worklet src&gt;</code>. The platform answer to css-doodle's <code>@shaders()</code>. Chrome-only; Firefox/Safari show a "not supported" notice.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;paint-worklet src="worklets/swirl.js"&gt;&lt;/paint-worklet&gt;
 
-#sc-paint pattern-grid &gt; i {
-  --hue: calc(var(--i, sibling-index()) * 22);
-  background: conic-gradient(...);          /* fallback: Firefox, Safari */
-}
-@supports (background: paint(id)) {        /* Chrome: real Houdini worklet */
-  #sc-paint pattern-grid &gt; i { background: hsl(var(--hue) 60% 40%) paint(swirl); }
+#sc-paint pattern-grid &gt; i { background: paint(swirl); }
+
+/* No paint() API (Firefox, Safari): hide the demo, show a notice */
+@supports not (background: paint(id)) {
+  #sc-paint seed-context  { display: none; }
+  #sc-paint .sc-no-support { display: grid; }
 }</code></pre></details>
       </figure>
 
