@@ -1926,7 +1926,11 @@ body.dark .feature-card:hover {
 }
 #sc-pow pattern-grid > i,
 #sc-pow pattern-grid > button {
-  aspect-ratio: 1;
+  /* No aspect-ratio: the square .tile drives row height, and a square cell
+     would then force the column width to match, overflowing 6 cols past the
+     tile (the hero ended up off-tile in Chrome/Safari). Let cells fill their
+     1fr column track instead. */
+  min-width: 0;
   background:
     radial-gradient(circle at 50% 50%, #c00 0 30%, transparent 32%) 0 0 / 14px 14px,
     #fdd835;
@@ -1937,12 +1941,18 @@ body.dark .feature-card:hover {
 #sc-pow pattern-grid > i { cursor: default; }
 #sc-pow .sc-pow-hero {
   cursor: pointer;
-  outline: 3px dashed #1a1a24;
-  outline-offset: -4px;
+  position: relative;
+  z-index: 1;
+  /* Always a solid dark outline (high contrast on the yellow). The old hint
+     animated the outline to solid WHITE at 50% — invisible on yellow, so in
+     Chrome/Safari the marker vanished. Pulse a box-shadow ring instead. */
+  outline: 3px solid #1a1a24;
+  outline-offset: -3px;
   animation: sc-pow-hint 1.2s ease-in-out infinite;
 }
 @keyframes sc-pow-hint {
-  50% { outline-color: #fff; outline-style: solid; }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(26, 26, 36, 0); }
+  50%      { box-shadow: 0 0 0 5px rgba(26, 26, 36, 0.4); }
 }
 @media (prefers-reduced-motion: reduce) {
   #sc-pow .sc-pow-hero { animation: none; }

@@ -1688,35 +1688,28 @@ setInterval(() =&gt; { f = 1 - f; draw(); }, 200);
       <!-- 58. Lichtenstein — POW (popover + anchor positioning) -->
       <figure id="sc-pow">
         <div class="tile">
-          <pattern-grid id="sc-pow-grid" cols="6" rows="4" shim="sibling"></pattern-grid>
+          <pattern-grid id="sc-pow-grid" cols="6" rows="4"></pattern-grid>
           <div id="sc-pow-balloon" popover>
             POW!
           </div>
         </div>
-        <figcaption><strong>Lichtenstein — POW</strong>Ben-Day dots painted on every cell with a CSS radial gradient. One cell is a <code>&lt;button popovertarget&gt;</code> that opens a comic-book "POW!" speech balloon. Click the outlined cell.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="6" rows="4" shim="sibling"&gt;&lt;/pattern-grid&gt;
+        <figcaption><strong>Lichtenstein — POW</strong>Ben-Day dots painted on every cell with a CSS radial gradient. One outlined cell opens a comic-book "POW!" speech balloon (a <code>popover</code>). Click the outlined cell.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;pattern-grid cols="6" rows="4"&gt;&lt;/pattern-grid&gt;
 &lt;div id="sc-pow-balloon" popover&gt;POW!&lt;/div&gt;
 
-// after render, replace one cell with a popover-trigger button
+// make one existing cell the trigger (a &lt;button&gt; grid item lays out
+// outside the grid in Chrome/Safari, so keep the &lt;i&gt; and wire it up)
 const hero = grid.cellElements[10];
-hero.replaceWith(Object.assign(document.createElement('button'), {
-  type: 'button', popovertarget: 'sc-pow-balloon'
-}));
+hero.className = 'sc-pow-hero';
+hero.addEventListener('click', () =&gt; popover.togglePopover());
 
-// JS positioning on toggle (CSS anchor() doesn't reach the top layer in Chrome yet)
-popover.addEventListener('toggle', e =&gt; {
+// position beside the cell before it paints (no anchor() in the top layer yet)
+popover.addEventListener('beforetoggle', e =&gt; {
   if (e.newState !== 'open') return;
   const r = hero.getBoundingClientRect();
   popover.style.top = r.top - 80 + 'px';
   popover.style.left = r.right + 8 + 'px';
-});
-
-#sc-pow pattern-grid &gt; i,
-#sc-pow pattern-grid &gt; button {
-  background:
-    radial-gradient(circle at 50% 50%, #c00 0 28%, transparent 30%) 0 0 / 16px 16px,
-    #fdd835;
-}</code></pre></details>
+});</code></pre></details>
         <script>
           (function () {
             const grid = document.getElementById('sc-pow-grid');
@@ -1729,15 +1722,21 @@ popover.addEventListener('toggle', e =&gt; {
               popover.style.left = r.right + 8 + 'px';
             };
             grid.addEventListener('pattern-grid:render', () => {
-              const cell = grid.cellElements[10];
-              if (!cell) return;
-              hero = document.createElement('button');
-              hero.type = 'button';
-              hero.setAttribute('popovertarget', 'sc-pow-balloon');
-              hero.setAttribute('popovertargetaction', 'toggle');
-              hero.setAttribute('aria-label', 'Show POW');
+              // Use the existing <i> cell as the trigger rather than swapping in
+              // a <button>: a <button> grid item lays out outside the grid in
+              // Chrome/Safari (the marker ended up off the tile). The <i> is a
+              // correct grid cell in every browser; toggle the popover via JS.
+              hero = grid.cellElements[10];
+              if (!hero) return;
               hero.className = 'sc-pow-hero';
-              cell.replaceWith(hero);
+              hero.setAttribute('role', 'button');
+              hero.setAttribute('tabindex', '0');
+              hero.setAttribute('aria-label', 'Show POW');
+              const toggle = () => popover.togglePopover();
+              hero.addEventListener('click', toggle);
+              hero.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+              });
             }, { once: true });
             // Position before the popover paints (beforetoggle) so it never
             // flashes at the viewport corner before snapping next to the cell.
