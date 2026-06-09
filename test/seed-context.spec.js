@@ -355,4 +355,47 @@ test.describe('<seed-context>', () => {
     expect(b.length).toBe(9);
     expect(a).not.toEqual(b);
   });
+
+  test('prng getter returns a fresh, deterministic seeded generator in [0, 1)', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="abc"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    const result = await page.locator('seed-context').evaluate((el) => {
+      const gen1 = el.prng;
+      const gen2 = el.prng;
+      const seqA = Array.from({ length: 5 }, () => gen1());
+      const seqB = Array.from({ length: 5 }, () => gen2());
+      return { isFn: typeof el.prng === 'function', seqA, seqB };
+    });
+    // Each access returns a function...
+    expect(result.isFn).toBe(true);
+    // ...and a fresh, independent generator: two generators from the same
+    // seed produce the identical sequence (deterministic, separate state).
+    expect(result.seqA).toEqual(result.seqB);
+    // values are floats in [0, 1)
+    for (const v of result.seqA) {
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThan(1);
+    }
+    // a non-trivial generator does not just repeat one value
+    expect(new Set(result.seqA).size).toBeGreaterThan(1);
+  });
+
+  test('prng getter reflects the current seed', async ({ page }) => {
+    await page.setContent(`
+      <script type="module" src="http://localhost:5173/src/pattern-grid.js"></script>
+      <script type="module" src="http://localhost:5173/src/seed-context.js"></script>
+      <seed-context seed="one"><pattern-grid cells="2x2"></pattern-grid></seed-context>
+    `);
+    const { before, after } = await page.locator('seed-context').evaluate((el) => {
+      const draw = () => Array.from({ length: 5 }, () => el.prng());
+      const before = draw();
+      el.seed = 'two';
+      const after = draw();
+      return { before, after };
+    });
+    expect(before).not.toEqual(after);
+  });
 });
