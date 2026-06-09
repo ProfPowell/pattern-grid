@@ -830,32 +830,74 @@ body.dark .feature-card:hover {
 }
 
 /* --- Showcase: Unicode rain --- */
+/* Each cell stacks 10 box-drawing glyph layers; a seeded random picks which
+   one shows (--g), and --row drives a downward brightness cascade so the grid
+   "rains". All-CSS and cross-browser: glyph selection uses only min()/max()
+   (no if()/style() queries, no abs()), and the animation-delay calc() lives in
+   the longhand — not the `animation` shorthand — to avoid the Firefox
+   shorthand-calc evaluation quirk. */
 #sc-rain .tile { background: #0a0a0a; }
 #sc-rain pattern-grid {
   display: grid;
   grid-template-columns: repeat(var(--pg-cols), 1fr);
 }
-#sc-rain pattern-grid > .glyph {
+#sc-rain pattern-grid > .rc {
   aspect-ratio: 1;
   display: grid;
-  place-items: center;
-  color: hsl(140 80% calc(40% + var(--rand-0) * 40%));
   font-family: ui-monospace, monospace;
   font-size: 1rem;
-  opacity: calc(0.3 + var(--rand-0) * 0.7);
+  --g: mod(var(--randi-0), 10);
+  opacity: calc(0.45 + var(--rand-2) * 0.55);
+  animation: rain-fall 2.6s linear infinite;
+  /* longhand on purpose — see note above */
+  animation-delay: calc(var(--row, 0) * 0.22s + var(--rand-1) * 0.12s);
 }
-#sc-rain pattern-grid > .glyph::before {
-  content: "─";
+/* stack every glyph layer in the same cell */
+#sc-rain pattern-grid > .rc > i {
+  grid-area: 1 / 1;
+  place-self: center;
 }
-#sc-rain pattern-grid > .glyph:nth-child(10n+1)::before { content: "│"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+2)::before { content: "┌"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+3)::before { content: "┐"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+4)::before { content: "└"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+5)::before { content: "┘"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+6)::before { content: "├"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+7)::before { content: "┤"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+8)::before { content: "┬"; }
-#sc-rain pattern-grid > .glyph:nth-child(10n+9)::before { content: "┴"; }
+/* the 10-glyph palette (one fixed glyph per layer) */
+#sc-rain .rc > i:nth-child(1)::before  { content: "│"; }
+#sc-rain .rc > i:nth-child(2)::before  { content: "┤"; }
+#sc-rain .rc > i:nth-child(3)::before  { content: "╢"; }
+#sc-rain .rc > i:nth-child(4)::before  { content: "╖"; }
+#sc-rain .rc > i:nth-child(5)::before  { content: "╕"; }
+#sc-rain .rc > i:nth-child(6)::before  { content: "┐"; }
+#sc-rain .rc > i:nth-child(7)::before  { content: "└"; }
+#sc-rain .rc > i:nth-child(8)::before  { content: "┴"; }
+#sc-rain .rc > i:nth-child(9)::before  { content: "┬"; }
+#sc-rain .rc > i:nth-child(10)::before { content: "├"; }
+/* show only the layer whose index equals --g (random per cell) */
+#sc-rain .rc > i:nth-child(1)  { opacity: calc(1 - min(1, max(var(--g) - 0, 0 - var(--g)))); }
+#sc-rain .rc > i:nth-child(2)  { opacity: calc(1 - min(1, max(var(--g) - 1, 1 - var(--g)))); }
+#sc-rain .rc > i:nth-child(3)  { opacity: calc(1 - min(1, max(var(--g) - 2, 2 - var(--g)))); }
+#sc-rain .rc > i:nth-child(4)  { opacity: calc(1 - min(1, max(var(--g) - 3, 3 - var(--g)))); }
+#sc-rain .rc > i:nth-child(5)  { opacity: calc(1 - min(1, max(var(--g) - 4, 4 - var(--g)))); }
+#sc-rain .rc > i:nth-child(6)  { opacity: calc(1 - min(1, max(var(--g) - 5, 5 - var(--g)))); }
+#sc-rain .rc > i:nth-child(7)  { opacity: calc(1 - min(1, max(var(--g) - 6, 6 - var(--g)))); }
+#sc-rain .rc > i:nth-child(8)  { opacity: calc(1 - min(1, max(var(--g) - 7, 7 - var(--g)))); }
+#sc-rain .rc > i:nth-child(9)  { opacity: calc(1 - min(1, max(var(--g) - 8, 8 - var(--g)))); }
+#sc-rain .rc > i:nth-child(10) { opacity: calc(1 - min(1, max(var(--g) - 9, 9 - var(--g)))); }
+/* per-row phase for the downward cascade (12 rows) */
+#sc-rain .rc:nth-child(-n+12)                  { --row: 0; }
+#sc-rain .rc:nth-child(n+13):nth-child(-n+24)  { --row: 1; }
+#sc-rain .rc:nth-child(n+25):nth-child(-n+36)  { --row: 2; }
+#sc-rain .rc:nth-child(n+37):nth-child(-n+48)  { --row: 3; }
+#sc-rain .rc:nth-child(n+49):nth-child(-n+60)  { --row: 4; }
+#sc-rain .rc:nth-child(n+61):nth-child(-n+72)  { --row: 5; }
+#sc-rain .rc:nth-child(n+73):nth-child(-n+84)  { --row: 6; }
+#sc-rain .rc:nth-child(n+85):nth-child(-n+96)  { --row: 7; }
+#sc-rain .rc:nth-child(n+97):nth-child(-n+108) { --row: 8; }
+#sc-rain .rc:nth-child(n+109):nth-child(-n+120){ --row: 9; }
+#sc-rain .rc:nth-child(n+121):nth-child(-n+132){ --row: 10; }
+#sc-rain .rc:nth-child(n+133):nth-child(-n+144){ --row: 11; }
+@keyframes rain-fall {
+  0%        { color: hsl(140 80% 22%); }  /* dim (held during delay) */
+  20%       { color: hsl(140 95% 80%); }  /* bright head */
+  45%       { color: hsl(140 80% 42%); }
+  100%      { color: hsl(140 80% 22%); }  /* dim tail */
+}
 
 /* --- Showcase: hover ripple --- */
 #sc-ripple pattern-grid {

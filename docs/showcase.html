@@ -221,21 +221,23 @@
 
       <!-- 13. Unicode rain -->
       <figure id="sc-rain">
-        <div class="tile"><seed-context seed="rain"><pattern-grid cells="12x12"><template><span class="glyph"></span></template></pattern-grid></seed-context></div>
-        <figcaption><strong>Unicode rain</strong>Box-drawing glyph palette over a green opacity field.</figcaption>
+        <div class="tile"><seed-context seed="rain"><pattern-grid cells="12x12"><template><span class="rc"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></template></pattern-grid></seed-context></div>
+        <figcaption><strong>Unicode rain</strong>A seeded-random glyph per cell, falling in a downward cascade — both driven by <code>&lt;seed-context&gt;</code> randoms, all-CSS.</figcaption>
         <details><summary>Source</summary><pre><code>&lt;seed-context seed="rain"&gt;
   &lt;pattern-grid cells="12x12"&gt;
-    &lt;template&gt;&lt;span class="glyph"&gt;&lt;/span&gt;&lt;/template&gt;
+    &lt;!-- 10 stacked glyph layers per cell --&gt;
+    &lt;template&gt;&lt;span class="rc"&gt;&lt;i&gt;&lt;/i&gt;…&lt;i&gt;&lt;/i&gt;&lt;/span&gt;&lt;/template&gt;
   &lt;/pattern-grid&gt;
 &lt;/seed-context&gt;
 
-#sc-rain .glyph::before { content: "─"; }
-#sc-rain .glyph:nth-child(10n+1)::before { content: "│"; }
-/* ... 8 more rotations of nth-child ... */
-#sc-rain .glyph {
-  color: hsl(140 80% calc(40% + var(--rand-0) * 40%));
-  opacity: calc(0.3 + var(--rand-0) * 0.7);
-}</code></pre></details>
+/* random glyph: --g picks which stacked layer shows (no if()/abs()) */
+#sc-rain .rc { --g: mod(var(--randi-0), 10); }
+#sc-rain .rc &gt; i:nth-child(1)::before { content: "│"; } /* …10 glyphs */
+#sc-rain .rc &gt; i:nth-child(1) { opacity: calc(1 - min(1, max(var(--g) - 0, 0 - var(--g)))); }
+
+/* downward cascade: --row (set via nth-child ranges) phases the fall */
+#sc-rain .rc { animation: rain-fall 2.6s linear infinite; }
+#sc-rain .rc { animation-delay: calc(var(--row,0) * 0.22s + var(--rand-1) * 0.12s); }</code></pre></details>
       </figure>
 
       <!-- 14. Hover ripple -->
