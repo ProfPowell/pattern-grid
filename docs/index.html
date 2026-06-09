@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://unpkg.com/@profpowell/pattern-grid/css" />
   <script type="module" src="https://unpkg.com/@profpowell/pattern-grid"></script>
+  <script type="module" src="https://unpkg.com/@profpowell/code-block"></script>
 </head>
 <body>
   <header class="site-header">
@@ -72,7 +73,7 @@
     <section class="quick-start">
       <h2>Quick Start</h2>
       <p>Drop the script tag in and you're done. The component registers itself.</p>
-      <pre><code>&lt;script type="module" src="https://unpkg.com/@profpowell/pattern-grid"&gt;&lt;/script&gt;
+      <code-block language="html">&lt;script type="module" src="https://unpkg.com/@profpowell/pattern-grid"&gt;&lt;/script&gt;
 
 &lt;pattern-grid cells="8x8"&gt;&lt;/pattern-grid&gt;
 
@@ -85,9 +86,9 @@
     aspect-ratio: 1;
     background: hsl(calc(sibling-index() / sibling-count() * 360) 70% 50%);
   }
-&lt;/style&gt;</code></pre>
+&lt;/style&gt;</code-block>
       <p>For npm-managed projects:</p>
-      <pre><code>npm install @profpowell/pattern-grid</code></pre>
+      <code-block language="bash">npm install @profpowell/pattern-grid</code-block>
     </section>
 
     <section>
@@ -129,6 +130,8 @@
     function applyTheme(dark) {
       document.body.classList.toggle('dark', dark);
       document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      const t = dark ? 'dark' : 'light';
+      document.querySelectorAll('code-block').forEach((cb) => cb.setAttribute('theme', t));
     }
     function toggleTheme() {
       const dark = !document.body.classList.contains('dark');
