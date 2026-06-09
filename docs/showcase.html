@@ -187,16 +187,21 @@
 
       <!-- 11. Crystals -->
       <figure id="sc-crystals">
-        <div class="tile"><seed-context seed="cryst" count="2"><pattern-grid cells="10x10"></pattern-grid></seed-context></div>
-        <figcaption><strong>Crystals</strong>Two clip-path triangles, random hue.</figcaption>
-        <details><summary>Source</summary><pre><code>&lt;seed-context seed="cryst" count="2"&gt;
+        <div class="tile"><seed-context seed="cryst" count="5"><pattern-grid cells="10x10"></pattern-grid></seed-context></div>
+        <figcaption><strong>Crystals</strong>A parametric gem facet — every vertex driven by a seeded random, so each cell is a distinct crystal.</figcaption>
+        <details><summary>Source</summary><pre><code>&lt;seed-context seed="cryst" count="5"&gt;
   &lt;pattern-grid cells="10x10"&gt;&lt;/pattern-grid&gt;
 &lt;/seed-context&gt;
 
-#sc-crystals pattern-grid &gt; i:nth-child(odd)  { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
-#sc-crystals pattern-grid &gt; i:nth-child(even) { clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
 #sc-crystals pattern-grid &gt; i {
-  background: hsl(calc(var(--rand-1) * 360deg) 70% 55%);
+  background: linear-gradient(135deg,
+    hsl(calc(var(--rand-1) * 360deg) 70% 62%),
+    hsl(calc(var(--rand-1) * 360deg) 70% 42%));
+  clip-path: polygon(
+    50% 0%,
+    calc(64% + var(--rand-0) * 36%) calc(32% + var(--rand-4) * 26%),
+    calc(30% + var(--rand-3) * 40%) 100%,
+    calc(36% - var(--rand-2) * 36%) calc(32% + var(--rand-4) * 26%));
 }</code></pre></details>
       </figure>
 
